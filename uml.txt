@@ -1,0 +1,145 @@
+
+g : getter
+s : static
++ : public
+- : private
+? : optional argument
+
+enum FoodCategory:
+    Iranian
+    FastFood
+    SeaFood
+
+class Restaurant with serializable: //accessed by user
+g   - id : string
+g   - name : string
+    + menu : FoodMenu
+g   - menuID : string
+g   - address: Address
+    + areaOfDispatch : ?????
+g   - averageScore : double
+
+    + Restaurant(name, Set<FoodCategory> ?foodCategories, address, averageScore)
+
+class FoodMenu with serializable:
+g   - id : string
+g   - foodMap : Map<string, Food>
+g   - data : Map<FoodCategory, Food[]>
+    + foodCategories : Set<FoodCategory>
+    + getFoodByName(string name) : Food
+    + addFood(Food food)
+    + removeFoodByName(string name)
+    + getFoods(FoodCategory) : Food[]
+    + hasFoodCategory(FoodCategory) : bool
+
+class Food with serializable: //accessed by user, edited by owner
+g   - id : string    
+    + name : string
+    + description : string
+    + price : Price
+    + isAvailable : bool
+    + image : Image
+    + category : FoodCategory
+
+    + toFoodData() : FoodData
+    + Food(name, ?description, price, ?isAvailable, ?image, category)
+
+class FoodData:
+g   - name : string
+g   - price : Price
+
+
+class Order with serializable: //accessed and edited by user and owner
+g   - id : string
+    + items : Map<FoodData, int>
+g   - time : DateTime
+g   - code : string
+g   - totalCost : Price
+    + isDelivered : bool
+g   - restaurant : Restaurant
+g   - customer : CustomerData
+    
+    + Order(items, restaurant, customer)
+    + reorder() : Order
+
+
+class CustomerData:
+    + firstName : string
+    + lastName : string
+    + address : Address
+
+    + CustomerData(firstName, lastName, address)
+
+class Price: // immutable
+    - value : int
+
+    + toInt() : int
+    + toString() : string
+    + add(Price price) : Price
+    + subtract(Price price): Price
+    + multiply(Price price): Price
+    + divide(Price price): Price
+    + addAll(Price[] prices): Price
+
+    + Price(int)
+
+
+abstract class Account:
+g   - token : string
+    - password : string
+    - phoneNumber : string
+g   - previousOrders : Order[] //sorted by time
+g   - activeOrders : Order[] //sorted by time
+
+    + Account(string validPhoneNumber, string validPassword, token)
+    + isPasswordCorrect(string) : bool
+    + isPhoneNumberCorrect(string) : bool
+
+class UserAccount extends Account:
+g   - firstName : string
+g   - lastName : string
+g   - addresses : Map<string, Address>
+    + defaultAddress : string
+g   - favoriteRestaurantsIDs : string[]
+    + credit : Price
+g   - commentIDs : string[]
+
+    + toCustomerData(string ?addressName) : CustomerData
+    + UserAccount(firstName, lastName, addresses, validPhoneNumber, validPassword, token) //Named arguments
+
+class OwnerAccount extends Account:
+g   - Restaurant restaurant
+    + OwnerAccount(validPhoneNumber, validPassword, restaurant, token)
+
+class Comment with serializable:
+g   - id : string
+g   - restaurant : Restaurant
+g   - time : DateTime
+g   - title : string
+g   - message : string
+g   - score : double
+    + response : string
+
+    Comment(title, message, score)
+
+mixin Serializable:
+g   - id : string
+
+    + serialize(Serializer)
+
+class Serializer:
+    + createID(Serializable) : string
+
+class Server:
+g  - serializer : Serializer
+
+s   + isPhoneNumberValid(string) : bool
+s   + isPasswordValid(string) : bool
+
+    + getObjectById(string) : Object
+    + getCommentById(string commentID) : Comment
+    + getCommentsById(string[] commentIDs) : Comment[]
+    + getCommentsByRestaurantID(string restaurantID)
+    + addComment(Comment)
+    + addResponse(string commentID, string response)
+    + addOrder(Order order)
