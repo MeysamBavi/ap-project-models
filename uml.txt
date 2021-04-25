@@ -143,3 +143,4 @@ s   + isPasswordValid(string) : bool
     + addComment(Comment)
     + addResponse(string commentID, string response)
     + addOrder(Order order)
+    + createNewRestaurant(name, foodCategories, address, AOD) : Restaurant
