@@ -95,7 +95,7 @@ class _formState extends State<form> {
                 child: ElevatedButton(
                   child: Text("submit"),
                   onPressed: (){
-                      if (formkey_name.currentState.validate() && formkey_phone.currentState.validate() && formkey_password.currentState.validate())
+                      if (formkey_name.currentState!.validate() && formkey_phone.currentState!.validate() && formkey_password.currentState!.validate())
                       {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("proceed")));
                       }
