@@ -2,12 +2,13 @@ import 'package:models/models.dart';
 import 'package:test/test.dart';
 
 void main() {
-  var pizza = Food(name: 'pizza', category: FoodCategory.FastFood, price: Price(25000));
-  var burger = Food(name: 'burger', category: FoodCategory.FastFood, price: Price(20000));
-  var sushi = Food(name: 'sushi', category: FoodCategory.SeaFood, price: Price(45000));
-  var fish = Food(name: 'fish', category: FoodCategory.SeaFood, price: Price(30000));
-  var kabab = Food(name: 'kabab', category: FoodCategory.Iranian, price: Price(15000));
-  var kookoo = Food(name: 'kookoo', category: FoodCategory.Iranian, price: Price(10000));
+  var server = Server();
+  var pizza = Food(name: 'pizza', category: FoodCategory.FastFood, price: Price(25000), server: server);
+  var burger = Food(name: 'burger', category: FoodCategory.FastFood, price: Price(20000), server: server);
+  var sushi = Food(name: 'sushi', category: FoodCategory.SeaFood, price: Price(45000), server: server);
+  var fish = Food(name: 'fish', category: FoodCategory.SeaFood, price: Price(30000), server: server);
+  var kabab = Food(name: 'kabab', category: FoodCategory.Iranian, price: Price(15000), server: server);
+  var kookoo = Food(name: 'kookoo', category: FoodCategory.Iranian, price: Price(10000), server: server);
 
   test('auto adding categories', () {
     var menu = FoodMenu();
@@ -48,7 +49,7 @@ void main() {
 
   test('identical reference', () {
     var menu = FoodMenu();
-    var rice = Food(name: 'rice', category: FoodCategory.Iranian, price: Price(10000));
+    var rice = Food(name: 'rice', category: FoodCategory.Iranian, price: Price(10000), server: server);
     menu.addFood(rice);
     rice.name = 'rice2';
     expect(menu.getFoods(rice.category)?[0].name, equals('rice2'));
@@ -56,7 +57,7 @@ void main() {
 
   test('remove', () {
     var menu = FoodMenu();
-    var rice = Food(name: 'rice', category: FoodCategory.Iranian, price: Price(10000));
+    var rice = Food(name: 'rice', category: FoodCategory.Iranian, price: Price(10000), server: server);
     menu.addFood(rice);
     menu.addFood(pizza);
     menu.removeFood(rice);
