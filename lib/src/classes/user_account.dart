@@ -2,6 +2,7 @@ import 'account.dart';
 import 'address.dart';
 import 'server.dart';
 import 'price.dart';
+import 'small_data.dart';
 
 class UserAccount extends Account {
 
@@ -68,15 +69,5 @@ class UserAccount extends Account {
   }
 
   CustomerData toCustomerData(Address address) => CustomerData(firstName, lastName, address);
-
-}
-
-class CustomerData {
-
-  final String firstName;
-  final String lastName;
-  final Address address;
-
-  CustomerData(this.firstName, this.lastName, this.address);
 
 }

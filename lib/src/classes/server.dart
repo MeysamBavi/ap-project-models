@@ -1,3 +1,4 @@
+import 'order.dart';
 import 'editable.dart';
 import 'serializer.dart';
 
@@ -24,6 +25,10 @@ class Server {
   bool isPasswordCorrect(String phoneNumber) {
     //TODO implement password check
     return false;
+  }
+
+  void addNewOrder(Order order) {
+    //TODO implement new order handling
   }
 
 }

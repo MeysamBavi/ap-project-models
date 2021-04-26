@@ -2,6 +2,7 @@ import 'editable.dart';
 import 'serializable.dart';
 import 'price.dart';
 import 'server.dart';
+import 'small_data.dart';
 
 class Food with Serializable implements Editable {
 
@@ -67,12 +68,6 @@ class Food with Serializable implements Editable {
     _name = value;
     server.edit(this);
   }
-}
-
-class FoodData {
-  final String name;
-  final Price price;
-  FoodData(this.name, this.price);
 }
 
 enum FoodCategory {
