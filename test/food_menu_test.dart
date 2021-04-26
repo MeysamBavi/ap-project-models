@@ -11,14 +11,14 @@ void main() {
   var kookoo = Food(name: 'kookoo', category: FoodCategory.Iranian, price: Price(10000), server: server);
 
   test('auto adding categories', () {
-    var menu = FoodMenu();
+    var menu = FoodMenu(server);
     menu.addFood(pizza);
     menu.addFood(burger);
     expect(menu.categories, equals([FoodCategory.FastFood]));
   });
 
   test('auto adding categories', () {
-    var menu = FoodMenu();
+    var menu = FoodMenu(server);
     menu.addFood(pizza);
     menu.addFood(burger);
     menu.addFood(sushi);
@@ -27,7 +27,7 @@ void main() {
   });
 
   test('auto removing categories', () {
-    var menu = FoodMenu();
+    var menu = FoodMenu(server);
     menu.addFood(pizza);
     menu.removeFood(pizza);
     expect(menu.categories, isEmpty);
@@ -35,20 +35,20 @@ void main() {
   });
 
   test('returning identical reference', () {
-    var menu = FoodMenu();
+    var menu = FoodMenu(server);
     menu.addFood(pizza);
     expect(menu.getFoods(pizza.category)?[0], equals(pizza));
   });
 
   test('returning identical reference', () {
-    var menu = FoodMenu();
+    var menu = FoodMenu(server);
     menu.addFood(sushi);
     menu.addFood(kookoo);
     expect(menu.getFoods(kookoo.category)?[0], equals(kookoo));
   });
 
   test('identical reference', () {
-    var menu = FoodMenu();
+    var menu = FoodMenu(server);
     var rice = Food(name: 'rice', category: FoodCategory.Iranian, price: Price(10000), server: server);
     menu.addFood(rice);
     rice.name = 'rice2';
@@ -56,7 +56,7 @@ void main() {
   });
 
   test('remove', () {
-    var menu = FoodMenu();
+    var menu = FoodMenu(server);
     var rice = Food(name: 'rice', category: FoodCategory.Iranian, price: Price(10000), server: server);
     menu.addFood(rice);
     menu.addFood(pizza);
@@ -65,7 +65,7 @@ void main() {
   });
 
   test('remove', () {
-    var menu = FoodMenu();
+    var menu = FoodMenu(server);
     menu.addFood(burger);
     menu.addFood(pizza);
     menu.removeFood(burger);
@@ -73,14 +73,14 @@ void main() {
   });
 
   test('remove sth that doesnt exist', () {
-    var menu = FoodMenu();
+    var menu = FoodMenu(server);
     menu.addFood(pizza);
     menu.removeFood(fish);
     expect(menu.getFoods(fish.category), equals(null));
   });
 
   test('remove twice', () {
-    var menu = FoodMenu();
+    var menu = FoodMenu(server);
     menu.addFood(pizza);
     menu.removeFood(pizza);
     menu.removeFood(pizza);
