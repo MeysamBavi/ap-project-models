@@ -5,6 +5,8 @@ class Server {
 
   final serializer = Serializer();
 
+  String token = '';
+
   bool isPhoneNumberValid(String phoneNumber) {
     var pattern = RegExp(r'^09\d{9}$');
     return pattern.hasMatch(phoneNumber);
@@ -17,6 +19,11 @@ class Server {
 
   void edit(Editable object) {
     //TODO implement edit
+  }
+
+  bool isPasswordCorrect(String phoneNumber) {
+    //TODO implement password check
+    return false;
   }
 
 }
