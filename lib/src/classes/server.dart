@@ -1,3 +1,4 @@
+import 'editable.dart';
 import 'serializer.dart';
 
 class Server {
@@ -12,6 +13,10 @@ class Server {
   bool isPasswordValid(String password) {
     var pattern = RegExp(r'^(?=.{6,}$)(?=.*[0-9])(?=.*[a-zA-Z])[0-9a-zA-Z]+$');
     return pattern.hasMatch(password);
+  }
+
+  void edit(Editable object) {
+    //TODO implement edit
   }
 
 }
