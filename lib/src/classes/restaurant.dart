@@ -4,7 +4,7 @@ import 'serializable.dart';
 
 class Restaurant with Serializable {
   final String name;
-  FoodMenu? _menu;
+  FoodMenu? menu;
   final String? menuID;
   final foodCategories;
   // Address _address
@@ -12,8 +12,6 @@ class Restaurant with Serializable {
   double _score = 0;
 
   get score => _score;
-
-  FoodMenu? get menu => _menu;
 
   Restaurant({
     required this.name,
