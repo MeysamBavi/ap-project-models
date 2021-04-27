@@ -1,18 +1,19 @@
 import 'fake_data_base.dart';
-
 import 'order.dart';
 import 'editable.dart';
 import 'serializer.dart';
+import 'account.dart';
 
 class Server {
 
   Server([DataBase? dataBase]) : this.dataBase = dataBase;
 
+  Account? _account;
   DataBase? dataBase;
-
+  String token = '';
   final serializer = Serializer();
 
-  String token = '';
+  Account? get account => _account;
 
   bool isPhoneNumberValid(String phoneNumber) {
     var pattern = RegExp(r'^09\d{9}$');

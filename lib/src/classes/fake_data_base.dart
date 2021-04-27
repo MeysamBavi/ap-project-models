@@ -1,40 +1,39 @@
 import '../../models.dart';
 import 'dart:math';
 
-var dataBase = DataBase(accounts: [], restaurant: [], comments: [], menus: [], orders: []);
-var server = Server(dataBase);
-
 class DataBase {
   final List<Account> accounts;
   final List<Restaurant> restaurant;
   final List<Comment> comments;
   final List<FoodMenu> menus;
   final List<Order> orders;
+  final Map<String, String> loginData;
 
   DataBase({
-   required this.accounts,
-   required this.restaurant,
-   required this.comments,
-   required this.menus,
-   required this.orders
+  required this.accounts,
+  required this.restaurant,
+  required this.comments,
+  required this.menus,
+  required this.orders,
+  required this.loginData
 });
 
-  bool _filled = false;
-
-  void fill() {
-    if (_filled) return;
-    FakeData.generateOwnerAccount();
-    FakeData.generateUserAccount();
-    _filled = true;
+  static DataBase empty() {
+    return DataBase(accounts: [], restaurant: [], comments: [], menus: [], orders: [], loginData: {});
   }
 
 }
 
 class FakeData {
 
-  static final rand = Random();
+  final DataBase dataBase;
+  final Server server;
+  final rand = Random(DateTime.now().second);
 
-  static final foods = <Food>[
+  final List<Food> foods;
+
+  FakeData(this.dataBase, this.server)  :
+        foods = <Food>[
     Food(name: 'Pepperoni', category: FoodCategory.FastFood, price: Price(35000), server: server),
     Food(name: 'Sushi', category: FoodCategory.SeaFood, price: Price(50000), server: server),
     Food(name: 'Fish', category: FoodCategory.SeaFood, price: Price(30000), server: server),
@@ -53,7 +52,7 @@ class FakeData {
     Food(name: 'Shark', category: FoodCategory.SeaFood, price: Price(88000), server: server),
   ];
 
-  static final resNames = <String>[
+  final resNames = <String>[
     'Mcdonald',
     'Burger King',
     'Lime Kitchen',
@@ -74,7 +73,12 @@ class FakeData {
     'Little Persia'
   ];
 
-  static String generatePhoneNumber() {
+  void fill() {
+    generateOwnerAccount();
+    generateUserAccount();
+  }
+
+  String generatePhoneNumber() {
     var str = '09';
     for (var i = 0; i < 9; i++) {
       str += rand.nextInt(10).toString();
@@ -82,7 +86,7 @@ class FakeData {
     return str;
   }
 
-  static FoodMenu generateFoodMenu() {
+  FoodMenu generateFoodMenu() {
     var set = <int>{};
     for (var i = 0; i < 7; i++) {
       set.add(rand.nextInt(foods.length));
@@ -98,7 +102,7 @@ class FakeData {
     return menu;
   }
 
-  static Restaurant generateRestaurant() {
+  Restaurant generateRestaurant() {
     var menu = generateFoodMenu();
     var restaurant = Restaurant(name: resNames[rand.nextInt(resNames.length)], menuID: menu.id, score: rand.nextDouble()*5);
     restaurant.serialize(server.serializer);
@@ -112,13 +116,14 @@ class FakeData {
     return restaurant;
   }
 
-  static OwnerAccount generateOwnerAccount() {
+  OwnerAccount generateOwnerAccount() {
     var acc = OwnerAccount(phoneNumber: generatePhoneNumber(), restaurant: generateRestaurant(), server: server);
     dataBase.accounts.add(acc);
+    dataBase.loginData[acc.phoneNumber] = 'owner123';
     return acc;
   }
 
-  static UserAccount generateUserAccount() {
+  UserAccount generateUserAccount() {
     var user = UserAccount(
         phoneNumber: generatePhoneNumber(),
         server: server,
@@ -128,6 +133,7 @@ class FakeData {
         favRestaurantIDs: [dataBase.restaurant[0].id!],
         commentIDs: [dataBase.comments[0].id!]
     );
+    dataBase.loginData[user.phoneNumber] = 'user123';
     dataBase.accounts.add(user);
     return user;
   }
