@@ -14,3 +14,4 @@ export 'src/classes/order.dart';
 export 'src/classes/owner_account.dart';
 export 'src/classes/small_data.dart';
 export 'src/classes/user_account.dart';
+export 'src/classes/fake_data_base.dart';

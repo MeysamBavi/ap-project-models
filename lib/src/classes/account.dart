@@ -1,5 +1,4 @@
-import 'package:models/src/classes/editable.dart';
-
+import 'editable.dart';
 import 'order.dart';
 import 'server.dart';
 

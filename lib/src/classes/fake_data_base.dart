@@ -1,4 +1,4 @@
-import 'package:models/models.dart';
+import '../../models.dart';
 import 'dart:math';
 
 var dataBase = DataBase(accounts: [], restaurant: [], comments: [], menus: [], orders: []);

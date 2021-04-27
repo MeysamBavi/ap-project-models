@@ -1,6 +1,5 @@
-import 'package:models/models.dart';
-import 'package:models/src/classes/editable.dart';
-
+import '../../models.dart';
+import 'editable.dart';
 import 'serializable.dart';
 import 'price.dart';
 import 'small_data.dart';
