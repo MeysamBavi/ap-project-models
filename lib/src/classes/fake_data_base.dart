@@ -90,7 +90,9 @@ class FakeData {
     var menu = FoodMenu(server);
     menu.serialize(server.serializer);
     for (var i in set) {
-      menu.addFood(foods[i]);
+      var food = foods[i];
+      food.serialize(server.serializer);
+      menu.addFood(food);
     }
     dataBase.menus.add(menu);
     return menu;
