@@ -1,8 +1,14 @@
+import 'fake_data_base.dart';
+
 import 'order.dart';
 import 'editable.dart';
 import 'serializer.dart';
 
 class Server {
+
+  Server([DataBase? dataBase]) : this.dataBase = dataBase;
+
+  DataBase? dataBase;
 
   final serializer = Serializer();
 
