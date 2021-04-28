@@ -117,7 +117,7 @@ class FakeData {
   }
 
   OwnerAccount generateOwnerAccount() {
-    var acc = OwnerAccount(phoneNumber: generatePhoneNumber(), restaurant: generateRestaurant(), server: server);
+    var acc = OwnerAccount(phoneNumber: '09123123123', restaurant: generateRestaurant(), server: server);
     dataBase.accounts.add(acc);
     dataBase.loginData[acc.phoneNumber] = 'owner123';
     return acc;
@@ -125,7 +125,7 @@ class FakeData {
 
   UserAccount generateUserAccount() {
     var user = UserAccount(
-        phoneNumber: generatePhoneNumber(),
+        phoneNumber: '09321321321',
         server: server,
         firstName: 'Ali',
         lastName: 'Alavi',
