@@ -3,6 +3,8 @@ import 'order.dart';
 import 'editable.dart';
 import 'serializer.dart';
 import 'account.dart';
+import 'owner_account.dart';
+import 'food_menu.dart';
 
 class Server {
 
@@ -46,6 +48,10 @@ class Server {
       for (var acc in dataBase!.accounts) {
         if (acc.phoneNumber == phoneNumber) {
           _account = acc;
+          // if this account is for owner, fina and assign its restaurant's menu
+          if (_account is OwnerAccount) {
+            (_account as OwnerAccount).restaurant.menu = getObjectByID((_account as OwnerAccount).restaurant.menuID!) as FoodMenu;
+          }
           return true;
         }
       }

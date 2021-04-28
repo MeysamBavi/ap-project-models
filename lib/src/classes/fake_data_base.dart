@@ -50,6 +50,10 @@ class FakeData {
     Food(name: 'Jooje', category: FoodCategory.Iranian, price: Price(17000), server: server),
     Food(name: 'Tuna', category: FoodCategory.SeaFood, price: Price(28000), server: server),
     Food(name: 'Shark', category: FoodCategory.SeaFood, price: Price(88000), server: server),
+    Food(name: 'Mirza Qasemi', category: FoodCategory.Iranian, price: Price(48000), server: server),
+    Food(name: 'Sabzi Polo', category: FoodCategory.Iranian, price: Price(59000), server: server),
+    Food(name: 'Kalam Polo', category: FoodCategory.Iranian, price: Price(14000), server: server),
+    Food(name: 'Barg', category: FoodCategory.Iranian, price: Price(53000), server: server),
   ];
 
   final resNames = <String>[
@@ -88,7 +92,7 @@ class FakeData {
 
   FoodMenu generateFoodMenu() {
     var set = <int>{};
-    for (var i = 0; i < 7; i++) {
+    for (var i = 0; i < 14; i++) {
       set.add(rand.nextInt(foods.length));
     }
     var menu = FoodMenu(server);
