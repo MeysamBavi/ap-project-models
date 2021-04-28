@@ -38,4 +38,18 @@ class Server {
     //TODO implement new order handling
   }
 
+  bool login(String phoneNumber, String password) {
+    var correctPassword = dataBase!.loginData[phoneNumber];
+    if (correctPassword == null) return false;
+    if (password == correctPassword) {
+      for (var acc in dataBase!.accounts) {
+        if (acc.phoneNumber == phoneNumber) {
+          _account = acc;
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
 }
