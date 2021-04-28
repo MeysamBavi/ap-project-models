@@ -17,4 +17,4 @@ export 'src/classes/user_account.dart';
 export 'src/classes/fake_data_base.dart';
 export 'src/ui/constants.dart';
 export 'src/ui/head.dart';
-export 'src/ui/button_modal.dart';
+export 'src/ui/button_model.dart';
