@@ -3,7 +3,7 @@ import 'dart:math';
 
 class DataBase {
   final List<Account> accounts;
-  final List<Restaurant> restaurant;
+  final List<Restaurant> restaurants;
   final List<Comment> comments;
   final List<FoodMenu> menus;
   final List<Order> orders;
@@ -11,7 +11,7 @@ class DataBase {
 
   DataBase({
   required this.accounts,
-  required this.restaurant,
+  required this.restaurants,
   required this.comments,
   required this.menus,
   required this.orders,
@@ -19,7 +19,7 @@ class DataBase {
 });
 
   static DataBase empty() {
-    return DataBase(accounts: [], restaurant: [], comments: [], menus: [], orders: [], loginData: {});
+    return DataBase(accounts: [], restaurants: [], comments: [], menus: [], orders: [], loginData: {});
   }
 
 }
@@ -106,13 +106,15 @@ class FakeData {
     var menu = generateFoodMenu();
     var restaurant = Restaurant(name: resNames[rand.nextInt(resNames.length)], menuID: menu.id, score: rand.nextDouble()*5);
     restaurant.serialize(server.serializer);
-    dataBase.restaurant.add(restaurant);
+    dataBase.restaurants.add(restaurant);
     var c1 = Comment(server: server, restaurantID: restaurant.id!, score: 4, title: 'Good', message: 'it was good');
     var c2 = Comment(server: server, restaurantID: restaurant.id!, score: 1, title: 'Bad', message: 'it was bad');
     c1.serialize(server.serializer);
     c2.serialize(server.serializer);
     dataBase.comments.add(c1);
     dataBase.comments.add(c2);
+    restaurant.commentIDs.add(c1.id!);
+    restaurant.commentIDs.add(c2.id!);
     return restaurant;
   }
 
@@ -120,6 +122,7 @@ class FakeData {
     var acc = OwnerAccount(phoneNumber: '09123123123', restaurant: generateRestaurant(), server: server);
     dataBase.accounts.add(acc);
     dataBase.loginData[acc.phoneNumber] = 'owner123';
+    acc.activeOrders.add(Order(server: server, items: {FoodData('pizza', Price(26000)) : 2}, restaurant: acc.restaurant, customer: CustomerData('Mojtaba', 'Vahidi', Address())));
     return acc;
   }
 
@@ -130,10 +133,10 @@ class FakeData {
         firstName: 'Ali',
         lastName: 'Alavi',
         addresses: {'home' : Address()},
-        favRestaurantIDs: [dataBase.restaurant[0].id!],
+        favRestaurantIDs: [dataBase.restaurants[0].id!],
         commentIDs: [dataBase.comments[0].id!]
     );
-    dataBase.loginData[user.phoneNumber] = 'user123';
+    dataBase.loginData[user.phoneNumber] = 'user321';
     dataBase.accounts.add(user);
     return user;
   }

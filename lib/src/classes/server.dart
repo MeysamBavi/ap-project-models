@@ -25,13 +25,14 @@ class Server {
     return pattern.hasMatch(password);
   }
 
-  void edit(Editable object) {
-    //TODO implement edit
+  bool isIDValid(String id) {
+    var pattern = RegExp(r'^([RMCOF]-)?([0-9ABCDEF]{4})-([0-9ABCDEF]{4})$');
+    return pattern.hasMatch(id);
   }
 
-  bool isPasswordCorrect(String phoneNumber) {
-    //TODO implement password check
-    return false;
+
+  void edit(Editable object) {
+    //TODO implement edit
   }
 
   void addNewOrder(Order order) {
@@ -50,6 +51,42 @@ class Server {
       }
     }
     return false;
+  }
+
+  Object? getObjectByID(String id) {
+    if (!isIDValid(id)) return null;
+
+    if (id.startsWith('M-')) {
+      for (var menu in dataBase!.menus) {
+        if (menu.id == id) return menu;
+      }
+    }
+
+    if (id.startsWith('R-')) {
+      for (var res in dataBase!.restaurants) {
+        if (res.id == id) return res;
+      }
+    }
+
+    if (id.startsWith('C-')) {
+      for (var comment in dataBase!.comments) {
+        if (comment.id == id) return comment;
+      }
+    }
+
+    if (id.startsWith('O-')) {
+      for (var order in dataBase!.orders) {
+        if (order.id == id) return order;
+      }
+    }
+
+    // if (id.startsWith('F-')) {
+    //   for (var food in dataBase!.foods) {
+    //     if (food.id == id) return food;
+    //   }
+    // }
+
+    return null;
   }
 
 }
