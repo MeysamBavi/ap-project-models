@@ -5,6 +5,8 @@ import 'serializer.dart';
 import 'account.dart';
 import 'owner_account.dart';
 import 'food_menu.dart';
+import 'small_data.dart';
+import 'food.dart';
 
 class Server {
 
@@ -39,6 +41,19 @@ class Server {
 
   void addNewOrder(Order order) {
     //TODO implement new order handling
+  }
+
+  Order? reorder(Order order) {
+    var newItems = <FoodData, int>{};
+    for (var oldFoodData in order.items.keys) {
+      var newFood = getFoodByID(oldFoodData.foodID, order.restaurant.menuID!);
+      if (newFood == null) continue;
+      newItems[newFood.toFoodData()] = order.items[oldFoodData]!;
+    }
+    if (newItems.isEmpty) return null;
+    var newOrder = Order(server: this, items: newItems, restaurant: order.restaurant, customer: order.customer);
+    newOrder.serialize(serializer);
+    return newOrder;
   }
 
   bool login(String phoneNumber, String password) {
@@ -85,13 +100,19 @@ class Server {
         if (order.id == id) return order;
       }
     }
+    return null;
+  }
 
-    // if (id.startsWith('F-')) {
-    //   for (var food in dataBase!.foods) {
-    //     if (food.id == id) return food;
-    //   }
-    // }
-
+  Food? getFoodByID(String foodID, String menuID) {
+    if (!isIDValid(foodID)) return null;
+    var menu = getObjectByID(menuID) as FoodMenu?;
+    if (menu == null) return null;
+    for (var cat in menu.categories) {
+      var foods = menu.getFoods(cat)!;
+      for (var food in foods) {
+        if (food.id == foodID) return food;
+      }
+    }
     return null;
   }
 

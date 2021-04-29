@@ -12,7 +12,8 @@ class CustomerData {
 }
 
 class FoodData {
+  final String foodID;
   final String name;
   final Price price;
-  FoodData(this.name, this.price);
+  FoodData(this.name, this.foodID, this.price);
 }

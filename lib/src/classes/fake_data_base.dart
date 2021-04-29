@@ -54,7 +54,9 @@ class FakeData {
     Food(name: 'Sabzi Polo', category: FoodCategory.Iranian, price: Price(59000), server: server),
     Food(name: 'Kalam Polo', category: FoodCategory.Iranian, price: Price(14000), server: server),
     Food(name: 'Barg', category: FoodCategory.Iranian, price: Price(53000), server: server),
-  ];
+  ] {
+    foods.forEach((element) {element.serialize(server.serializer);});
+  }
 
   final resNames = <String>[
     'Mcdonald',
@@ -126,7 +128,7 @@ class FakeData {
     var acc = OwnerAccount(phoneNumber: '09123123123', restaurant: generateRestaurant(), server: server);
     dataBase.accounts.add(acc);
     dataBase.loginData[acc.phoneNumber] = 'owner123';
-    acc.activeOrders.add(Order(server: server, items: {FoodData('pizza', Price(26000)) : 2}, restaurant: acc.restaurant, customer: CustomerData('Mojtaba', 'Vahidi', Address())));
+    acc.activeOrders.add(Order(server: server, items: {FoodData('pizza', '', Price(28000)) : 2}, restaurant: acc.restaurant, customer: CustomerData('Mojtaba', 'Vahidi', Address())));
     return acc;
   }
 

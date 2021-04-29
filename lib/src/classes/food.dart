@@ -42,7 +42,7 @@ class Food with Serializable implements Editable {
   @override
   Server get server => _server;
 
-  FoodData toFoodData() => FoodData(_name, _price);
+  FoodData toFoodData() => FoodData(_name, id!, _price);
 
   set category(FoodCategory value) {
     _category = value;

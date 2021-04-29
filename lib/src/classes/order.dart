@@ -7,7 +7,7 @@ import 'small_data.dart';
 class Order with Serializable implements Editable {
   final Server server;
   final Map<FoodData, int> items;
-  final DateTime time;
+  DateTime time;
   String code;
   bool _isRequested;
   bool _isDelivered;
@@ -44,6 +44,11 @@ class Order with Serializable implements Editable {
   void sendRequest() {
     _isRequested = true;
     server.addNewOrder(this);
+    time = DateTime.now();
+  }
+
+  Order? reorder() {
+    return server.reorder(this);
   }
 
 }
