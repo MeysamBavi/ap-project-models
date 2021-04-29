@@ -3,6 +3,7 @@ import 'address.dart';
 import 'server.dart';
 import 'price.dart';
 import 'small_data.dart';
+import 'order.dart';
 
 class UserAccount extends Account {
 
@@ -13,6 +14,8 @@ class UserAccount extends Account {
   final Map<String, Address> addresses;
   final List<String> favRestaurantIDs;
   final List<String> commentIDs;
+  // adding and removing from cart should be done manually
+  final List<Order> cart;
 
   UserAccount({
     required String phoneNumber,
@@ -23,9 +26,11 @@ class UserAccount extends Account {
     String? defaultAddress,
     required this.addresses,
     required this.favRestaurantIDs,
-    required this.commentIDs
+    required this.commentIDs,
+    List<Order>? cart,
 })  : _credit = credit ?? Price(0),
       _defaultAddress = defaultAddress ?? '',
+      this.cart = cart ?? [],
       super(phoneNumber: phoneNumber, server: server);
 
   String get defaultAddress => _defaultAddress;
