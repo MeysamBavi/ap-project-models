@@ -27,9 +27,12 @@ class CommonColors {
 
 class Strings {
 
-  static final _data = <String, Map<String, String>>{
+  static const _data = <String, Map<String, String>>{
     'eng' : {
       'key' : 'value',
+      'bottom-nav-label-stats' : 'Statistics',
+      'bottom-nav-label-edit' : 'Edit Menu',
+      'bottom-nav-label-order' : 'Orders',
     }
   };
 
