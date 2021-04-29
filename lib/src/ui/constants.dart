@@ -33,6 +33,10 @@ class Strings {
       'bottom-nav-label-stats' : 'Statistics',
       'bottom-nav-label-edit' : 'Edit Menu',
       'bottom-nav-label-order' : 'Orders',
+      'FoodCategory.FastFood' : 'Fast Food',
+      'FoodCategory.SeaFood' : 'Sea Food',
+      'FoodCategory.Iranian' : 'Iranian',
+      'edit-menu-categories-header' : 'Categories',
     }
   };
 
