@@ -41,6 +41,7 @@ class Strings {
       'search-menu-tooltip' : 'Search Menu',
       'food-item-edit-button' : 'Edit',
       'toman' : 'Toman',
+      'orders-menu-header' : 'Orders',
     }
   };
 
