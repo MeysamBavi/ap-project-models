@@ -5,29 +5,28 @@ import 'server.dart';
 
 class FoodMenu with Serializable implements Editable {
 
-  final Map<FoodCategory, List<Food>> _data = <FoodCategory, List<Food>>{};
+  final Map<FoodCategory, List<Food>> _data;
   Server _server;
 
-  FoodMenu(Server server) : _server = server;
+  FoodMenu(Server server): _server = server, _data = <FoodCategory, List<Food>>{} {
+    for (var category in FoodCategory.values) {
+      _data[category] = <Food>[];
+    }
+  }
+
 
   @override
   Server get server => _server;
 
-  List<FoodCategory> get categories => _data.keys.toList();
+  List<FoodCategory> get categories => FoodCategory.values.where((element) => _data[element]!.isNotEmpty).toList(growable: false);
 
   void addFood(Food food) {
-    if (_data[food.category] == null) {
-      _data[food.category] = <Food>[];
-    }
     _data[food.category]!.add(food);
     server.edit(this);
   }
 
   void removeFood(Food food) {
-    _data[food.category]?.remove(food);
-    if (_data[food.category] == null || _data[food.category]!.isEmpty) {
-      _data.remove(food.category);
-    }
+    _data[food.category]!.remove(food);
     server.edit(this);
   }
 
