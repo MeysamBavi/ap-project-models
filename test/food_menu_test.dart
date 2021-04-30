@@ -61,7 +61,7 @@ void main() {
     menu.addFood(rice);
     menu.addFood(pizza);
     menu.removeFood(rice);
-    expect(menu.getFoods(rice.category), equals(null));
+    expect(menu.getFoods(rice.category), isEmpty);
   });
 
   test('remove', () {
@@ -76,7 +76,7 @@ void main() {
     var menu = FoodMenu(server);
     menu.addFood(pizza);
     menu.removeFood(fish);
-    expect(menu.getFoods(fish.category), equals(null));
+    expect(menu.getFoods(fish.category), isEmpty);
   });
 
   test('remove twice', () {
@@ -84,8 +84,30 @@ void main() {
     menu.addFood(pizza);
     menu.removeFood(pizza);
     menu.removeFood(pizza);
-    expect(menu.getFoods(pizza.category), equals(null));
+    expect(menu.getFoods(pizza.category), isEmpty);
     expect(menu.categories, isEmpty);
+  });
+
+  test('order of categories', (){
+    var menu1 = FoodMenu(server);
+    var menu2 = FoodMenu(server);
+    menu1.addFood(pizza);
+    menu1.addFood(sushi);
+    menu1.addFood(kookoo);
+    menu2.addFood(kookoo);
+    menu2.addFood(pizza);
+    menu2.addFood(sushi);
+    expect(menu1.categories.join(' ') == menu2.categories.join(' '), isTrue);
+  });
+
+  test('order of categories', (){
+    var menu1 = FoodMenu(server);
+    var menu2 = FoodMenu(server);
+    menu1.addFood(pizza);
+    menu1.addFood(sushi);
+    menu2.addFood(pizza);
+    menu2.addFood(sushi);
+    expect(menu1.categories.join(' ') == menu2.categories.join(' '), isTrue);
   });
 
 }
