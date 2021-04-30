@@ -42,6 +42,12 @@ class Strings {
       'food-item-edit-button' : 'Edit',
       'toman' : 'Toman',
       'orders-menu-header' : 'Orders',
+      'edit-bottom-sheet-remove' : 'Delete',
+      'edit-bottom-sheet-save' : 'Save',
+      'food-remove-dialog-title' : 'Delete Food?',
+      'food-remove-dialog-no' : 'No',
+      'food-remove-dialog-yes' : 'Yes',
+      'remove-food-dialog-message' : 'Are you sure?',
     }
   };
 
