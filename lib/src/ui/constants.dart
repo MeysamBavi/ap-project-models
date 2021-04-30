@@ -37,6 +37,10 @@ class Strings {
       'FoodCategory.SeaFood' : 'Sea Food',
       'FoodCategory.Iranian' : 'Iranian',
       'edit-menu-categories-header' : 'Categories',
+      'add-food-tooltip' : 'Add Food',
+      'search-menu-tooltip' : 'Search Menu',
+      'food-item-edit-button' : 'Edit',
+      'toman' : 'Toman',
     }
   };
 
