@@ -40,7 +40,8 @@ class Server {
   }
 
   void addNewOrder(Order order) {
-    //TODO implement new order handling
+    dataBase!.orders.add(order);
+    dataBase!.ownerOf[order.restaurant.id!]!.activeOrders.add(order);
   }
 
   Order? reorder(Order order) {

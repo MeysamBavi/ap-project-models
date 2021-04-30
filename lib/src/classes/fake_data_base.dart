@@ -8,6 +8,7 @@ class DataBase {
   final List<FoodMenu> menus;
   final List<Order> orders;
   final Map<String, String> loginData;
+  final Map<String, OwnerAccount> ownerOf;
 
   DataBase({
   required this.accounts,
@@ -15,11 +16,12 @@ class DataBase {
   required this.comments,
   required this.menus,
   required this.orders,
-  required this.loginData
+  required this.loginData,
+  required this.ownerOf
 });
 
   static DataBase empty() {
-    return DataBase(accounts: [], restaurants: [], comments: [], menus: [], orders: [], loginData: {});
+    return DataBase(accounts: [], restaurants: [], comments: [], menus: [], orders: [], loginData: {}, ownerOf: {});
   }
 
 }
@@ -34,7 +36,7 @@ class FakeData {
 
   FakeData(this.dataBase, this.server)  :
         foods = <Food>[
-    Food(name: 'Pepperoni', category: FoodCategory.FastFood, price: Price(35000), server: server),
+    Food(name: 'Pepperoni', category: FoodCategory.FastFood, price: Price(35000), server: server, isAvailable: false),
     Food(name: 'Sushi', category: FoodCategory.SeaFood, price: Price(50000), server: server),
     Food(name: 'Fish', category: FoodCategory.SeaFood, price: Price(30000), server: server),
     Food(name: 'Kabab', category: FoodCategory.Iranian, price: Price(20000), server: server),
@@ -42,20 +44,20 @@ class FakeData {
     Food(name: 'Lasagna', category: FoodCategory.FastFood, price: Price(23000), server: server),
     Food(name: 'Pasta', category: FoodCategory.FastFood, price: Price(27000), server: server),
     Food(name: 'Qeyme', category: FoodCategory.Iranian, price: Price(20000), server: server),
-    Food(name: 'Sardine', category: FoodCategory.SeaFood, price: Price(12000), server: server),
+    Food(name: 'Sardine', category: FoodCategory.SeaFood, price: Price(12000), server: server, isAvailable: false),
     Food(name: 'Eggs', category: FoodCategory.Iranian, price: Price(5000), server: server),
     Food(name: 'Burger', category: FoodCategory.FastFood, price: Price(32000), server: server),
     Food(name: 'Taco', category: FoodCategory.FastFood, price: Price(94000), server: server),
     Food(name: 'Salsa', category: FoodCategory.FastFood, price: Price(43000), server: server),
-    Food(name: 'Jooje', category: FoodCategory.Iranian, price: Price(17000), server: server),
-    Food(name: 'Tuna', category: FoodCategory.SeaFood, price: Price(28000), server: server),
+    Food(name: 'Jooje', category: FoodCategory.Iranian, price: Price(17000), server: server, isAvailable: false),
+    Food(name: 'Tuna', category: FoodCategory.SeaFood, price: Price(28000), server: server, isAvailable: false),
     Food(name: 'Shark', category: FoodCategory.SeaFood, price: Price(88000), server: server),
     Food(name: 'Mirza Qasemi', category: FoodCategory.Iranian, price: Price(48000), server: server),
-    Food(name: 'Sabzi Polo', category: FoodCategory.Iranian, price: Price(59000), server: server),
+    Food(name: 'Sabzi Polo', category: FoodCategory.Iranian, price: Price(59000), server: server, isAvailable: false),
     Food(name: 'Kalam Polo', category: FoodCategory.Iranian, price: Price(14000), server: server),
     Food(name: 'Barg', category: FoodCategory.Iranian, price: Price(53000), server: server),
   ] {
-    foods.forEach((element) {element.serialize(server.serializer);});
+    foods.forEach((element) => element.serialize(server.serializer));
   }
 
   final resNames = <String>[
@@ -101,15 +103,22 @@ class FakeData {
     menu.serialize(server.serializer);
     for (var i in set) {
       var food = foods[i];
-      food.serialize(server.serializer);
       menu.addFood(food);
     }
     dataBase.menus.add(menu);
     return menu;
   }
 
+  FoodMenu getSampleMenu() {
+    var menu = FoodMenu(server);
+    menu.serialize(server.serializer);
+    [0, 1, 3, 4, 6, 7, 8, 10, 11, 13, 14, 17].forEach((i) => menu.addFood(foods[i]));
+    dataBase.menus.add(menu);
+    return menu;
+  }
+
   Restaurant generateRestaurant() {
-    var menu = generateFoodMenu();
+    var menu = getSampleMenu();
     var restaurant = Restaurant(name: resNames[rand.nextInt(resNames.length)], menuID: menu.id, score: rand.nextDouble()*5);
     restaurant.serialize(server.serializer);
     dataBase.restaurants.add(restaurant);
@@ -127,8 +136,10 @@ class FakeData {
   OwnerAccount generateOwnerAccount() {
     var acc = OwnerAccount(phoneNumber: '09123123123', restaurant: generateRestaurant(), server: server);
     dataBase.accounts.add(acc);
+    dataBase.ownerOf[acc.restaurant.id!] = acc;
     dataBase.loginData[acc.phoneNumber] = 'owner123';
-    acc.activeOrders.add(Order(server: server, items: {FoodData('pizza', '', Price(28000)) : 2}, restaurant: acc.restaurant, customer: CustomerData('Mojtaba', 'Vahidi', Address())));
+    var order = Order(server: server, items: {foods[0].toFoodData() : 2}, restaurant: acc.restaurant, customer: CustomerData('Mojtaba', 'Vahidi', Address()));
+    order.sendRequest();
     return acc;
   }
 
