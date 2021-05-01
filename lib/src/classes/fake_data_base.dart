@@ -140,6 +140,8 @@ class FakeData {
     dataBase.loginData[acc.phoneNumber] = 'owner123';
     var order = Order(server: server, items: {foods[0].toFoodData() : 2}, restaurant: acc.restaurant, customer: CustomerData('Mojtaba', 'Vahidi', Address()));
     order.sendRequest();
+    var order2 = Order(server: server, items: {foods[0].toFoodData() : 2 , foods[3].toFoodData() : 1 , foods[6].toFoodData() : 3}, restaurant: acc.restaurant, customer: CustomerData('Ali', 'Alavi', Address()));
+    order2.sendRequest();
     return acc;
   }
 
