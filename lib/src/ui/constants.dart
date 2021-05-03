@@ -48,6 +48,11 @@ class Strings {
       'food-remove-dialog-no' : 'No',
       'food-remove-dialog-yes' : 'Yes',
       'remove-food-dialog-message' : 'Are you sure?',
+      'order-bottom-sheet-is-ready' : 'ready to deliver?',
+      'order-page-active-orders' : 'Active orders',
+      'order-page-inactive-orders' : 'Inactive orders',
+      'add-bottom-sheet-food-name' : 'Name',
+      'add-bottom-sheet-food-price' : 'Price',
     }
   };
 
