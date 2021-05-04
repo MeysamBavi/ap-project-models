@@ -58,6 +58,7 @@ class Strings {
       'add-food-empty-price-error' : 'Price is required.',
       'add-food-invalid-price-error' : 'Invalid number.',
       'add-food-empty-name-error' : 'Name is required.',
+      'order-details-button' : 'Details',
     }
   };
 
