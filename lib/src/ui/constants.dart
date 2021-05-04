@@ -59,6 +59,17 @@ class Strings {
       'add-food-invalid-price-error' : 'Invalid number.',
       'add-food-empty-name-error' : 'Name is required.',
       'order-details-button' : 'Details',
+
+      //user app
+      'bottom-nav-restaurants' : 'Restaurants',
+      'bottom-nav-cart' : 'Cart',
+      'bottom-nav-orders' : 'Orders',
+      'bottom-nav-user-account' : 'Account',
+      'app-bar-restaurants' : 'Restaurants',
+      'app-bar-leading-search' : 'Search',
+      'restaurant-card-inf' : 'Info',
+
+
     }
   };
 
