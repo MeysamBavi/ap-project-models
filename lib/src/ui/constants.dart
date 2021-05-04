@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import '../classes/food.dart';
 
 class CommonColors {
   static Color? pink = Colors.pink[200];
@@ -29,13 +30,13 @@ class Strings {
 
   static const _data = <String, Map<String, String>>{
     'eng' : {
-      'key' : 'value',
-      'bottom-nav-label-stats' : 'Statistics',
-      'bottom-nav-label-edit' : 'Edit Menu',
-      'bottom-nav-label-order' : 'Orders',
       'FoodCategory.FastFood' : 'Fast Food',
       'FoodCategory.SeaFood' : 'Sea Food',
       'FoodCategory.Iranian' : 'Iranian',
+
+      'bottom-nav-label-stats' : 'Statistics',
+      'bottom-nav-label-edit' : 'Edit Menu',
+      'bottom-nav-label-order' : 'Orders',
       'edit-menu-categories-header' : 'Categories',
       'add-food-tooltip' : 'Add Food',
       'search-menu-tooltip' : 'Search Menu',
@@ -48,15 +49,15 @@ class Strings {
       'food-remove-dialog-no' : 'No',
       'food-remove-dialog-yes' : 'Yes',
       'remove-food-dialog-message' : 'Are you sure?',
-      'order-bottom-sheet-is-ready' : 'Ready to deliver?',
+      'order-bottom-sheet-is-ready' : 'ready to deliver?',
       'order-page-active-orders' : 'Active orders',
       'order-page-inactive-orders' : 'Inactive orders',
       'add-bottom-sheet-food-name' : 'Name',
       'add-bottom-sheet-food-price' : 'Price',
       'add-bottom-sheet-food-description' : 'Description',
-      'edit-dialogue-text' : 'Are you sure about the changes?',
-      'edit-dialogue-save' : 'Yes',
-      'edit-dialogue-revert' : 'Revert changes',
+      'add-food-empty-price-error' : 'Price is required.',
+      'add-food-invalid-price-error' : 'Invalid number.',
+      'add-food-empty-name-error' : 'Name is required.',
     }
   };
 
@@ -64,5 +65,18 @@ class Strings {
 
   static String? get(String key) {
     return _data[defaultLanguage]?[key];
+  }
+
+  static FoodCategory? toCategory(String name) {
+    if (name == 'Iranian' || name == 'iranian') {
+      return FoodCategory.Iranian;
+    }
+    if (name == 'Fast Food' || name == 'FastFood' || name == 'fast food') {
+      return FoodCategory.FastFood;
+    }
+    if (name == 'Sea Food' || name == 'SeaFood' || name == 'sea food') {
+      return FoodCategory.SeaFood;
+    }
+    return null;
   }
 }
