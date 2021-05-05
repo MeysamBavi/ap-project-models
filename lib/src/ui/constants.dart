@@ -67,8 +67,10 @@ class Strings {
       'bottom-nav-user-account' : 'Account',
       'app-bar-restaurants' : 'Restaurants',
       'app-bar-leading-search' : 'Search',
-      'restaurant-card-inf' : 'Info',
-
+      'restaurant-card-inf' : 'Buy',
+      'restaurant-page-return-tooltip' : 'Return',
+      'restaurant-page-menu-header' : 'Menu',
+      'restaurant-page-button' : 'Info',
 
     }
   };
