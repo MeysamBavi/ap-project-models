@@ -79,7 +79,10 @@ class Strings {
       'restaurant-page-return-tooltip' : 'Return',
       'restaurant-page-menu-header' : 'Menu',
       'restaurant-page-button' : 'Info',
-
+      'order-bottom-sheet-number' : 'Number',
+      'order-bottom-sheet-empty-error' : 'Please enter a number',
+      'order-bottom-sheet-negative-error' : 'Number cant be negative :/',
+      'order-bottom-sheet-order' : 'Order',
     }
   };
 
