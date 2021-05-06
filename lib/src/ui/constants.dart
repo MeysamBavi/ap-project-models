@@ -61,6 +61,12 @@ class Strings {
       'add-food-invalid-price-error' : 'Invalid number.',
       'add-food-empty-name-error' : 'Name is required.',
       'order-details-button' : 'Details',
+      'menu-search-options-title' : 'Search for...',
+      'search-name-hint' : 'Name contains...',
+      'price-from' : 'Min price',
+      'price-to' : 'Max price',
+      'search-availability' : 'Is Available',
+      'search' : 'Search',
 
       //user app
       'bottom-nav-restaurants' : 'Restaurants',
