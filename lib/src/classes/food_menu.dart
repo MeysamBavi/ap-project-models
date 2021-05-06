@@ -38,4 +38,16 @@ class FoodMenu with Serializable implements Editable {
     return categories.contains(category);
   }
 
+  // returns a new menu with all the foods that predicate returns true on them
+  FoodMenu toSubMenu(bool Function(Food) predicate) {
+    var subMenu = FoodMenu(server);
+    for (var category in FoodCategory.values) {
+      for (Food food in _data[category] ?? const []) {
+        if (predicate(food)) {
+          subMenu.addFood(food);
+        }
+      }
+    }
+    return subMenu;
+  }
 }

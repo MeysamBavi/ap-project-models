@@ -1,8 +1,9 @@
 
 class Price {
-  final int _value;
 
-  const Price(this._value);
+  static const MAX = 1000000000;
+  final int _value;
+  const Price(int value)  : _value = value > MAX ? MAX : value;
 
   int toInt() => _value;
 
