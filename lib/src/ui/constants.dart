@@ -34,6 +34,7 @@ class Strings {
       'FoodCategory.SeaFood' : 'Sea Food',
       'FoodCategory.Iranian' : 'Iranian',
 
+      // restaurant app
       'bottom-nav-label-stats' : 'Statistics',
       'bottom-nav-label-edit' : 'Edit Menu',
       'bottom-nav-label-order' : 'Orders',
@@ -50,8 +51,9 @@ class Strings {
       'food-remove-dialog-yes' : 'Yes',
       'remove-food-dialog-message' : 'Are you sure?',
       'order-bottom-sheet-is-ready' : 'ready to deliver?',
-      'order-page-active-orders' : 'Active orders',
-      'order-page-inactive-orders' : 'Inactive orders',
+      'order-page-active-orders' : 'Active Orders',
+      'order-page-inactive-orders' : 'Previous Orders',
+      'no-order-message' : 'No order exists.',
       'add-bottom-sheet-food-name' : 'Name',
       'add-bottom-sheet-food-price' : 'Price',
       'add-bottom-sheet-food-description' : 'Description',
@@ -92,5 +94,15 @@ class Strings {
       return FoodCategory.SeaFood;
     }
     return null;
+  }
+
+  static String formatDate(DateTime time) {
+    var year = time.year.toString().padLeft(4, '0');
+    var month = time.month.toString().padLeft(2, '0');
+    var day = time.day.toString().padLeft(2, '0');
+    var hour = time.hour.toString().padLeft(2, '0');
+    var minute = time.minute.toString().padLeft(2, '0');
+    var seconds = time.second.toString().padLeft(2, '0');
+    return '$hour:$minute:$seconds  $year/$month/$day';
   }
 }
