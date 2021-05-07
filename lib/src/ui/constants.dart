@@ -81,8 +81,11 @@ class Strings {
       'restaurant-page-button' : 'Info',
       'order-bottom-sheet-number' : 'Number',
       'order-bottom-sheet-empty-error' : 'Please enter a number',
-      'order-bottom-sheet-negative-error' : 'Number cant be negative :/',
+      'order-bottom-sheet-negative-error' : 'Number must be positive',
       'order-bottom-sheet-order' : 'Order',
+      'order-bottom-sheet-not-available' : 'This food is not available',
+      'cart-page-no-items-in-cart' : 'The cart is empty',
+      'cart-page-app-bar' : 'User cart'
     }
   };
 
