@@ -85,7 +85,11 @@ class Strings {
       'order-bottom-sheet-order' : 'Order',
       'order-bottom-sheet-not-available' : 'This food is not available',
       'cart-page-no-items-in-cart' : 'The cart is empty',
-      'cart-page-app-bar' : 'User cart'
+      'cart-page-app-bar' : 'User cart',
+      'user-account-app-bar' : 'User account',
+      'add-fund-null-error' : 'The field cant be empty',
+      'add-fund-negative-error' : 'Value cant be negative or zero',
+      'add-fund-hint' : 'Add Credit'
     }
   };
 
