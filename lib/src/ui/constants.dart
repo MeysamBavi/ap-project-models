@@ -67,6 +67,15 @@ class Strings {
       'price-to' : 'Max price',
       'search-availability' : 'Is Available',
       'search' : 'Search',
+      'settings-appbar-title' : 'Settings',
+      'restaurant-name-label' : 'Restaurant name:',
+      'restaurant-address-label' : 'Address:',
+      'owner-phone-number-label' : 'Phone number:',
+      'restaurant-score-label' : 'Score:',
+      'restaurant-info-label' : 'Information:',
+      'comment-button' : 'Comments',
+      'map-button' : 'Set location',
+
 
       //user app
       'bottom-nav-restaurants' : 'Restaurants',
@@ -124,4 +133,10 @@ class Strings {
     var seconds = time.second.toString().padLeft(2, '0');
     return '$hour:$minute:$seconds  $year/$month/$day';
   }
+
+  static String censorPhoneNumber(String phoneNumber) {
+    var l = phoneNumber.length;
+    return '${phoneNumber.substring(0, 4)}****${phoneNumber.substring(l-3, l)}';
+  }
+
 }
