@@ -91,7 +91,8 @@ class Strings {
       'user-account-app-bar' : 'User account',
       'add-fund-null-error' : 'The field cant be empty',
       'add-fund-negative-error' : 'Value cant be negative or zero',
-      'add-fund-hint' : 'Add Credit'
+      'add-fund-hint' : 'Add Credit',
+      'fav-restaurants-app-bar' : 'Favourite Restaurants',
     }
   };
 
