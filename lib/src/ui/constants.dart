@@ -102,6 +102,8 @@ class Strings {
       'add-fund-negative-error' : 'Value cant be negative or zero',
       'add-fund-hint' : 'Add Credit',
       'fav-restaurants-app-bar' : 'Favourite Restaurants',
+      'orders-app-bar' : 'Orders',
+
     }
   };
 
