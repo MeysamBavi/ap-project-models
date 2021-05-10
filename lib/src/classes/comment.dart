@@ -7,10 +7,10 @@ class Comment with Serializable implements Editable {
   final Server server;
   final String restaurantID;
   final DateTime time;
-  final double score;
+  final int score;
   final String title;
   final String message;
-  String? _response;
+  String? _reply;
 
   Comment({
     required this.server,
@@ -20,10 +20,10 @@ class Comment with Serializable implements Editable {
     required this.message
 })  : time = DateTime.now();
 
-  String? get response => _response;
+  String? get reply => _reply;
 
-  set response(String? value) {
-    _response = value;
+  set reply(String? value) {
+    _reply = value;
     server.edit(this);
   }
 }

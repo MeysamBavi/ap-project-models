@@ -18,3 +18,4 @@ export 'src/classes/fake_data_base.dart';
 export 'src/ui/constants.dart';
 export 'src/ui/head.dart';
 export 'src/ui/button_model.dart';
+export 'src/ui/comment_widget.dart';

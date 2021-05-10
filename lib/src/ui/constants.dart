@@ -108,6 +108,9 @@ class Strings {
       'fav-restaurants-app-bar' : 'Favourite Restaurants',
       'orders-app-bar' : 'Orders',
 
+      //models
+      'empty-reply-error' : 'Reply can\'t be empty',
+
     }
   };
 
