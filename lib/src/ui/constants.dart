@@ -75,6 +75,10 @@ class Strings {
       'restaurant-info-label' : 'Information:',
       'comment-button' : 'Comments',
       'map-button' : 'Set location',
+      'place-marker-title' : 'Place the marker',
+      'confirm' : 'Confirm',
+      'aod-title' : 'Determine the area of dispatch',
+      
 
 
       //user app
