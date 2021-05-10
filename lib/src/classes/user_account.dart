@@ -10,7 +10,7 @@ class UserAccount extends Account {
   final String firstName;
   final String lastName;
   Price _credit;
-  String _defaultAddress;
+  String? _defaultAddress;
   final Map<String, Address> addresses;
   final List<String> favRestaurantIDs;
   final List<String> commentIDs;
@@ -29,13 +29,13 @@ class UserAccount extends Account {
     required this.commentIDs,
     List<Order>? cart,
 })  : _credit = credit ?? Price(0),
-      _defaultAddress = defaultAddress ?? '',
+      _defaultAddress = defaultAddress,
       this.cart = cart ?? [],
       super(phoneNumber: phoneNumber, server: server);
 
-  String get defaultAddress => _defaultAddress;
+  String? get defaultAddress => _defaultAddress;
 
-  set defaultAddress(String value) {
+  set defaultAddress(String? value) {
     _defaultAddress = value;
     server.edit(this);
   }
