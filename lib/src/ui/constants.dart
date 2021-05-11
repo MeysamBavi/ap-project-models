@@ -90,6 +90,7 @@ class Strings {
       'app-bar-leading-search' : 'Search',
       'restaurant-card-inf' : 'Buy',
       'restaurant-page-return-tooltip' : 'Return',
+      'restaurant-page-accept-tooltip' : 'Order',
       'restaurant-page-menu-header' : 'Menu',
       'restaurant-page-button' : 'Info',
       'order-bottom-sheet-number' : 'Number',
@@ -107,7 +108,14 @@ class Strings {
       'add-fund-hint' : 'Add Credit',
       'fav-restaurants-app-bar' : 'Favourite Restaurants',
       'orders-app-bar' : 'Orders',
-
+      'orders-active-orders-heading' : 'Active Orders',
+      'orders-previous-orders-heading' : 'Previous Orders',
+      'orders-no-active-orders' : 'No Active Orders',
+      'orders-no-previous-orders' : 'No Previous Orders',
+      'orders-reorder-button' : 'Re-Order',
+      'insufficient-fund-dialog' : 'Not Enough Money',
+      'fund-dialog-add-fund' : 'Add',
+      'orders-comment-button' : 'Comment',
       //models
       'empty-reply-error' : 'Reply can\'t be empty',
 
