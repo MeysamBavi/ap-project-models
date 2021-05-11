@@ -78,7 +78,7 @@ class Strings {
       'place-marker-title' : 'Place the marker',
       'confirm' : 'Confirm',
       'aod-title' : 'Determine the area of dispatch',
-      
+      'comments-panel-title' : 'Comments',
 
 
       //user app

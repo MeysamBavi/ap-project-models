@@ -32,6 +32,9 @@ class _CommentTileState extends State<CommentTile> {
           Text(comment.score.toString(), style: TextStyle(fontWeight: FontWeight.bold),)
         ],
       ),
+      subtitle: Text(Strings.formatDate(comment.time), style: Theme.of(context).textTheme.caption,),
+      backgroundColor: Colors.grey[50],
+      collapsedBackgroundColor: Colors.white,
       children: [
         Container(
           width: MediaQuery.of(context).size.width - 50,
@@ -41,6 +44,7 @@ class _CommentTileState extends State<CommentTile> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: Theme.of(context).primaryColorDark),
+            color: Colors.white
           ),
         ),
         Padding(
