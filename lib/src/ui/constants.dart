@@ -79,6 +79,9 @@ class Strings {
       'confirm' : 'Confirm',
       'aod-title' : 'Determine the area of dispatch',
       'comments-panel-title' : 'Comments',
+      'stats-title' : 'Statistics',
+      'today' : 'Today',
+      'all' : 'All',
 
 
       //user app
@@ -142,13 +145,17 @@ class Strings {
   }
 
   static String formatDate(DateTime time) {
-    var year = time.year.toString().padLeft(4, '0');
-    var month = time.month.toString().padLeft(2, '0');
-    var day = time.day.toString().padLeft(2, '0');
     var hour = time.hour.toString().padLeft(2, '0');
     var minute = time.minute.toString().padLeft(2, '0');
     var seconds = time.second.toString().padLeft(2, '0');
-    return '$hour:$minute:$seconds  $year/$month/$day';
+    return '$hour:$minute:$seconds  ${formatDay(time)}';
+  }
+
+  static String formatDay(DateTime time) {
+    var year = time.year.toString().padLeft(4, '0');
+    var month = time.month.toString().padLeft(2, '0');
+    var day = time.day.toString().padLeft(2, '0');
+    return '$year/$month/$day';
   }
 
   static String censorPhoneNumber(String phoneNumber) {
