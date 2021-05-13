@@ -82,6 +82,9 @@ class FakeData {
   ];
 
   void fill() {
+    for (var i = 0; i < 10; i++) {
+      generateRestaurant(true);
+    }
     generateOwnerAccount();
     generateUserAccount();
   }
@@ -117,8 +120,8 @@ class FakeData {
     return menu;
   }
 
-  Restaurant generateRestaurant() {
-    var menu = getSampleMenu();
+  Restaurant generateRestaurant(bool isRandom) {
+    var menu = isRandom ? generateFoodMenu() : getSampleMenu();
     var restaurant = Restaurant(name: resNames[rand.nextInt(resNames.length)], menuID: menu.id, score: rand.nextDouble()*5);
     restaurant.serialize(server.serializer);
     dataBase.restaurants.add(restaurant);
@@ -134,13 +137,15 @@ class FakeData {
   }
 
   OwnerAccount generateOwnerAccount() {
-    var acc = OwnerAccount(phoneNumber: '09123123123', restaurant: generateRestaurant(), server: server);
+    var acc = OwnerAccount(phoneNumber: '09123123123', restaurant: generateRestaurant(false), server: server);
     dataBase.accounts.add(acc);
     dataBase.ownerOf[acc.restaurant.id!] = acc;
     dataBase.loginData[acc.phoneNumber] = 'owner123';
     var order = Order(server: server, items: {foods[0].toFoodData() : 2}, restaurant: acc.restaurant, customer: CustomerData('Mojtaba', 'Vahidi', Address()));
+    order.serialize(server.serializer);
     order.sendRequest();
     var order2 = Order(server: server, items: {foods[0].toFoodData() : 2 , foods[3].toFoodData() : 1 , foods[6].toFoodData() : 3}, restaurant: acc.restaurant, customer: CustomerData('Ali', 'Alavi', Address()));
+    order2.serialize(server.serializer);
     order2.sendRequest();
     return acc;
   }
@@ -152,8 +157,8 @@ class FakeData {
         firstName: 'Ali',
         lastName: 'Alavi',
         addresses: {'home' : Address()},
-        favRestaurantIDs: [dataBase.restaurants[0].id!],
-        commentIDs: [dataBase.comments[0].id!]
+        favRestaurantIDs: [dataBase.restaurants[0].id!, dataBase.restaurants[1].id!, dataBase.restaurants[2].id!],
+        commentIDs: [dataBase.comments[0].id!, dataBase.comments[2].id!, dataBase.comments[5].id!,]
     );
     dataBase.loginData[user.phoneNumber] = 'user321';
     dataBase.accounts.add(user);

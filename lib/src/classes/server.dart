@@ -1,3 +1,7 @@
+import 'dart:math';
+
+import 'package:models/models.dart';
+
 import 'fake_data_base.dart';
 import 'order.dart';
 import 'editable.dart';
@@ -115,6 +119,15 @@ class Server {
       }
     }
     return null;
+  }
+
+  List<Restaurant> getRecommendedRestaurants([bool Function(Restaurant)? predicate]) {
+    if (predicate == null) {
+      return List.unmodifiable(
+          dataBase!.restaurants.sublist(0, min(10, dataBase!.restaurants.length))
+      );
+    }
+    return List.unmodifiable(dataBase!.restaurants.where(predicate));
   }
 
 }
