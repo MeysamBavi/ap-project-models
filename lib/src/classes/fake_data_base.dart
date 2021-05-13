@@ -82,10 +82,11 @@ class FakeData {
   ];
 
   void fill() {
+    // order of these calls matters, do not change! (Literally spaghetti)
+    generateOwnerAccount();
     for (var i = 0; i < 10; i++) {
       generateRestaurant(true);
     }
-    generateOwnerAccount();
     generateUserAccount();
   }
 
@@ -121,10 +122,18 @@ class FakeData {
   }
 
   Restaurant generateRestaurant(bool isRandom) {
-    var menu = isRandom ? generateFoodMenu() : getSampleMenu();
+    var menu;
+    if (isRandom) {
+      menu = generateFoodMenu();
+    } else {
+      menu = getSampleMenu();
+    }
     var restaurant = Restaurant(name: resNames[rand.nextInt(resNames.length)], menuID: menu.id, score: rand.nextDouble()*5);
     restaurant.serialize(server.serializer);
     dataBase.restaurants.add(restaurant);
+    if (isRandom) {
+      dataBase.ownerOf[restaurant.id!] = dataBase.accounts[0] as OwnerAccount;
+    }
     var c1 = Comment(server: server, restaurantID: restaurant.id!, score: 4, title: 'Good', message: 'it was good');
     var c2 = Comment(server: server, restaurantID: restaurant.id!, score: 1, title: 'Bad', message: 'it was bad');
     c1.serialize(server.serializer);
@@ -134,6 +143,29 @@ class FakeData {
     restaurant.commentIDs.add(c1.id!);
     restaurant.commentIDs.add(c2.id!);
     return restaurant;
+  }
+
+  Order getSampleOrder(CustomerData customer, bool isRequested, bool isDelivered) {
+    var restaurant = dataBase.restaurants[rand.nextInt(dataBase.restaurants.length)];
+    var menu = server.getObjectByID(restaurant.menuID!) as FoodMenu;
+    var items = <FoodData, int>{};
+    for (var category in menu.categories) {
+      items[menu.getFoods(category)![0].toFoodData()] = rand.nextInt(3) + 1;
+    }
+    var order = Order(
+      server: server,
+      items: items,
+      restaurant: restaurant,
+      customer: customer,
+    );
+    order.serialize(server.serializer);
+    if (isRequested) {
+      order.sendRequest();
+      if (isDelivered) {
+        order.isDelivered = isDelivered;
+      }
+    }
+    return order;
   }
 
   OwnerAccount generateOwnerAccount() {
@@ -160,6 +192,13 @@ class FakeData {
         favRestaurantIDs: [dataBase.restaurants[0].id!, dataBase.restaurants[1].id!, dataBase.restaurants[2].id!],
         commentIDs: [dataBase.comments[0].id!, dataBase.comments[2].id!, dataBase.comments[5].id!,]
     );
+    var customerData = user.toCustomerData(user.addresses['home']!);
+    user.cart.add(getSampleOrder(customerData, false, false));
+    user.cart.add(getSampleOrder(customerData, false, false));
+    user.previousOrders.add(getSampleOrder(customerData, true, true));
+    user.previousOrders.add(getSampleOrder(customerData, true, true));
+    user.activeOrders.add(getSampleOrder(customerData, true, false));
+    user.activeOrders.add(getSampleOrder(customerData, true, false));
     dataBase.loginData[user.phoneNumber] = 'user321';
     dataBase.accounts.add(user);
     return user;
