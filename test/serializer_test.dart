@@ -24,47 +24,47 @@ void main() {
   });
 
   test('id validator', () {
-    expect(server.isIDValid('1234-ABCD'), isTrue);
+    expect(server.serializer.isIDValid('1234-ABCD'), isTrue);
   });
 
   test('id validator', () {
-    expect(server.isIDValid('F-1A34-AB00'), isTrue);
+    expect(server.serializer.isIDValid('F-1A34-AB00'), isTrue);
   });
 
   test('id validator', () {
-    expect(server.isIDValid('M-0000-A987'), isTrue);
+    expect(server.serializer.isIDValid('M-0000-A987'), isTrue);
   });
 
   test('id validator', () {
-    expect(server.isIDValid('O-0000-A987'), isTrue);
+    expect(server.serializer.isIDValid('O-0000-A987'), isTrue);
   });
 
   test('id validator', () {
-    expect(server.isIDValid('1234-ABCG'), isFalse);
+    expect(server.serializer.isIDValid('1234-ABCG'), isFalse);
   });
 
   test('id validator', () {
-    expect(server.isIDValid('Z-1234-ABCD'), isFalse);
+    expect(server.serializer.isIDValid('Z-1234-ABCD'), isFalse);
   });
 
   test('id validator', () {
-    expect(server.isIDValid('F-1234-ABC'), isFalse);
+    expect(server.serializer.isIDValid('F-1234-ABC'), isFalse);
   });
 
   test('id validator', () {
-    expect(server.isIDValid('123-ABCD'), isFalse);
+    expect(server.serializer.isIDValid('123-ABCD'), isFalse);
   });
 
   test('id validator', () {
-    expect(server.isIDValid('123-ABC'), isFalse);
+    expect(server.serializer.isIDValid('123-ABC'), isFalse);
   });
 
   test('id validator', () {
-    expect(server.isIDValid('R-12345678'), isFalse);
+    expect(server.serializer.isIDValid('R-12345678'), isFalse);
   });
 
   test('id validator', () {
-    expect(server.isIDValid('1234567C'), isFalse);
+    expect(server.serializer.isIDValid('1234567C'), isFalse);
   });
 
 }
