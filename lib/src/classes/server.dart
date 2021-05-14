@@ -14,12 +14,12 @@ import 'food.dart';
 
 class Server {
 
-  Server([DataBase? dataBase]) : this.dataBase = dataBase;
+  Server([DataBase? dataBase]) : this.dataBase = dataBase ?? DataBase.empty(), serializer = Serializer();
 
   Account? _account;
-  DataBase? dataBase;
+  DataBase dataBase;
   String token = '';
-  final serializer = Serializer();
+  final serializer;
 
   Account? get account => _account;
 
@@ -44,8 +44,8 @@ class Server {
   }
 
   void addNewOrder(Order order) {
-    dataBase!.orders.add(order);
-    dataBase!.ownerOf[order.restaurant.id!]!.activeOrders.add(order);
+    dataBase.orders.add(order);
+    dataBase.ownerOf[order.restaurant.id!]!.activeOrders.add(order);
   }
 
   Order? reorder(Order order) {
@@ -62,10 +62,10 @@ class Server {
   }
 
   bool login(String phoneNumber, String password) {
-    var correctPassword = dataBase!.loginData[phoneNumber];
+    var correctPassword = dataBase.loginData[phoneNumber];
     if (correctPassword == null) return false;
     if (password == correctPassword) {
-      for (var acc in dataBase!.accounts) {
+      for (var acc in dataBase.accounts) {
         if (acc.phoneNumber == phoneNumber) {
           _account = acc;
           // if this account is for owner, fina and assign its restaurant's menu
@@ -80,28 +80,31 @@ class Server {
   }
 
   Object? getObjectByID(String id) {
-    if (!isIDValid(id)) return null;
+    if (!isIDValid(id)) {
+      print('INVALID ID');
+      return null;
+    }
 
     if (id.startsWith('M-')) {
-      for (var menu in dataBase!.menus) {
+      for (var menu in dataBase.menus) {
         if (menu.id == id) return menu;
       }
     }
 
     if (id.startsWith('R-')) {
-      for (var res in dataBase!.restaurants) {
+      for (var res in dataBase.restaurants) {
         if (res.id == id) return res;
       }
     }
 
     if (id.startsWith('C-')) {
-      for (var comment in dataBase!.comments) {
+      for (var comment in dataBase.comments) {
         if (comment.id == id) return comment;
       }
     }
 
     if (id.startsWith('O-')) {
-      for (var order in dataBase!.orders) {
+      for (var order in dataBase.orders) {
         if (order.id == id) return order;
       }
     }
@@ -124,10 +127,10 @@ class Server {
   List<Restaurant> getRecommendedRestaurants([bool Function(Restaurant)? predicate]) {
     if (predicate == null) {
       return List.unmodifiable(
-          dataBase!.restaurants.sublist(0, min(10, dataBase!.restaurants.length))
+          dataBase.restaurants.sublist(0, min(10, dataBase.restaurants.length))
       );
     }
-    return List.unmodifiable(dataBase!.restaurants.where(predicate));
+    return List.unmodifiable(dataBase.restaurants.where(predicate));
   }
 
 }

@@ -122,13 +122,13 @@ class FakeData {
   }
 
   Restaurant generateRestaurant(bool isRandom) {
-    var menu;
+    FoodMenu menu;
     if (isRandom) {
       menu = generateFoodMenu();
     } else {
       menu = getSampleMenu();
     }
-    var restaurant = Restaurant(name: resNames[rand.nextInt(resNames.length)], menuID: menu.id, score: rand.nextDouble()*5);
+    var restaurant = Restaurant(name: resNames[rand.nextInt(resNames.length)], menuID: menu.id!, score: rand.nextDouble()*5);
     restaurant.serialize(server.serializer);
     dataBase.restaurants.add(restaurant);
     if (isRandom) {
