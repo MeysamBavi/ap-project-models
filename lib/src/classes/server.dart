@@ -1,7 +1,5 @@
 import 'dart:math';
 
-import 'package:models/models.dart';
-
 import 'fake_data_base.dart';
 import 'order.dart';
 import 'editable.dart';
@@ -11,6 +9,7 @@ import 'owner_account.dart';
 import 'food_menu.dart';
 import 'small_data.dart';
 import 'food.dart';
+import 'restaurant.dart';
 
 class Server {
 

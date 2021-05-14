@@ -1,7 +1,6 @@
 import 'account.dart';
 import 'server.dart';
 import 'restaurant.dart';
-import 'order.dart';
 
 class OwnerAccount extends Account {
   final Restaurant restaurant;

@@ -1,5 +1,16 @@
-import '../../models.dart';
 import 'dart:math';
+import 'food_menu.dart';
+import 'food.dart';
+import 'account.dart';
+import 'owner_account.dart';
+import 'user_account.dart';
+import 'order.dart';
+import 'restaurant.dart';
+import 'comment.dart';
+import 'price.dart';
+import 'server.dart';
+import 'small_data.dart';
+import 'address.dart';
 
 class DataBase {
   final List<Account> accounts;
@@ -34,7 +45,7 @@ class FakeData {
 
   final List<Food> foods;
 
-  FakeData(this.dataBase, this.server)  :
+  FakeData(this.server)  : dataBase = server.dataBase,
         foods = <Food>[
     Food(name: 'Pepperoni', category: FoodCategory.FastFood, price: Price(35000), server: server, isAvailable: false),
     Food(name: 'Sushi', category: FoodCategory.SeaFood, price: Price(50000), server: server),
@@ -83,9 +94,9 @@ class FakeData {
 
   void fill() {
     // order of these calls matters, do not change! (Literally spaghetti)
-    generateOwnerAccount();
+    generateOwnerAccount(false);
     for (var i = 0; i < 10; i++) {
-      generateRestaurant(true);
+      generateOwnerAccount(true);
     }
     generateUserAccount();
   }
@@ -104,19 +115,19 @@ class FakeData {
       set.add(rand.nextInt(foods.length));
     }
     var menu = FoodMenu(server);
-    menu.serialize(server.serializer);
     for (var i in set) {
       var food = foods[i];
       menu.addFood(food);
     }
+    menu.serialize(server.serializer);
     dataBase.menus.add(menu);
     return menu;
   }
 
   FoodMenu getSampleMenu() {
     var menu = FoodMenu(server);
-    menu.serialize(server.serializer);
     [0, 1, 3, 4, 6, 7, 8, 10, 11, 13, 14, 17].forEach((i) => menu.addFood(foods[i]));
+    menu.serialize(server.serializer);
     dataBase.menus.add(menu);
     return menu;
   }
@@ -128,12 +139,9 @@ class FakeData {
     } else {
       menu = getSampleMenu();
     }
-    var restaurant = Restaurant(name: resNames[rand.nextInt(resNames.length)], menuID: menu.id!, score: rand.nextDouble()*5);
+    var restaurant = Restaurant(name: isRandom ? resNames[rand.nextInt(resNames.length)] : 'SBU Food', menuID: menu.id!, score: rand.nextDouble()*5);
     restaurant.serialize(server.serializer);
     dataBase.restaurants.add(restaurant);
-    if (isRandom) {
-      dataBase.ownerOf[restaurant.id!] = dataBase.accounts[0] as OwnerAccount;
-    }
     var c1 = Comment(server: server, restaurantID: restaurant.id!, score: 4, title: 'Good', message: 'it was good');
     var c2 = Comment(server: server, restaurantID: restaurant.id!, score: 1, title: 'Bad', message: 'it was bad');
     c1.serialize(server.serializer);
@@ -147,6 +155,7 @@ class FakeData {
 
   Order getSampleOrder(CustomerData customer, bool isRequested, bool isDelivered) {
     var restaurant = dataBase.restaurants[rand.nextInt(dataBase.restaurants.length)];
+    print('getting food menu with id: ${restaurant.menuID}');
     var menu = server.getObjectByID(restaurant.menuID!) as FoodMenu;
     var items = <FoodData, int>{};
     for (var category in menu.categories) {
@@ -168,17 +177,19 @@ class FakeData {
     return order;
   }
 
-  OwnerAccount generateOwnerAccount() {
-    var acc = OwnerAccount(phoneNumber: '09123123123', restaurant: generateRestaurant(false), server: server);
+  OwnerAccount generateOwnerAccount(bool isRandom) {
+    var acc = OwnerAccount(phoneNumber: isRandom ? generatePhoneNumber() :'09123123123', restaurant: generateRestaurant(isRandom), server: server);
     dataBase.accounts.add(acc);
     dataBase.ownerOf[acc.restaurant.id!] = acc;
     dataBase.loginData[acc.phoneNumber] = 'owner123';
-    var order = Order(server: server, items: {foods[0].toFoodData() : 2}, restaurant: acc.restaurant, customer: CustomerData('Mojtaba', 'Vahidi', Address()));
-    order.serialize(server.serializer);
-    order.sendRequest();
-    var order2 = Order(server: server, items: {foods[0].toFoodData() : 2 , foods[3].toFoodData() : 1 , foods[6].toFoodData() : 3}, restaurant: acc.restaurant, customer: CustomerData('Ali', 'Alavi', Address()));
-    order2.serialize(server.serializer);
-    order2.sendRequest();
+    if (!isRandom) {
+      var order = Order(server: server, items: {foods[0].toFoodData() : 2}, restaurant: acc.restaurant, customer: CustomerData('Mojtaba', 'Vahidi', Address()));
+      order.serialize(server.serializer);
+      order.sendRequest();
+      var order2 = Order(server: server, items: {foods[0].toFoodData() : 2 , foods[3].toFoodData() : 1 , foods[6].toFoodData() : 3}, restaurant: acc.restaurant, customer: CustomerData('Ali', 'Alavi', Address()));
+      order2.serialize(server.serializer);
+      order2.sendRequest();
+    }
     return acc;
   }
 

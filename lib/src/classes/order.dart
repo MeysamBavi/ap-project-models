@@ -1,8 +1,9 @@
-import '../../models.dart';
 import 'editable.dart';
 import 'serializable.dart';
 import 'price.dart';
 import 'small_data.dart';
+import 'server.dart';
+import 'restaurant.dart';
 
 class Order with Serializable implements Editable {
   final Server server;
