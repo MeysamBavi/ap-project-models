@@ -18,10 +18,17 @@ class Serializer {
   
   String createID(Serializable object) {
     var rand = Random();
-    String str = idPrefix[object.runtimeType] ?? '';
-    str += object.hashCode.toRadixString(16).padLeft(4, '0').substring(0, 4) + '-';
-    str += rand.nextInt(0x0ffff + 1).toRadixString(16);
-    return str.toUpperCase();
+    String id = idPrefix[object.runtimeType] ?? '';
+    id += object.hashCode.toRadixString(16).padLeft(4, '0').substring(0, 4) + '-';
+    id += rand.nextInt(0x0ffff + 1).toRadixString(16).padLeft(4, '0');
+    id = id.toUpperCase();
+    assert (isIDValid(id));
+    return id;
+  }
+
+  bool isIDValid(String id) {
+    var pattern = RegExp(r'^([RMCOF]-)?([0-9ABCDEF]{4})-([0-9ABCDEF]{4})$');
+    return pattern.hasMatch(id);
   }
 
   Serializer._() : super();

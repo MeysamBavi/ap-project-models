@@ -32,12 +32,6 @@ class Server {
     return pattern.hasMatch(password);
   }
 
-  bool isIDValid(String id) {
-    var pattern = RegExp(r'^([RMCOF]-)?([0-9ABCDEF]{4})-([0-9ABCDEF]{4})$');
-    return pattern.hasMatch(id);
-  }
-
-
   void edit(Editable object) {
     //TODO implement edit
   }
@@ -79,7 +73,7 @@ class Server {
   }
 
   Object? getObjectByID(String id) {
-    if (!isIDValid(id)) {
+    if (!serializer.isIDValid(id)) {
       print('INVALID ID');
       return null;
     }
@@ -111,7 +105,7 @@ class Server {
   }
 
   Food? getFoodByID(String foodID, String menuID) {
-    if (!isIDValid(foodID)) return null;
+    if (!serializer.isIDValid(foodID)) return null;
     var menu = getObjectByID(menuID) as FoodMenu?;
     if (menu == null) return null;
     for (var cat in menu.categories) {
