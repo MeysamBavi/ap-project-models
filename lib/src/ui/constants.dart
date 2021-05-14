@@ -119,6 +119,9 @@ class Strings {
       'insufficient-fund-dialog' : 'Not Enough Money',
       'fund-dialog-add-fund' : 'Add',
       'orders-comment-button' : 'Comment',
+      'my-comments' : 'My Comments',
+      'no-comments' : 'You haven\'t commented anything.',
+
       //models
       'empty-reply-error' : 'Reply can\'t be empty',
 
