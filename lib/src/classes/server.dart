@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'fake_data_base.dart';
 import 'order.dart';
 import 'editable.dart';
@@ -10,6 +9,7 @@ import 'food_menu.dart';
 import 'small_data.dart';
 import 'food.dart';
 import 'restaurant.dart';
+import 'comment.dart';
 
 class Server {
 
@@ -39,6 +39,12 @@ class Server {
   void addNewOrder(Order order) {
     dataBase.orders.add(order);
     dataBase.ownerOf[order.restaurant.id!]!.activeOrders.add(order);
+  }
+
+  void addNewComment(Comment comment) {
+    dataBase.comments.add(comment);
+    var restaurant = getObjectByID(comment.restaurantID) as Restaurant;
+    restaurant.commentIDs.add(comment.id!);
   }
 
   Order? reorder(Order order) {

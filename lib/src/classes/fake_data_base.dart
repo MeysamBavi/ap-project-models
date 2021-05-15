@@ -155,7 +155,6 @@ class FakeData {
 
   Order getSampleOrder(CustomerData customer, bool isRequested, bool isDelivered) {
     var restaurant = dataBase.restaurants[rand.nextInt(dataBase.restaurants.length)];
-    print('getting food menu with id: ${restaurant.menuID}');
     var menu = server.getObjectByID(restaurant.menuID!) as FoodMenu;
     var items = <FoodData, int>{};
     for (var category in menu.categories) {

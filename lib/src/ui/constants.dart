@@ -121,6 +121,10 @@ class Strings {
       'orders-comment-button' : 'Comment',
       'my-comments' : 'My Comments',
       'no-comments' : 'You haven\'t commented anything.',
+      'comment-title' : 'Title',
+      'comment-message' : 'Message',
+      'comment-empty-title' : 'Title can\'t be empty.',
+      'comment-empty-message' : 'Message can\'t be empty.',
 
       //models
       'empty-reply-error' : 'Reply can\'t be empty',

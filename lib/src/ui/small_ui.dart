@@ -26,12 +26,13 @@ buildScore(int score) {
 }
 
 Color getColorForScore(int score) {
-  const map = <int, Color> {
+  var map = <int, Color> {
+    0 : Colors.grey[600]!,
     1 : Colors.red,
     2 : Colors.orangeAccent,
     3 : Colors.yellow,
     4 : Colors.lightGreen,
     5 : Colors.green,
   };
-  return map[score] ?? map[5]!;
+  return map[score] ?? map[0]!;
 }
