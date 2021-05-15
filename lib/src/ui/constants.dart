@@ -125,6 +125,8 @@ class Strings {
       'comment-message' : 'Message',
       'comment-empty-title' : 'Title can\'t be empty.',
       'comment-empty-message' : 'Message can\'t be empty.',
+      'reorder-fail' : 'Could not recreate the order.',
+      'reorder-success' : 'Order added to your cart.',
 
       //models
       'empty-reply-error' : 'Reply can\'t be empty',
