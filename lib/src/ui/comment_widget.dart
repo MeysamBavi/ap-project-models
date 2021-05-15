@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../classes/comment.dart';
 import 'constants.dart';
+import 'small_ui.dart';
 
 class CommentTile extends StatefulWidget {
 
@@ -25,13 +26,7 @@ class _CommentTileState extends State<CommentTile> {
 
     return ExpansionTile(
       title: Text(comment.title),
-      leading: Wrap(
-        spacing: 5,
-        children: [
-          Icon(Icons.star, color: getColorForScore(comment.score),),
-          Text(comment.score.toString(), style: TextStyle(fontWeight: FontWeight.bold),)
-        ],
-      ),
+      leading: buildScore(comment.score),
       subtitle: Text(Strings.formatDate(comment.time), style: Theme.of(context).textTheme.caption,),
       backgroundColor: Colors.grey[50],
       collapsedBackgroundColor: Colors.white,
@@ -78,17 +73,6 @@ class _CommentTileState extends State<CommentTile> {
       ],
       expandedCrossAxisAlignment: CrossAxisAlignment.center,
     );
-  }
-
-  Color getColorForScore(int score) {
-    const map = <int, Color> {
-      1 : Colors.red,
-      2 : Colors.orangeAccent,
-      3 : Colors.yellow,
-      4 : Colors.lightGreen,
-      5 : Colors.green,
-    };
-    return map[score] ?? map[5]!;
   }
 
   void confirmPressed() {
