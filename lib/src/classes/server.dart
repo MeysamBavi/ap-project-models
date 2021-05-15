@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:geolocator/geolocator.dart' show Geolocator;
 import 'fake_data_base.dart';
 import 'order.dart';
 import 'editable.dart';
@@ -123,13 +124,31 @@ class Server {
     return null;
   }
 
-  List<Restaurant> getRecommendedRestaurants([bool Function(Restaurant)? predicate]) {
-    if (predicate == null) {
-      return List.unmodifiable(
-          dataBase.restaurants.sublist(0, min(10, dataBase.restaurants.length))
-      );
+  static int onScore(Restaurant a, Restaurant b) => (b.score - a.score).sign.toInt();
+  static int Function(Restaurant, Restaurant) createOnDistance(double latitude, double longitude) {
+    return (Restaurant a, Restaurant b) {
+      var distanceToA = Geolocator.distanceBetween(a.address.latitude, a.address.longitude, latitude, longitude);
+      var distanceToB = Geolocator.distanceBetween(b.address.latitude, b.address.longitude, latitude, longitude);
+      return (distanceToA - distanceToB).sign.toInt();
+    };
+  }
+
+  List<Restaurant> getRecommendedRestaurants(bool Function(Restaurant)? filter) {
+    List<Restaurant> result;
+    if (filter == null) {
+      result = dataBase.restaurants.sublist(0, min(10, dataBase.restaurants.length));
+      return result;
     }
-    return List.unmodifiable(dataBase.restaurants.where(predicate));
+    result = dataBase.restaurants.where(filter).toList(growable: false);
+    return result;
+  }
+
+  List<Restaurant> sortRecommendedRestaurants(List<Restaurant> restaurants, int Function(Restaurant, Restaurant)? sortOrder) {
+    if (sortOrder == null) {
+      return restaurants;
+    }
+    restaurants.sort(sortOrder);
+    return restaurants;
   }
 
 }

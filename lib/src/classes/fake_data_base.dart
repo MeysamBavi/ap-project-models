@@ -139,7 +139,7 @@ class FakeData {
     } else {
       menu = getSampleMenu();
     }
-    var restaurant = Restaurant(name: isRandom ? resNames[rand.nextInt(resNames.length)] : 'SBU Food', menuID: menu.id!, score: rand.nextDouble()*5);
+    var restaurant = Restaurant(name: isRandom ? resNames[rand.nextInt(resNames.length)] : 'SBU Food', menuID: menu.id!, score: rand.nextDouble()*5, address: Address());
     restaurant.serialize(server.serializer);
     dataBase.restaurants.add(restaurant);
     var c1 = Comment(server: server, restaurantID: restaurant.id!, score: 4, title: 'Good', message: 'it was good');
@@ -199,6 +199,7 @@ class FakeData {
         firstName: 'Ali',
         lastName: 'Alavi',
         addresses: {'home' : Address()},
+        defaultAddress: 'home',
         favRestaurantIDs: [dataBase.restaurants[0].id!, dataBase.restaurants[1].id!, dataBase.restaurants[2].id!],
         commentIDs: [dataBase.comments[0].id!, dataBase.comments[2].id!, dataBase.comments[5].id!,]
     );

@@ -8,8 +8,8 @@ class Restaurant with Serializable {
   FoodMenu? menu;
   final String? menuID;
   final foodCategories;
-  Address? address;
-  double? areaOfDispatch; // in meters
+  Address address;
+  double areaOfDispatch; // in meters
   final double score;
   final List<String> commentIDs;
 
@@ -18,8 +18,8 @@ class Restaurant with Serializable {
     Set<FoodCategory>? this.foodCategories,
     required this.menuID,
     required this.score,
-    this.address,
-    this.areaOfDispatch,
+    required this.address,
+    this.areaOfDispatch = 0,
   })  : commentIDs = [];
 
 }
