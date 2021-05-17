@@ -80,6 +80,7 @@ class _CommentTileState extends State<CommentTile> {
       setState(() {
         _formKey.currentState!.save();
       });
+      ScaffoldMessenger.of(context).showSnackBar(showBar(Strings.get('comment-answer-added')!, Duration(milliseconds: 2000)));
     }
   }
 }

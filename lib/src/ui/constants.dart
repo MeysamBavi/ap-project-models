@@ -131,12 +131,20 @@ class Strings {
       //models
       'empty-reply-error' : 'Reply can\'t be empty',
 
-      //snack bars
+      //user snack bars
       'foods-added-to-cart' : 'Your orders have been added to the cart',
       'order-completed' : 'Order is complete, your food will be delivered ASAP',
       'credit-added' : 'Credit added Successfully',
       'comment-added' : 'Comment added Successfully',
       'delete_order' : 'Order deleted Successfully',
+
+      //restaurant snack bars
+      'edit-food-edit-successful' : 'Food edited Successfully',
+      'delete-food-successful' : 'Food deleted Successfully',
+      'add-food-successful' : 'Food added Successfully',
+      'food-delivered-successful' : 'Food delivered Successfully',
+      'comment-answer-added' : 'Your answer has been added to the Comment',
+      'location-selected' : 'Area of dispatch Selected Successfully',
 
     }
   };
