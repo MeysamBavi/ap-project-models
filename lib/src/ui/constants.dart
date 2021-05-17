@@ -131,6 +131,13 @@ class Strings {
       //models
       'empty-reply-error' : 'Reply can\'t be empty',
 
+      //snack bars
+      'foods-added-to-cart' : 'Your orders have been added to the cart',
+      'order-completed' : 'Order is complete, your food will be delivered ASAP',
+      'credit-added' : 'Credit added Successfully',
+      'comment-added' : 'Comment added Successfully',
+      'delete_order' : 'Order deleted Successfully',
+
     }
   };
 

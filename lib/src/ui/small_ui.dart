@@ -36,3 +36,16 @@ Color getColorForScore(int score) {
   };
   return map[score] ?? map[0]!;
 }
+
+SnackBar showBar(String content , Duration duration)
+{
+  return SnackBar(
+    content: Text(content),
+    duration: duration,
+
+    behavior: SnackBarBehavior.floating,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
+  );
+}
