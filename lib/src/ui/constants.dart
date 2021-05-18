@@ -127,6 +127,8 @@ class Strings {
       'comment-empty-message' : 'Message can\'t be empty.',
       'reorder-fail' : 'Could not recreate the order.',
       'reorder-success' : 'Order added to your cart.',
+      'search-name-empty' : 'Name is required.',
+      'restaurant-name-hint' : 'Restaurant name',
 
       //models
       'empty-reply-error' : 'Reply can\'t be empty',
