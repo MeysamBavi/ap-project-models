@@ -25,14 +25,32 @@ buildScore(int score) {
   );
 }
 
+buildScoreFill(double score) {
+  return Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(5),
+      color: getColorForScore(score.round())
+    ),
+    padding: const EdgeInsets.all(2),
+    child: Wrap(
+      spacing: 5,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        Icon(Icons.star_rounded, color: Colors.white,),
+        Text(score.toStringAsFixed(1), style: TextStyle(color: Colors.white),)
+      ],
+    ),
+  );
+}
+
 Color getColorForScore(int score) {
   var map = <int, Color> {
     0 : Colors.grey[600]!,
-    1 : Colors.red,
-    2 : Colors.orangeAccent,
-    3 : Colors.yellow,
-    4 : Colors.lightGreen,
-    5 : Colors.green,
+    1 : Colors.red[800]!,
+    2 : Colors.orange[700]!,
+    3 : Colors.lime[600]!,
+    4 : Colors.green,
+    5 : Colors.cyan,
   };
   return map[score] ?? map[0]!;
 }
