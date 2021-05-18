@@ -9,7 +9,7 @@ class Order with Serializable implements Editable {
   final Server server;
   final Map<FoodData, int> items;
   DateTime time;
-  String code;
+  String? _code;
   bool _isRequested;
   bool _isDelivered;
 
@@ -20,9 +20,10 @@ class Order with Serializable implements Editable {
     required this.items,
     required this.restaurant,
     required this.customer,
-    this.code = '',
+    String? code,
 })  : time = DateTime.now(),
       _isDelivered = false,
+      _code = code,
       _isRequested = false;
 
   bool get isDelivered => _isDelivered;
@@ -41,6 +42,12 @@ class Order with Serializable implements Editable {
   }
 
   bool get isRequested => _isRequested;
+
+  String get code => _code ?? id ?? 'null';
+
+  set code(String value) {
+    _code = value;
+  }
 
   void sendRequest() {
     _isRequested = true;
