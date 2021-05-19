@@ -131,6 +131,8 @@ class Strings {
       'reorder-success' : 'Order added to your cart.',
       'search-name-empty' : 'Name is required.',
       'restaurant-name-hint' : 'Restaurant name',
+      'restaurant-no-comments' : 'No comment found.',
+      'comments-tab-title' : 'Comments',
 
       //models
       'empty-reply-error' : 'Reply can\'t be empty',
