@@ -199,12 +199,12 @@ class FakeData {
         server: server,
         firstName: 'Ali',
         lastName: 'Alavi',
-        addresses: {'home' : Address()},
-        defaultAddress: 'home',
+        addresses: [Address(name: 'home')],
+        defaultAddressName: 'home',
         favRestaurantIDs: [dataBase.restaurants[0].id!, dataBase.restaurants[1].id!, dataBase.restaurants[2].id!],
         commentIDs: [dataBase.comments[0].id!, dataBase.comments[2].id!, dataBase.comments[5].id!,]
     );
-    var customerData = user.toCustomerData(user.addresses['home']!);
+    var customerData = user.toCustomerData(user.defaultAddress!);
     user.cart.add(getSampleOrder(customerData, false, false));
     user.cart.add(getSampleOrder(customerData, false, false));
     user.previousOrders.add(getSampleOrder(customerData, true, true));

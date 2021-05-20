@@ -10,8 +10,8 @@ class UserAccount extends Account {
   final String firstName;
   final String lastName;
   Price _credit;
-  String? _defaultAddress;
-  final Map<String, Address> addresses;
+  String? _defaultAddressName;
+  final List<Address> addresses;
   final List<String> favRestaurantIDs;
   final List<String> commentIDs;
   // adding and removing from cart should be done manually
@@ -23,22 +23,30 @@ class UserAccount extends Account {
     required this.firstName,
     required this.lastName,
     Price? credit,
-    String? defaultAddress,
+    String? defaultAddressName,
     required this.addresses,
     required this.favRestaurantIDs,
     required this.commentIDs,
     List<Order>? cart,
 })  : _credit = credit ?? Price(0),
-      _defaultAddress = defaultAddress,
+      _defaultAddressName = defaultAddressName,
       this.cart = cart ?? [],
       super(phoneNumber: phoneNumber, server: server);
 
-  String? get defaultAddress => _defaultAddress;
+  Address? get defaultAddress {
+    for (var address in addresses) {
+      if (address.name == _defaultAddressName) return address;
+    }
+    return null;
+  }
 
-  set defaultAddress(String? value) {
-    _defaultAddress = value;
+  set defaultAddressName(String? value) {
+    _defaultAddressName = value;
     server.edit(this);
   }
+
+
+  String? get defaultAddressName => _defaultAddressName;
 
   Price get credit => _credit;
 
@@ -47,14 +55,13 @@ class UserAccount extends Account {
     server.edit(this);
   }
 
-  // can be used for modifying an address too
-  void addAddress(String name, Address address) {
-    addresses[name] = address;
+  void addAddress(Address address) {
+    addresses.add(address);
     server.edit(this);
   }
 
-  void removeAddress(String name) {
-    addresses.remove(name);
+  void removeAddress(Address address) {
+    addresses.remove(address);
     server.edit(this);
   }
 
