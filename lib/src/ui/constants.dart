@@ -141,6 +141,15 @@ class Strings {
       'restaurant-name-hint' : 'Restaurant name',
       'restaurant-no-comments' : 'No comment found.',
       'comments-tab-title' : 'Comments',
+      'edit-address-title' : 'Edit Address',
+      'add-address-title' : 'Add Address',
+      'address-name-hint' : 'Address name',
+      'address-text-hint' : 'Full description',
+      'address-coordinates-hint' : 'Coordinates',
+      'empty-address-name' : 'Name is required.',
+      'empty-address-text' : 'Description can\'t be empty.',
+      'empty-address-coordinates' : 'Coordinates are required.',
+      'done' : 'Done',
 
       //models
       'empty-reply-error' : 'Reply can\'t be empty',
