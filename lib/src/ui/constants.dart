@@ -153,6 +153,8 @@ class Strings {
 
       //models
       'empty-reply-error' : 'Reply can\'t be empty',
+      'in-area' : 'Inside area',
+      'not-in-area' : 'Outside area',
 
       //user snack bars
       'foods-added-to-cart' : 'Your orders have been added to the cart',
@@ -160,6 +162,8 @@ class Strings {
       'credit-added' : 'Credit added Successfully',
       'comment-added' : 'Comment added Successfully',
       'delete_order' : 'Order deleted Successfully',
+      'address-added' : 'Address added successfully.',
+      'address-edited' : 'Address edited successfully.',
 
       //restaurant snack bars
       'edit-food-edit-successful' : 'Food edited Successfully',
