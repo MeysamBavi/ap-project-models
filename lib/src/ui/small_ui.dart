@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'constants.dart';
 
 Widget buildHeader(String title, [TextStyle style = const TextStyle(fontSize: 24)]) {
   return SliverPadding(
@@ -14,7 +15,7 @@ Widget buildHeader(String title, [TextStyle style = const TextStyle(fontSize: 24
   );
 }
 
-buildScore(int score) {
+Widget buildScore(int score) {
   return Wrap(
     spacing: 5,
     crossAxisAlignment: WrapCrossAlignment.center,
@@ -25,7 +26,7 @@ buildScore(int score) {
   );
 }
 
-buildScoreFill(double score) {
+Widget buildScoreFill(double score) {
   return Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(5),
@@ -40,6 +41,19 @@ buildScoreFill(double score) {
         Text(score.toStringAsFixed(1), style: TextStyle(color: Colors.white),)
       ],
     ),
+  );
+}
+
+Widget buildArea(bool isInArea, [bool fill = false]) {
+  var color = isInArea ? Colors.green : Colors.red;
+  return Container(
+    padding: const EdgeInsets.all(2),
+    decoration: BoxDecoration(
+      border: Border.all(color: color, width: 1),
+      borderRadius: BorderRadius.circular(4),
+      color: fill ? Colors.white : null,
+    ),
+    child: Text(isInArea ? Strings.get('in-area')! : Strings.get('not-in-area')!, style: TextStyle(fontSize: 10, color: color),),
   );
 }
 
