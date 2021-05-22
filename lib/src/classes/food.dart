@@ -3,6 +3,7 @@ import 'serializable.dart';
 import 'price.dart';
 import 'server.dart';
 import 'small_data.dart';
+import 'package:flutter/material.dart';
 
 class Food with Serializable implements Editable {
 
@@ -12,12 +13,13 @@ class Food with Serializable implements Editable {
   bool _isAvailable;
   FoodCategory _category;
   Server _server;
-  //TODO add Image field
+  Image _image;
 
   Food({
     required String name,
     required FoodCategory category,
     required Price price,
+    Image? image,
     String? description,
     bool isAvailable = true,
     required Server server
@@ -25,6 +27,7 @@ class Food with Serializable implements Editable {
         _name = name,
         _category = category,
         _price = price,
+        _image = image ?? Image.asset('assets/default_food.jpg'),
         _description = description ?? '',
         _isAvailable = isAvailable,
         _server = server;
@@ -38,6 +41,8 @@ class Food with Serializable implements Editable {
   bool get isAvailable => _isAvailable;
 
   FoodCategory get category => _category;
+
+  Image get image => _image;
 
   @override
   Server get server => _server;
@@ -66,6 +71,12 @@ class Food with Serializable implements Editable {
 
   set name(String value) {
     _name = value;
+    server.edit(this);
+  }
+
+  set image(Image image)
+  {
+    _image = image;
     server.edit(this);
   }
 }
