@@ -150,7 +150,9 @@ class Strings {
       'empty-address-text' : 'Description can\'t be empty.',
       'empty-address-coordinates' : 'Coordinates are required.',
       'done' : 'Done',
-
+      'ok' : 'Ok',
+      'outside-area-dialog-title' : 'Outside of area of dispatch',
+      'outside-area-dialog-message' : 'Your default address is outside of this restaurant\'s area. Choose a different address.',
       //models
       'empty-reply-error' : 'Reply can\'t be empty',
       'in-area' : 'Inside area',
