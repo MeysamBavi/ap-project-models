@@ -11,6 +11,7 @@ import 'small_data.dart';
 import 'food.dart';
 import 'restaurant.dart';
 import 'comment.dart';
+import 'address.dart';
 
 class Server {
 
@@ -149,6 +150,11 @@ class Server {
     }
     restaurants.sort(sortOrder);
     return restaurants;
+  }
+
+  bool isInArea(Address customer, Address restaurant, double radius) {
+    if (radius == 0.0) return true;
+    return Geolocator.distanceBetween(restaurant.latitude, restaurant.longitude, customer.latitude, customer.longitude) <= radius;
   }
 
 }

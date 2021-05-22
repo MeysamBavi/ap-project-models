@@ -140,6 +140,9 @@ class FakeData {
       menu = getSampleMenu();
     }
     var restaurant = Restaurant(name: isRandom ? resNames[rand.nextInt(resNames.length)] : 'SBU Food', menuID: menu.id!, score: rand.nextDouble()*5, address: Address());
+    if (!isRandom) {
+      restaurant.areaOfDispatch = 5000;
+    }
     restaurant.foodCategories.addAll(menu.categories);
     restaurant.serialize(server.serializer);
     dataBase.restaurants.add(restaurant);
