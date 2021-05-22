@@ -14,7 +14,7 @@ class Order with Serializable implements Editable {
   bool _isDelivered;
 
   final Restaurant restaurant;
-  final CustomerData customer;
+  CustomerData customer;
   Order({
     required this.server,
     required this.items,
