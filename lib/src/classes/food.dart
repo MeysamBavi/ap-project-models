@@ -27,7 +27,7 @@ class Food with Serializable implements Editable {
         _name = name,
         _category = category,
         _price = price,
-        _image = image ?? Image.asset('assets/default_food.jpg'),
+        _image = image ?? Image.asset('assets/default_food.jpg' , package: 'models',),
         _description = description ?? '',
         _isAvailable = isAvailable,
         _server = server;

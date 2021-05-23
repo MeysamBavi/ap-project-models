@@ -82,7 +82,7 @@ class Strings {
       'stats-title' : 'Statistics',
       'today' : 'Today',
       'all' : 'All',
-
+      'edit-add-image' : 'Add image',
 
       //user app
       'bottom-nav-restaurants' : 'Restaurants',
