@@ -10,11 +10,11 @@ class CommonColors {
   static Color black = Colors.black;
   static Color cyan = Color(0xFF00E5FF);
 
-  static Color themeColorPlatinum = Color(0xE7E5DF);
-  static Color themeColorBlue = Color(0x44BBA4);
-  static Color themeColorRed = Color(0xBC4749);
-  static Color themeColorBlack = Color(0x393E41);
-  static Color themeColorYellow = Color(0xE7BB41);
+  static Color themeColorPlatinum = Color(0xFFE7E5DF);
+  static Color themeColorBlue = Color(0xFF44BBA4);
+  static Color themeColorRed = Color(0xFFBC4749);
+  static Color themeColorBlack = Color(0xFF393E41);
+  static Color themeColorYellow = Color(0xFFE7BB41);
 
   static var randomColorList = <Color?>[
     CommonColors.green,
