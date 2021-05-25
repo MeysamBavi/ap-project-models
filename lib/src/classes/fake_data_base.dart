@@ -11,6 +11,7 @@ import 'price.dart';
 import 'server.dart';
 import 'small_data.dart';
 import 'address.dart';
+import 'discount.dart';
 
 class DataBase {
   final List<Account> accounts;
@@ -20,6 +21,7 @@ class DataBase {
   final List<Order> orders;
   final Map<String, String> loginData;
   final Map<String, OwnerAccount> ownerOf;
+  final List<Discount> discounts;
 
   DataBase({
   required this.accounts,
@@ -28,11 +30,12 @@ class DataBase {
   required this.menus,
   required this.orders,
   required this.loginData,
-  required this.ownerOf
+  required this.ownerOf,
+  required this.discounts
 });
 
   static DataBase empty() {
-    return DataBase(accounts: [], restaurants: [], comments: [], menus: [], orders: [], loginData: {}, ownerOf: {});
+    return DataBase(accounts: [], restaurants: [], comments: [], menus: [], orders: [], loginData: {}, ownerOf: {}, discounts: []);
   }
 
 }
@@ -99,6 +102,7 @@ class FakeData {
       generateOwnerAccount(true);
     }
     generateUserAccount();
+    dataBase.discounts.addAll([Discount('off-20', 20), Discount('off-10', 10), Discount('off-30', 30)]);
   }
 
   String generatePhoneNumber() {

@@ -20,3 +20,4 @@ export 'src/ui/head.dart';
 export 'src/ui/button_model.dart';
 export 'src/ui/comment_widget.dart';
 export 'src/ui/small_ui.dart';
+export 'src/classes/discount.dart';

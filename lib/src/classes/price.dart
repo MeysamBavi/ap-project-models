@@ -1,3 +1,4 @@
+import 'discount.dart';
 
 class Price {
 
@@ -43,6 +44,11 @@ class Price {
   Price addTo(List<Price> prices) {
     prices.add(this);
     return Price.addAll(prices);
+  }
+
+  Price apply(Discount discount) {
+    var value = (100 - discount.percent)/100 * this.toInt();
+    return Price(value.round());
   }
 
 }
