@@ -85,6 +85,25 @@ class Server {
     return false;
   }
 
+  bool isPhoneNumberUnique(String phoneNumber) {
+    if (!Server.isPhoneNumberValid(phoneNumber)) return true;
+    for (var acc in dataBase.accounts) {
+      if (acc.phoneNumber == phoneNumber) return false;
+    }
+    return true;
+  }
+
+  bool signUpOwner(String phoneNumber, String password, Restaurant restaurant, FoodMenu menu) {
+    restaurant.serialize(serializer);
+    restaurant.menu = menu;
+    _account = OwnerAccount(phoneNumber: phoneNumber, restaurant: restaurant, server: this);
+    dataBase.accounts.add(_account!);
+    dataBase.loginData[phoneNumber] = password;
+    dataBase.restaurants.add(restaurant);
+    dataBase.menus.add(menu);
+    return true;
+  }
+
   Object? getObjectByID(String id) {
     if (!serializer.isIDValid(id)) {
       print('INVALID ID');
