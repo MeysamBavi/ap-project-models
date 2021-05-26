@@ -7,14 +7,14 @@ class CommonColors {
   static Color? blue = Colors.blueAccent[400];
   static Color? green = Colors.greenAccent[400];
   static Color? red = Colors.redAccent[400];
-  static Color black = Colors.black;
-  static Color cyan = Color(0xFF00E5FF);
+  static const Color black = Colors.black;
+  static const Color cyan = Color(0xFF00E5FF);
 
-  static Color themeColorPlatinum = Color(0xFFE7E5DF);
-  static Color themeColorBlue = Color(0xFF44BBA4);
-  static Color themeColorRed = Color(0xFF980000);
-  static Color themeColorBlack = Color(0xFF393E41);
-  static Color themeColorYellow = Color(0xFFE7BB41);
+  static const Color themeColorPlatinum = Color(0xFFE7E5DF);
+  static const Color themeColorBlue = Color(0xFF44BBA4);
+  static const Color themeColorRed = Color(0xFF980000);
+  static const Color themeColorBlack = Color(0xFF393E41);
+  static const Color themeColorYellow = Color(0xFFE7BB41);
 
   static var randomColorList = <Color?>[
     CommonColors.green,
@@ -175,6 +175,16 @@ class Strings {
       'empty-reply-error' : 'Reply can\'t be empty',
       'in-area' : 'Inside area',
       'not-in-area' : 'Outside area',
+      'phone-number-hint' : 'Phone number',
+      'phone-number-empty' : 'Phone number is required.',
+      'phone-number-invalid' : 'Invalid phone number.',
+      'password-hint' : 'Password',
+      'password-empty' : 'Password is required.',
+      'password-invalid' : 'Invalid password.',
+      'password-helper' : 'At least 6 characters of letters and numbers.',
+      'no-accounts-found' : 'Phone number or password is wrong.',
+      'login-button' : 'Login',
+      'login-header' : 'Login to your account',
 
       //user snack bars
       'foods-added-to-cart' : 'Your orders have been added to the cart',
