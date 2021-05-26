@@ -12,7 +12,7 @@ class CommonColors {
 
   static Color themeColorPlatinum = Color(0xFFE7E5DF);
   static Color themeColorBlue = Color(0xFF44BBA4);
-  static Color themeColorRed = Color(0xFFBC4749);
+  static Color themeColorRed = Color(0xFF980000);
   static Color themeColorBlack = Color(0xFF393E41);
   static Color themeColorYellow = Color(0xFFE7BB41);
 
