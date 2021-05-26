@@ -12,6 +12,7 @@ import 'food.dart';
 import 'restaurant.dart';
 import 'comment.dart';
 import 'address.dart';
+import 'discount.dart';
 
 class Server {
 
@@ -155,6 +156,15 @@ class Server {
   bool isInArea(Address customer, Address restaurant, double radius) {
     if (radius == 0.0) return true;
     return Geolocator.distanceBetween(restaurant.latitude, restaurant.longitude, customer.latitude, customer.longitude) <= radius;
+  }
+
+  Discount? validateDiscount(String code) {
+    var index =  dataBase.discounts.indexWhere((element) => element.code == code);
+    return index > -1 ? dataBase.discounts[index] : null;
+  }
+
+  void useDiscount(Discount discount) {
+    dataBase.discounts.remove(discount);
   }
 
 }
