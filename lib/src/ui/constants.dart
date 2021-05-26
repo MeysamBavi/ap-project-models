@@ -96,6 +96,16 @@ class Strings {
       'edit-address' : 'Edit',
       'area-radius' : 'Radius',
       'save-address' : 'Save',
+      'sign-up-header' : 'Create an account',
+      'sign-up-button' : 'Sign Up',
+      'restaurant-name-empty' : 'Name is required.',
+      'restaurant-address-text-hint' : 'Address description',
+      'address-text-empty' : 'Address is required.',
+      'coordinates-empty' : 'Coordinates are required.',
+      'radius-empty' : 'Radius is required.',
+      'set-radius-and-coordinates' : 'Set',
+      'duplicate-number-error' : 'This phone number is already registered.',
+      'login-prompt' : 'Already have an account?',
 
       //user app
       'bottom-nav-restaurants' : 'Restaurants',
