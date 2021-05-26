@@ -13,6 +13,7 @@ import 'restaurant.dart';
 import 'comment.dart';
 import 'address.dart';
 import 'discount.dart';
+import 'user_account.dart';
 
 class Server {
 
@@ -25,12 +26,12 @@ class Server {
 
   Account? get account => _account;
 
-  bool isPhoneNumberValid(String phoneNumber) {
+  static bool isPhoneNumberValid(String phoneNumber) {
     var pattern = RegExp(r'^09\d{9}$');
     return pattern.hasMatch(phoneNumber);
   }
   
-  bool isPasswordValid(String password) {
+  static bool isPasswordValid(String password) {
     var pattern = RegExp(r'^(?=.{6,}$)(?=.*[0-9])(?=.*[a-zA-Z])[0-9a-zA-Z]+$');
     return pattern.hasMatch(password);
   }
@@ -63,14 +64,17 @@ class Server {
     return newOrder;
   }
 
-  bool login(String phoneNumber, String password) {
+  bool login(String phoneNumber, String password, bool isForUser) {
     var correctPassword = dataBase.loginData[phoneNumber];
     if (correctPassword == null) return false;
     if (password == correctPassword) {
       for (var acc in dataBase.accounts) {
         if (acc.phoneNumber == phoneNumber) {
-          _account = acc;
-          // if this account is for owner, fina and assign its restaurant's menu
+          if (isForUser && acc is OwnerAccount) return false;
+          if (!isForUser && acc is UserAccount) return false;
+
+            _account = acc;
+          // if this account is for owner, find and assign its restaurant's menu
           if (_account is OwnerAccount) {
             (_account as OwnerAccount).restaurant.menu = getObjectByID((_account as OwnerAccount).restaurant.menuID!) as FoodMenu;
           }
