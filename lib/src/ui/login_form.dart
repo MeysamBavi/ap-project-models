@@ -30,36 +30,34 @@ class _LoginPanelState extends State<LoginPanel> {
     server = Head.of(context).server;
 
     return Scaffold(
-      body: Center(
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Image.asset('assets/default_food.jpg', package: 'models', fit: BoxFit.fitHeight,),
-            Container(
-              width: size.width * 0.9,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Theme.of(context).cardColor,
-              ),
-              padding: EdgeInsets.all(20),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(Strings.get('login-header')!, style: Theme.of(context).textTheme.headline1,),
-                    const SizedBox(height: 10,),
-                    if (_notFoundError)
-                      buildNotFoundError(),
-                    buildLoginPhoneNumberField(server, (value) => _phoneNumber = value),
-                    PasswordField(server, (value) => _password = value),
-                    const SizedBox(height: 10,),
-                    buildModelButton(Strings.get('login-button')!, Theme.of(context).primaryColor, loginPressed)
-                  ],
-                ),
-              ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(image: AssetImage('assets/login_background.jpg', package: 'models'), fit: BoxFit.cover),
+        ),
+        alignment: Alignment.center,
+        child: Container(
+          width: size.width * 0.9,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            color: Theme.of(context).cardColor,
+          ),
+          padding: EdgeInsets.all(20),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(Strings.get('login-header')!, style: Theme.of(context).textTheme.headline1,),
+                const SizedBox(height: 10,),
+                if (_notFoundError)
+                  buildNotFoundError(),
+                buildLoginPhoneNumberField(server, (value) => _phoneNumber = value),
+                PasswordField(server, (value) => _password = value),
+                const SizedBox(height: 10,),
+                buildModelButton(Strings.get('login-button')!, Theme.of(context).primaryColor, loginPressed)
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
