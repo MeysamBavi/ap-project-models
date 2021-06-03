@@ -11,10 +11,14 @@ class CommonColors {
   static const Color cyan = Color(0xFF00E5FF);
 
   static const Color themeColorPlatinum = Color(0xFFE7E5DF);
+  static const Color themeColorPlatinumLight = Color(0xFFFFFDF7);
   static const Color themeColorBlue = Color(0xFF44BBA4);
-  static const Color themeColorRed = Color(0xFF980000);
+  static const Color themeColorBlueDark = Color(0xFF378F7D);
+  static const Color themeColorRed = Color(0xFFBD2426);
+  static const Color themeColorRed2 = Color(0xFF980000);
   static const Color themeColorBlack = Color(0xFF393E41);
   static const Color themeColorYellow = Color(0xFFE7BB41);
+  static const Color themeColorYellowDark = Color(0xFFCCA12B);
 
   static var randomColorList = <Color?>[
     CommonColors.green,
