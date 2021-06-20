@@ -26,4 +26,14 @@ class Comment with Serializable implements Editable {
     _reply = value;
     server.edit(this);
   }
+
+  Map<String, dynamic> toJson() => {
+    'ID' : id,
+    'restaurantID' : restaurantID,
+    'time' : time.millisecondsSinceEpoch.toString(),
+    'score' : score,
+    'title' : title,
+    'message' : message,
+    'reply' : _reply,
+  };
 }

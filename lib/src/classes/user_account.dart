@@ -33,6 +33,20 @@ class UserAccount extends Account {
       this.cart = cart ?? [],
       super(phoneNumber: phoneNumber, server: server);
 
+  Map<String, dynamic> toJson() => {
+    'firstName' : firstName,
+    'lastName' : lastName,
+    'phoneNumber' : phoneNumber,
+    'credit' : _credit.toInt().toString(),
+    'defaultAddressName' : _defaultAddressName,
+    'addresses' : addresses,
+    'favRestaurantIDs' : favRestaurantIDs,
+    'commentIDs' : commentIDs,
+    'cart' : cart,
+    'previousOrdersIDs' : previousOrders.map((e) => e.id).toList(growable: false),
+    'activeOrdersIDs' : activeOrders.map((e) => e.id).toList(growable: false)
+  };
+
   Address? get defaultAddress {
     for (var address in addresses) {
       if (address.name == _defaultAddressName) return address;

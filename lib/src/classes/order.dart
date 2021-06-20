@@ -59,4 +59,26 @@ class Order with Serializable implements Editable {
     return server.reorder(this);
   }
 
+  Map<String, dynamic> toJson() {
+    var itemsConverted = <Map<String, dynamic>>[];
+    items.forEach((foodData, count) {
+      itemsConverted.add({
+        'name' : foodData.name,
+        'foodID' : foodData.foodID,
+        'price' : foodData.price.toInt().toString(),
+        'count' : count,
+      });
+    });
+    return {
+      'ID' : id,
+      'items' : itemsConverted,
+      'time' : time.millisecondsSinceEpoch.toString(),
+      'code' : _code,
+      'isRequested' : _isRequested,
+      'isDelivered' : _isDelivered,
+      'restaurantID' : restaurant.id,
+      'customer' : customer
+    };
+  }
+
 }

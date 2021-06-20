@@ -15,4 +15,11 @@ class Address {
   @override
   String toString() => text;
 
+  Map<String, dynamic> toJson() => {
+    'latitude' : latitude,
+    'longitude' : longitude,
+    'text' : text,
+    'name' : name
+  };
+
 }

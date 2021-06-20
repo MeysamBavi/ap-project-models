@@ -14,6 +14,13 @@ class FoodMenu with Serializable implements Editable {
     }
   }
 
+  Map<String, dynamic> toJson() {
+    var result = <String, dynamic>{};
+    _data.forEach((key, value) => result[key.toString()] = value);
+    result['ID'] = id;
+    return result;
+  }
+
 
   @override
   Server get server => _server;

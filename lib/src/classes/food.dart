@@ -32,6 +32,15 @@ class Food with Serializable implements Editable {
         _isAvailable = isAvailable,
         _server = server;
 
+  Map<String, dynamic> toJson() => {
+    'ID' : id,
+    'name' : _name,
+    'price' : _price.toInt().toString(),
+    'description' : _description,
+    'isAvailable' : _isAvailable,
+    'category' : _category.toString(),
+  };
+
   String get name => _name;
 
   Price get price => _price;

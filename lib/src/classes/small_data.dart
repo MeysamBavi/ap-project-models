@@ -9,6 +9,12 @@ class CustomerData {
 
   CustomerData(this.firstName, this.lastName, this.address);
 
+  Map<String, dynamic> toJson() => {
+    'firstName' : firstName,
+    'lastName' : lastName,
+    'address' : address
+  };
+
 }
 
 class FoodData {
