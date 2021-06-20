@@ -104,6 +104,20 @@ class Server {
     return true;
   }
 
+  bool signUpUser(String firstName, String lastName, String phoneNumber, Address defaultAddress) {
+    _account = UserAccount(
+      server: this,
+      firstName: firstName,
+      lastName: lastName,
+      phoneNumber: phoneNumber,
+      addresses: [defaultAddress],
+      defaultAddressName: defaultAddress.name,
+      favRestaurantIDs: [],
+      commentIDs: [],
+    );
+    return true;
+  }
+
   Object? getObjectByID(String id) {
     if (!serializer.isIDValid(id)) {
       print('INVALID ID');
