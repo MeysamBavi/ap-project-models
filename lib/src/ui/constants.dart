@@ -184,6 +184,11 @@ class Strings {
       'discount-dialog-title' : 'Enter discount code:',
       'discount-invalid-code' : 'Invalid discount code.',
       'apply' : 'Apply',
+      'signup-address-hint' : 'Tap here to add address',
+      'first-name-hint' : 'First name',
+      'last-name-hint' : 'Last name',
+      'empty-first-name' : 'First name is required.',
+      'empty-last-name' : 'Last name is required.',
 
       //models
       'empty-reply-error' : 'Reply can\'t be empty',
