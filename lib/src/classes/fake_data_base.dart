@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:convert';
 import 'food_menu.dart';
 import 'food.dart';
 import 'account.dart';
@@ -45,10 +46,12 @@ class FakeData {
   final DataBase dataBase;
   final Server server;
   final rand = Random(DateTime.now().second);
+  final JsonEncoder jsonEncoder = JsonEncoder.withIndent('  ');
+  final bool shouldLog;
 
   final List<Food> foods;
 
-  FakeData(this.server)  : dataBase = server.dataBase,
+  FakeData(this.server, [this.shouldLog = false])  : dataBase = server.dataBase,
         foods = <Food>[
     Food(name: 'Pepperoni', category: FoodCategory.FastFood, price: Price(35000), server: server, isAvailable: false),
     Food(name: 'Sushi', category: FoodCategory.SeaFood, price: Price(50000), server: server),
@@ -125,6 +128,11 @@ class FakeData {
     }
     menu.serialize(server.serializer);
     dataBase.menus.add(menu);
+    if (shouldLog) {
+      print('random generated food menu');
+      print(jsonEncoder.convert(menu));
+      print('');
+    }
     return menu;
   }
 
@@ -158,6 +166,11 @@ class FakeData {
     dataBase.comments.add(c2);
     restaurant.commentIDs.add(c1.id!);
     restaurant.commentIDs.add(c2.id!);
+    if (shouldLog) {
+      print('random generated restaurant');
+      print(jsonEncoder.convert(restaurant));
+      print('');
+    }
     return restaurant;
   }
 
@@ -180,6 +193,11 @@ class FakeData {
       if (isDelivered) {
         order.isDelivered = isDelivered;
       }
+    }
+    if (shouldLog) {
+      print('random generated order');
+      print(jsonEncoder.convert(order));
+      print('');
     }
     return order;
   }
@@ -220,6 +238,11 @@ class FakeData {
     user.activeOrders.add(getSampleOrder(customerData, true, false));
     dataBase.loginData[user.phoneNumber] = 'user321';
     dataBase.accounts.add(user);
+    if (shouldLog) {
+      print('user account');
+      print(jsonEncoder.convert(user));
+      print('');
+    }
     return user;
   }
 
