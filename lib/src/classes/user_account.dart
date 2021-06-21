@@ -33,6 +33,22 @@ class UserAccount extends Account {
       this.cart = cart ?? [],
       super(phoneNumber: phoneNumber, server: server);
 
+  UserAccount.fromJson(Map<String, dynamic> json, Server server):
+        firstName = json['firstName'],
+        lastName = json['lastName'],
+        _credit = Price(int.parse(json['credit'])),
+        _defaultAddressName = json['defaultAddressName'],
+        addresses = json['addresses'].map<Address>((e) => Address.fromJson(e)).toList(),
+        favRestaurantIDs = [...json['favRestaurantIDs']],
+        commentIDs = [...json['commentIDs']],
+        cart = json['cart'].map<Order>((e) => Order.fromJson(e, server)).toList(),
+        super(
+        phoneNumber: json['phoneNumber'],
+        server: server,
+        previousOrders: json['previousOrders'].map<Order>((e) => Order.fromJson(e, server)).toList(),
+        activeOrders: json['activeOrders'].map<Order>((e) => Order.fromJson(e, server)).toList(),
+      );
+
   Map<String, dynamic> toJson() => {
     'firstName' : firstName,
     'lastName' : lastName,

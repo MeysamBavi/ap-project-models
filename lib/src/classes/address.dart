@@ -12,6 +12,12 @@ class Address {
     this.longitude = 0,
 });
 
+  Address.fromJson(Map<String, dynamic> json):
+        text = json['text'],
+        name = json['name'],
+        latitude = json['latitude'],
+        longitude = json['longitude'];
+
   @override
   String toString() => text;
 

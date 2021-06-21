@@ -81,4 +81,19 @@ class Order with Serializable implements Editable {
     };
   }
 
+  Order.fromJson(Map<String, dynamic> json, Server server, [Restaurant? restaurant]):
+        items = <FoodData, int>{},
+        time = DateTime.fromMillisecondsSinceEpoch(int.parse(json['time'])),
+        _code = json['code'],
+        _isRequested = json['isRequested'],
+        _isDelivered = json['isDelivered'],
+        restaurant = restaurant ?? Restaurant.fromJson(json['restaurant']),
+        customer = CustomerData.fromJson(json['customer']),
+        server = server
+  {
+    json['items'].forEach((item) {
+      items[FoodData(item['name'], item['foodID'], Price(int.parse(item['price'])))] = item['count'];
+    });
+    id = json['ID'];
+  }
 }

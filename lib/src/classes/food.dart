@@ -32,6 +32,19 @@ class Food with Serializable implements Editable {
         _isAvailable = isAvailable,
         _server = server;
 
+  Food.fromJson(Map<String, dynamic> json, Server server):
+        _server = server,
+        _name = json['name'],
+        _price = Price(int.parse(json['price'])),
+        _description = json['description'],
+        _isAvailable = json['isAvailable'],
+        _category = Food.toCategory(json['category'])!,
+        _image = Image.asset('assets/default_food.jpg' , package: 'models',)
+  {
+    id = json['ID'];
+  }
+
+
   Map<String, dynamic> toJson() => {
     'ID' : id,
     'name' : _name,
@@ -87,6 +100,14 @@ class Food with Serializable implements Editable {
   {
     _image = image;
     server.edit(this);
+  }
+
+  // converts the result of [FoodCategory].toString() back to [FoodCategory]
+  static FoodCategory? toCategory(String foodCategory) {
+    for (var category in FoodCategory.values) {
+      if (category.toString() == foodCategory) return category;
+    }
+    return null;
   }
 }
 

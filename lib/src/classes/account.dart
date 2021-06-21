@@ -10,9 +10,11 @@ abstract class Account implements Editable {
 
   Account({
     required this.phoneNumber,
-    required Server server
-  }) :  previousOrders = <Order>[],
-        activeOrders = <Order>[],
+    required Server server,
+    List<Order>? previousOrders,
+    List<Order>? activeOrders,
+  }) :  this.previousOrders = previousOrders ?? <Order>[],
+        this.activeOrders = activeOrders ?? <Order>[],
         _server = server;
 
   @override

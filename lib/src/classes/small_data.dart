@@ -9,6 +9,11 @@ class CustomerData {
 
   CustomerData(this.firstName, this.lastName, this.address);
 
+  CustomerData.fromJson(Map<String, dynamic> json):
+  firstName = json['firstName'],
+  lastName = json['lastName'],
+  address = Address.fromJson(json['address']);
+
   Map<String, dynamic> toJson() => {
     'firstName' : firstName,
     'lastName' : lastName,

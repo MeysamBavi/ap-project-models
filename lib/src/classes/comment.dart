@@ -27,6 +27,18 @@ class Comment with Serializable implements Editable {
     server.edit(this);
   }
 
+  Comment.fromJson(Map<String, dynamic> json, Server server):
+        server = server,
+        restaurantID = json['restaurantID'],
+        time = DateTime.fromMillisecondsSinceEpoch(int.parse(json['time'])),
+        score = json['score'],
+        title = json['title'],
+        message = json['message'],
+        _reply = json['reply']
+  {
+    id = json['ID'];
+  }
+
   Map<String, dynamic> toJson() => {
     'ID' : id,
     'restaurantID' : restaurantID,

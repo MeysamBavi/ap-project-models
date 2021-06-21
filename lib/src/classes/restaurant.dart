@@ -28,6 +28,19 @@ class Restaurant with Serializable {
         this.logo = logo??Image.asset('assets/default_restaurant.jpg' , package: 'models',),
         this.foodCategories = foodCategories ?? {};
 
+  Restaurant.fromJson(Map<String, dynamic> json):
+        name = json['name'],
+        menuID = json['menuID'],
+        foodCategories = <FoodCategory>{ ...json['foodCategories'].map<FoodCategory>((e) => Food.toCategory(e)) },
+        address = Address.fromJson(json['address']),
+        areaOfDispatch = json['areaOfDispatch'],
+        score = json['score'],
+        commentIDs = [...json['commentIDs']],
+        logo = Image.asset('assets/default_restaurant.jpg' , package: 'models',)
+  {
+    id = json['ID'];
+  }
+
   Map<String, dynamic> toJson() => {
     'ID' : id,
     'name' : name,
