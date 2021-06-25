@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 import 'package:geolocator/geolocator.dart' show Geolocator;
 import 'fake_data_base.dart';
 import 'order.dart';
@@ -18,13 +20,13 @@ import 'user_account.dart';
 class Server {
 
   Server([DataBase? dataBase]) : this.dataBase = dataBase ?? DataBase.empty(), serializer = Serializer();
-
   Account? _account;
   DataBase dataBase;
   String token = '';
   final serializer;
-
   Account? get account => _account;
+  String separator ="|*|*|";
+
 
   static bool isPhoneNumberValid(String phoneNumber) {
     var pattern = RegExp(r'^09\d{9}$');
@@ -65,7 +67,7 @@ class Server {
   }
 
   bool login(String phoneNumber, String password, bool isForUser) {
-    var correctPassword = dataBase.loginData[phoneNumber];
+    /*var correctPassword = dataBase.loginData[phoneNumber];
     if (correctPassword == null) return false;
     if (password == correctPassword) {
       for (var acc in dataBase.accounts) {
@@ -81,6 +83,26 @@ class Server {
           return true;
         }
       }
+    }
+    return false;*/
+    if (isForUser)
+    {
+      Socket.connect("192.168.1.4" , 8081).then((serverSocket) async {
+        var message = "user";
+        serverSocket.add(intToBytes(message.length));
+        serverSocket.add(message.codeUnits);
+        await serverSocket.flush();
+        message = "Login" + separator + phoneNumber + separator + password ;
+        serverSocket.add(intToBytes(message.length));
+        serverSocket.add(message.codeUnits);
+        await serverSocket.flush();
+        serverSocket.listen((Uint8List event) async {
+          print(event);
+          _account = UserAccount.fromJson(event.toString() as Map<String , dynamic>, this);
+        });
+      });
+      if (_account != null)
+        return true;
     }
     return false;
   }
@@ -104,8 +126,9 @@ class Server {
     return true;
   }
 
-  bool signUpUser(String firstName, String lastName, String phoneNumber, Address defaultAddress) {
-    _account = UserAccount(
+  bool signUpUser(String firstName, String lastName, String phoneNumber, Address defaultAddress)  {
+
+    var account = UserAccount(
       server: this,
       firstName: firstName,
       lastName: lastName,
@@ -115,6 +138,22 @@ class Server {
       favRestaurantIDs: [],
       commentIDs: [],
     );
+    Socket.connect("192.168.1.4" , 8081).then((serverSocket) async {
+      var message = "user";
+      serverSocket.add(intToBytes(message.length));
+      serverSocket.add(message.codeUnits);
+      await serverSocket.flush();
+      message = "Signup" + separator + phoneNumber + separator + "sinaTaheri123" + separator + account.toJson().toString();
+      serverSocket.add(intToBytes(message.length));
+      serverSocket.add(message.codeUnits);
+      await serverSocket.flush();
+      serverSocket.listen((Uint8List event) async {
+        print(String.fromCharCodes(event));
+      });
+    });
+
+    print("Signup" + separator + phoneNumber + separator + "sinataheri" + separator + account.toJson().toString());
+    _account = account;
     return true;
   }
 
@@ -204,4 +243,8 @@ class Server {
     dataBase.discounts.remove(discount);
   }
 
+  List<int> intToBytes(int value)
+  {
+    return [(value & 0xFF000000) >> 24 , (value & 0x00FF0000) >> 16 , (value & 0x0000FF00) >> 8 , value & 0x000000FF];
+  }
 }
