@@ -92,7 +92,7 @@ class Order with Serializable implements Editable {
         server = server
   {
     json['items'].forEach((item) {
-      items[FoodData(item['name'], item['foodID'], Price(int.parse(item['price'])))] = item['count'];
+      items[FoodData(item['name'], item['foodID'], Price(int.parse(item['price'])))] = item['count'].toInt();
     });
     id = json['ID'];
   }

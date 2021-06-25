@@ -5,7 +5,7 @@ class Discount {
   const Discount(this.code, this.percent);
 
   factory Discount.fromJson(Map<String, dynamic> json) {
-    return Discount(json['code'], json['percent']);
+    return Discount(json['code'], json['percent'].toInt());
   }
 
 }

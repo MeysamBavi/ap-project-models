@@ -31,7 +31,7 @@ class Comment with Serializable implements Editable {
         server = server,
         restaurantID = json['restaurantID'],
         time = DateTime.fromMillisecondsSinceEpoch(int.parse(json['time'])),
-        score = json['score'],
+        score = json['score'].toInt(),
         title = json['title'],
         message = json['message'],
         _reply = json['reply']
