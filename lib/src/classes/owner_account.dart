@@ -25,6 +25,14 @@ class OwnerAccount extends Account {
     );
   }
 
+  Map<String, dynamic> toJson() => {
+    'phoneNumber' : phoneNumber,
+    'restaurantID' : restaurant.id,
+    'previousOrders' : previousOrders.map((e) => e.id).toList(growable: false),
+  };
+
+  List<String> activeOrdersToJson() => activeOrders.map((e) => e.id!).toList(growable: false);
+
   List<int> calculateCountPrice(DateTime? time, bool previousOrders) {
     var orders = previousOrders ? super.previousOrders : super.activeOrders;
     int count = 0, price = 0;

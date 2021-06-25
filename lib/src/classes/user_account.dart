@@ -59,8 +59,8 @@ class UserAccount extends Account {
     'favRestaurantIDs' : favRestaurantIDs,
     'commentIDs' : commentIDs,
     'cart' : cart,
-    'previousOrdersIDs' : previousOrders.map((e) => e.id).toList(growable: false),
-    'activeOrdersIDs' : activeOrders.map((e) => e.id).toList(growable: false)
+    'previousOrders' : previousOrders.map((e) => e.id).toList(growable: false),
+    'activeOrders' : activeOrders.map((e) => e.id).toList(growable: false)
   };
 
   Address? get defaultAddress {
