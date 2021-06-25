@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
-import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart' show Geolocator;
 import 'custom_socket.dart';
 import 'fake_data_base.dart';
