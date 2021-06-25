@@ -3,20 +3,19 @@ import 'dart:typed_data';
 
 class CustomSocket {
   Socket _socket;
+  late Stream<Uint8List> _broadcast;
   List<Uint8List> _buffer;
   CustomSocket(this._socket) :
-      _buffer = <Uint8List>[]
+        _buffer = <Uint8List>[]
   {
-    _socket.listen((Uint8List event) {
-      _buffer.add(event);
-    });
+    _broadcast = _socket.asBroadcastStream();
   }
 
-  String readString() {
-    return String.fromCharCodes(_buffer[0]);
+  Future<String> readString() async {
+    return String.fromCharCodes(await _broadcast.first);
   }
 
-  void writeString(String message) async {
+  Future<void> writeString(String message) async {
     _socket.add(intToBytes(message.length));
     _socket.add(message.codeUnits);
     await _socket.flush();
