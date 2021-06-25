@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
+import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart' show Geolocator;
+import 'custom_socket.dart';
 import 'fake_data_base.dart';
 import 'order.dart';
 import 'editable.dart';
@@ -19,15 +22,32 @@ import 'user_account.dart';
 
 class Server {
 
-  Server([DataBase? dataBase]) : this.dataBase = dataBase ?? DataBase.empty(), serializer = Serializer();
+  Server ([DataBase? dataBase]): this.dataBase = dataBase ?? DataBase.empty(), serializer = Serializer();
   Account? _account;
   DataBase dataBase;
   String token = '';
   final serializer;
+  Socket? socket;
+  CustomSocket? cs;
   Account? get account => _account;
   String separator ="|*|*|";
 
+  void setSocket(String ip , int port) async
+  {
+    socket = await Socket.connect(ip, port);
+    cs = CustomSocket(socket!);
+  }
 
+  void setStatus (bool isUser)
+  {
+    if (isUser)
+    {
+      cs!.writeString("user");
+    }
+    else
+      cs!.writeString("owner");
+
+  }
   static bool isPhoneNumberValid(String phoneNumber) {
     var pattern = RegExp(r'^09\d{9}$');
     return pattern.hasMatch(phoneNumber);
@@ -43,16 +63,23 @@ class Server {
   }
 
   void addNewOrder(Order order) {
-    dataBase.orders.add(order);
-    dataBase.ownerOf[order.restaurant.id!]!.activeOrders.add(order);
+    /*dataBase.orders.add(order);
+    dataBase.ownerOf[order.restaurant.id!]!.activeOrders.add(order);*/
+    cs!.writeString("serialize" + separator + "order");
+    order.id = cs!.readString();
+    _account!.activeOrders.add(order);
+    cs!.writeString("order" + separator + _account!.phoneNumber + separator + (_account as UserAccount).toJson().toString() + separator + order.id! + separator + order.toJson().toString() + separator + order.restaurant.id!);
   }
 
   void addNewComment(Comment comment) {
-    dataBase.comments.add(comment);
+    /*dataBase.comments.add(comment);
     var restaurant = getObjectByID(comment.restaurantID) as Restaurant;
-    restaurant.commentIDs.add(comment.id!);
+    restaurant.commentIDs.add(comment.id!);*/
+    cs!.writeString("serialize" + separator + "comment");
+    comment.id = cs!.readString();
+    cs!.writeString("comment" + separator + _account!.phoneNumber + separator +(_account as UserAccount).toJson().toString() + separator + comment.id! + separator + comment.toJson().toString());
   }
-
+  //can be deleted !
   Order? reorder(Order order) {
     var newItems = <FoodData, int>{};
     for (var oldFoodData in order.items.keys) {
@@ -87,22 +114,20 @@ class Server {
     return false;*/
     if (isForUser)
     {
-      Socket.connect("192.168.1.4" , 8081).then((serverSocket) async {
-        var message = "user";
-        serverSocket.add(intToBytes(message.length));
-        serverSocket.add(message.codeUnits);
-        await serverSocket.flush();
-        message = "Login" + separator + phoneNumber + separator + password ;
-        serverSocket.add(intToBytes(message.length));
-        serverSocket.add(message.codeUnits);
-        await serverSocket.flush();
-        serverSocket.listen((Uint8List event) async {
-          print(event);
-          _account = UserAccount.fromJson(event.toString() as Map<String , dynamic>, this);
-        });
-      });
-      if (_account != null)
-        return true;
+        cs!.writeString("login"+separator + phoneNumber + separator + password);
+        String accountJSON = cs!.readString();
+        if (!accountJSON.startsWith("Error")) {
+          _account = UserAccount.fromJson(JsonDecoder().convert(accountJSON), this);
+          return true;
+        }
+    }else{
+      cs!.writeString("login"+separator+phoneNumber+separator+password);
+      String? accountJSON = cs!.readString();
+      if (accountJSON != null)
+      {
+          _account = OwnerAccount.fromJson(JsonDecoder().convert(accountJSON), this);
+          return true;
+      }
     }
     return false;
   }
@@ -116,13 +141,17 @@ class Server {
   }
 
   bool signUpOwner(String phoneNumber, String password, Restaurant restaurant, FoodMenu menu) {
-    restaurant.serialize(serializer);
+    /*restaurant.serialize(serializer);
     restaurant.menu = menu;
     _account = OwnerAccount(phoneNumber: phoneNumber, restaurant: restaurant, server: this);
     dataBase.accounts.add(_account!);
     dataBase.loginData[phoneNumber] = password;
     dataBase.restaurants.add(restaurant);
-    dataBase.menus.add(menu);
+    dataBase.menus.add(menu);*/
+    var ownerAcc =  OwnerAccount(phoneNumber: phoneNumber, restaurant: restaurant, server: this);
+    cs!.writeString("serialize" + separator + "restaurant");
+    restaurant.id = cs!.readString();
+    cs!.writeString("signup" + separator + phoneNumber + separator + password + ownerAcc.toJson().toString() + separator + restaurant.id! + separator + restaurant.toJson().toString());
     return true;
   }
 
@@ -138,21 +167,9 @@ class Server {
       favRestaurantIDs: [],
       commentIDs: [],
     );
-    Socket.connect("192.168.1.4" , 8081).then((serverSocket) async {
-      var message = "user";
-      serverSocket.add(intToBytes(message.length));
-      serverSocket.add(message.codeUnits);
-      await serverSocket.flush();
-      message = "Signup" + separator + phoneNumber + separator + "sinaTaheri123" + separator + account.toJson().toString();
-      serverSocket.add(intToBytes(message.length));
-      serverSocket.add(message.codeUnits);
-      await serverSocket.flush();
-      serverSocket.listen((Uint8List event) async {
-        print(String.fromCharCodes(event));
-      });
-    });
-
-    print("Signup" + separator + phoneNumber + separator + "sinataheri" + separator + account.toJson().toString());
+    cs!.writeString("user");
+    cs!.writeString("signup" + separator + phoneNumber + separator +/*has to be password*/ "sinaTaheri1" + separator + account.toJson().toString());
+    print("Signup" + separator + phoneNumber + separator + "sinaTaheri1" + separator + account.toJson().toString());
     _account = account;
     return true;
   }
