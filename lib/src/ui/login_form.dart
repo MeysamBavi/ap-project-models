@@ -76,10 +76,10 @@ class _LoginPanelState extends State<LoginPanel> {
     );
   }
 
-  void loginPressed() {
+  void loginPressed() async {
     if (!_formKey.currentState!.validate()) return;
     _formKey.currentState!.save();
-    var found = server.login(_phoneNumber!, _password!, widget.isForUser);
+    var found = await server.login(_phoneNumber!, _password!, widget.isForUser);
     if (!found) {
       setState(() {
         _notFoundError = true;
