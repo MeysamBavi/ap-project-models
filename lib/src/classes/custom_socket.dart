@@ -2,23 +2,22 @@ import 'dart:io';
 import 'dart:typed_data';
 
 class CustomSocket {
-  Socket _socket;
-  late Stream<Uint8List> _broadcast;
-  List<Uint8List> _buffer;
-  CustomSocket(this._socket) :
-        _buffer = <Uint8List>[]
-  {
-    _broadcast = _socket.asBroadcastStream();
-  }
+  late Socket _socket;
+  String host;
+  int port;
+  CustomSocket(this.host, this.port);
 
-  Future<String> readString() async {
-    return String.fromCharCodes(await _broadcast.first);
-  }
-
-  Future<void> writeString(String message) async {
-    _socket.add(intToBytes(message.length));
-    _socket.add(message.codeUnits);
+  Future<String> writeString(String message) async {
+    _socket = await Socket.connect(host, port);
+    _socket.add([...intToBytes(message.length), ...message.codeUnits,]);
     await _socket.flush();
+    List<Uint8List> events = [];
+    await for (var data in _socket) {
+      events.add(data);
+    }
+    String result = events.map<String>((e) => String.fromCharCodes(e)).join();
+    await _socket.close();
+    return result;
   }
 
   List<int> intToBytes(int value) {
