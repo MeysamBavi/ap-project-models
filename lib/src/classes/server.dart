@@ -59,7 +59,7 @@ class Server {
     cs!.writeString("order" + separator + _account!.phoneNumber + separator + (_account as UserAccount).toJson().toString() + separator + order.id! + separator + order.toJson().toString() + separator + order.restaurant.id!);
     */
     order.id = await cs!.writeString("user"+ separator  + "serialize" + separator + "order");
-    var message = "user"  + separator + "order" + separator + _account!.phoneNumber + separator + (_account as UserAccount).toJson().toString() + separator + order.id! + separator + order.toJson().toString() + separator + order.restaurant.id!;
+    var message = "user"  + separator + "order" + separator + _account!.phoneNumber + separator + jsonEncode(_account as UserAccount) + separator + order.id! + separator + jsonEncode(order) + separator + order.restaurant.id!;
     String response = await cs!.writeString(message);
     print(response);
   }
@@ -75,24 +75,23 @@ class Server {
     cs!.writeString("comment" + separator + _account!.phoneNumber + separator +(_account as UserAccount).toJson().toString() + separator + comment.id! + separator + comment.toJson().toString());
     */
     comment.id = await cs!.writeString("user" + separator + "serialize" + separator + "comment");
-    var message = "user" + separator + "comment" + separator + _account!.phoneNumber + separator +(_account as UserAccount).toJson().toString() + separator + comment.id! + separator + comment.toJson().toString();
+    var message = "user" + separator + "comment" + separator + _account!.phoneNumber + separator + jsonEncode(_account as UserAccount) + separator + comment.id! + separator + jsonEncode(comment);
     String response = await cs!.writeString(message);
     print(response);
   }
   
   //can be deleted !
-  Order? reorder(Order order) {
-    /*var newItems = <FoodData, int>{};
+  Future<Order?> reorder(Order order) async {
+    var newItems = <FoodData, int>{};
     for (var oldFoodData in order.items.keys) {
-      var newFood = getFoodByID(oldFoodData.foodID, order.restaurant.menuID!);
+      var newFood = await getFoodByID(oldFoodData.foodID, order.restaurant.menuID!);
       if (newFood == null) continue;
       newItems[newFood.toFoodData()] = order.items[oldFoodData]!;
     }
     if (newItems.isEmpty) return null;
     var newOrder = Order(server: this, items: newItems, restaurant: order.restaurant, customer: order.customer);
-    newOrder.serialize(serializer);
-    return newOrder;*/
-
+    newOrder.id = await cs!.writeString(['user', 'serialize', 'order'].join(separator));
+    return newOrder;
   }
 
   Future<bool> login(String phoneNumber, String password, bool isForUser) async{
@@ -134,18 +133,18 @@ class Server {
     }
     return false;
      */
-    if (isForUser){
-      var message ="user"  + separator + "login" +separator + phoneNumber + separator + password;
+    if (isForUser) {
+      var message ="user"  + separator + "login" + separator + phoneNumber + separator + password;
       String returnMessage = await cs!.writeString(message);
       if (returnMessage.startsWith("Error"))
         return false;
-      _account = UserAccount.fromJson(json.decode(returnMessage), this);
+      _account = UserAccount.fromJson(jsonDecode(returnMessage), this);
     }else {
       var message ="owner"  + separator + "login" +separator + phoneNumber + separator + password;
       String returnMessage = await cs!.writeString(message);
       if (returnMessage.startsWith("Error"))
         return false;
-      _account = OwnerAccount.fromJson(json.decode(returnMessage), this);
+      _account = OwnerAccount.fromJson(jsonDecode(returnMessage), this);
     }
     return true;
   }
@@ -173,14 +172,15 @@ class Server {
     return true;*/
     var ownerAcc =  OwnerAccount(phoneNumber: phoneNumber, restaurant: restaurant, server: this);
     restaurant.id = await cs!.writeString("owner" + separator + "serialize" + separator + "restaurant");
-    var message = "owner" + separator + "signup" + separator + phoneNumber + separator + password +  ownerAcc.toJson().toString() + separator + restaurant.id! + separator + restaurant.toJson().toString();
+    var message = "owner" + separator + "signup" + separator + phoneNumber + separator + password +  jsonEncode(ownerAcc)+ separator + restaurant.id! + separator + jsonEncode(restaurant);
     String response = await cs!.writeString(message);
+    if (response == 'false') return false;
     _account = ownerAcc;
     print(response);
     return true;
   }
 
-  Future<bool> signUpUser(String firstName, String lastName, String phoneNumber, Address defaultAddress) async {
+  Future<bool> signUpUser(String firstName, String lastName, String phoneNumber, String password, Address defaultAddress) async {
 
     var account = UserAccount(
       server: this,
@@ -192,63 +192,36 @@ class Server {
       favRestaurantIDs: [],
       commentIDs: [],
     );
-    //custom socket version
-    /*
-    cs!.writeString("user");
-    cs!.writeString("signup" + separator + phoneNumber + separator +/*has to be password*/ "sinaTaheri1" + separator + account.toJson().toString());
-    print("Signup" + separator + phoneNumber + separator + "sinaTaheri1" + separator + account.toJson().toString());
-    _account = account;
-    return true;*/
-    var message ="user" + separator+"signup" + separator + phoneNumber + separator +/*has to be password*/ "sinaTaheri1" + separator + account.toJson().toString();
+    var message ="user" + separator+"signup" + separator + phoneNumber + separator + password + separator + jsonEncode(account);
     String response = await cs!.writeString(message);
+    if (response == 'false') return false;
     _account = account;
     print(response);
     return true;
   }
 
-  Object? getObjectByID(String id) {
-    if (!serializer.isIDValid(id)) {
-      print('INVALID ID');
-      return null;
-    }
+  Future<Object?> getObjectByID<T>(String id) async {
 
-    if (id.startsWith('M-')) {
-      for (var menu in dataBase.menus) {
-        if (menu.id == id) return menu;
-      }
-    }
+    String userOrOwner = _account is UserAccount ? 'user' : 'owner';
 
-    if (id.startsWith('R-')) {
-      for (var res in dataBase.restaurants) {
-        if (res.id == id) return res;
-      }
-    }
-
-    if (id.startsWith('C-')) {
-      for (var comment in dataBase.comments) {
-        if (comment.id == id) return comment;
-      }
-    }
-
-    if (id.startsWith('O-')) {
-      for (var order in dataBase.orders) {
-        if (order.id == id) return order;
-      }
+    String message = await cs!.writeString([userOrOwner, 'get', id].join(separator));
+    switch (T) {
+      case Order:
+        return Order.fromJson(jsonDecode(message), this);
+      case Restaurant:
+        return Order.fromJson(jsonDecode(message), this);
+      case FoodMenu:
+        return FoodMenu.fromJson(jsonDecode(message), this);
+      case Comment:
+        return Comment.fromJson(jsonDecode(message), this);
     }
     return null;
   }
 
-  Food? getFoodByID(String foodID, String menuID) {
-    if (!serializer.isIDValid(foodID)) return null;
-    var menu = getObjectByID(menuID) as FoodMenu?;
-    if (menu == null) return null;
-    for (var cat in menu.categories) {
-      var foods = menu.getFoods(cat)!;
-      for (var food in foods) {
-        if (food.id == foodID) return food;
-      }
-    }
-    return null;
+  Future<Food?> getFoodByID(String foodID, String menuID) async {
+    String message = await cs!.writeString(['user', 'getFood', menuID, foodID].join(separator));
+    if (message == 'null') return null;
+    return Food.fromJson(jsonDecode(message), this);
   }
 
   static int onScore(Restaurant a, Restaurant b) => (b.score - a.score).sign.toInt();
@@ -283,17 +256,14 @@ class Server {
     return Geolocator.distanceBetween(restaurant.latitude, restaurant.longitude, customer.latitude, customer.longitude) <= radius;
   }
 
-  Discount? validateDiscount(String code) {
-    var index =  dataBase.discounts.indexWhere((element) => element.code == code);
-    return index > -1 ? dataBase.discounts[index] : null;
+  Future<Discount?> validateDiscount(String code) async {
+    String message = await cs!.writeString(['user', 'discount', code].join(separator));
+    if (message == 'null') return null;
+    return Discount.fromJson(jsonDecode(message));
   }
 
-  void useDiscount(Discount discount) {
-    dataBase.discounts.remove(discount);
+  void useDiscount(Discount discount) async {
+    String message = await cs!.writeString(['user', 'useDiscount', discount.code].join(separator));
   }
-
-  List<int> intToBytes(int value)
-  {
-    return [(value & 0xFF000000) >> 24 , (value & 0x00FF0000) >> 16 , (value & 0x0000FF00) >> 8 , value & 0x000000FF];
-  }
+  
 }
