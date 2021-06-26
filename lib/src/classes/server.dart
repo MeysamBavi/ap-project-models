@@ -1,7 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart' show Geolocator;
 import 'custom_socket.dart';
 import 'fake_data_base.dart';
@@ -18,6 +17,7 @@ import 'comment.dart';
 import 'address.dart';
 import 'discount.dart';
 import 'user_account.dart';
+import 'restaurant_predicate.dart';
 
 class Server {
 
@@ -233,14 +233,14 @@ class Server {
     };
   }
 
-  List<Restaurant> getRecommendedRestaurants(bool Function(Restaurant)? filter) {
-    List<Restaurant> result;
-    if (filter == null) {
-      result = dataBase.restaurants.sublist(0, min(10, dataBase.restaurants.length));
-      return result;
-    }
-    result = dataBase.restaurants.where(filter).toList(growable: false);
-    return result;
+  Future<List<Restaurant>> getRecommendedRestaurants() async {
+    var message = await cs!.writeString(['user', 'recommended', 20.toString()].join(separator));
+    return jsonDecode(message).map<Restaurant>((e) => Restaurant.fromJson(e)).toList();
+  }
+
+  Future<List<Restaurant>> filterRecommendedRestaurants(RestaurantPredicate predicate) async {
+    var message = await cs!.writeString(['user', 'search', jsonEncode(predicate)].join(separator));
+    return jsonDecode(message).map<Restaurant>((e) => Restaurant.fromJson(e)).toList();
   }
 
   List<Restaurant> sortRecommendedRestaurants(List<Restaurant> restaurants, int Function(Restaurant, Restaurant)? sortOrder) {
@@ -265,5 +265,5 @@ class Server {
   void useDiscount(Discount discount) async {
     String message = await cs!.writeString(['user', 'useDiscount', discount.code].join(separator));
   }
-  
+
 }

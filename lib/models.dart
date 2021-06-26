@@ -21,5 +21,6 @@ export 'src/ui/button_model.dart';
 export 'src/ui/comment_widget.dart';
 export 'src/ui/small_ui.dart';
 export 'src/classes/discount.dart';
+export 'src/classes/restaurant_predicate.dart';
 export 'src/ui/login_form.dart';
 export 'src/ui/login_ui.dart';
