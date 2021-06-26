@@ -26,32 +26,15 @@ class Server {
   DataBase dataBase;
   String token = '';
   final serializer;
-  //CustomSocket? cs;
-  Socket? socket;
+  CustomSocket? cs;
+  //Socket? socket;
   Account? get account => _account;
   String separator ="|*|*|";
-
-  //void setSocket(String ip , int port) async
-  //{
-  //  final Socket socket = await Socket.connect(ip, port);
-  //  cs = CustomSocket(socket);
-  //}
-
-  void setStatus (bool isUser) async {
-    /*if (isUser)
-    {
-
-      //cs!.writeString("user");
-    }
-    else
-      //cs!.writeString("owner");
-    */
-    var message = isUser ? "user" : "owner";
-    socket = await Socket.connect("192.168.1.4", 8081);
-    socket!.add(intToBytes(message.length));
-    socket!.add(message.codeUnits);
-    await socket!.flush();
+  void setSocket(String ip , int port) async
+  {
+    cs = CustomSocket(ip , port);
   }
+
   static bool isPhoneNumberValid(String phoneNumber) {
     var pattern = RegExp(r'^09\d{9}$');
     return pattern.hasMatch(phoneNumber);
@@ -75,18 +58,10 @@ class Server {
     _account!.activeOrders.add(order);
     cs!.writeString("order" + separator + _account!.phoneNumber + separator + (_account as UserAccount).toJson().toString() + separator + order.id! + separator + order.toJson().toString() + separator + order.restaurant.id!);
     */
-    var message = "serialize" + separator + "order";
-    socket!.add(intToBytes(message.length));
-    socket!.add(message.codeUnits);
-    await socket!.flush();
-    socket!.listen((Uint8List event) {
-      order.id = String.fromCharCodes(event);
-    });
-    _account!.activeOrders.add(order);
-    message = "order" + separator + _account!.phoneNumber + separator + (_account as UserAccount).toJson().toString() + separator + order.id! + separator + order.toJson().toString() + separator + order.restaurant.id!;
-    socket!.add(intToBytes(message.length));
-    socket!.add(message.codeUnits);
-    await socket!.flush();
+    order.id = await cs!.writeString("user"+ separator  + "serialize" + separator + "order");
+    var message = "user"  + separator + "order" + separator + _account!.phoneNumber + separator + (_account as UserAccount).toJson().toString() + separator + order.id! + separator + order.toJson().toString() + separator + order.restaurant.id!;
+    String response = await cs!.writeString(message);
+    print(response);
   }
   
 
@@ -99,23 +74,15 @@ class Server {
     comment.id = await cs!.readString();
     cs!.writeString("comment" + separator + _account!.phoneNumber + separator +(_account as UserAccount).toJson().toString() + separator + comment.id! + separator + comment.toJson().toString());
     */
-    var message = "serialize" + separator + "comment";
-    socket!.add(intToBytes(message.length));
-    socket!.add(message.codeUnits);
-    await socket!.flush();
-    socket!.listen((Uint8List event) {
-      comment.id = String.fromCharCodes(event);
-    });
-    (_account as UserAccount).commentIDs.add(comment.id!);
-    message = "comment" + separator + _account!.phoneNumber + separator +(_account as UserAccount).toJson().toString() + separator + comment.id! + separator + comment.toJson().toString();
-    socket!.add(intToBytes(message.length));
-    socket!.add(message.codeUnits);
-    await socket!.flush();
+    comment.id = await cs!.writeString("user" + separator + "serialize" + separator + "comment");
+    var message = "user" + separator + "comment" + separator + _account!.phoneNumber + separator +(_account as UserAccount).toJson().toString() + separator + comment.id! + separator + comment.toJson().toString();
+    String response = await cs!.writeString(message);
+    print(response);
   }
   
   //can be deleted !
   Order? reorder(Order order) {
-    var newItems = <FoodData, int>{};
+    /*var newItems = <FoodData, int>{};
     for (var oldFoodData in order.items.keys) {
       var newFood = getFoodByID(oldFoodData.foodID, order.restaurant.menuID!);
       if (newFood == null) continue;
@@ -124,7 +91,8 @@ class Server {
     if (newItems.isEmpty) return null;
     var newOrder = Order(server: this, items: newItems, restaurant: order.restaurant, customer: order.customer);
     newOrder.serialize(serializer);
-    return newOrder;
+    return newOrder;*/
+
   }
 
   Future<bool> login(String phoneNumber, String password, bool isForUser) async{
@@ -166,22 +134,20 @@ class Server {
     }
     return false;
      */
-    var message = "login"+separator + phoneNumber + separator + password;
-    var returnMessage;
-    socket!.add(intToBytes(message.length));
-    socket!.add(message.codeUnits);
-    await socket!.flush();
-    socket!.listen((Uint8List event)  {
-         returnMessage =  String.fromCharCodes(event);
-        print(returnMessage);
-    });
     if (isForUser){
-      _account = UserAccount.fromJson(JsonDecoder().convert(returnMessage), this);
-      return true;
+      var message ="user"  + separator + "login" +separator + phoneNumber + separator + password;
+      String returnMessage = await cs!.writeString(message);
+      if (returnMessage.startsWith("Error"))
+        return false;
+      _account = UserAccount.fromJson(json.decode(returnMessage), this);
     }else {
-      _account = OwnerAccount.fromJson(JsonDecoder().convert(returnMessage), this);
-      return true;
+      var message ="owner"  + separator + "login" +separator + phoneNumber + separator + password;
+      String returnMessage = await cs!.writeString(message);
+      if (returnMessage.startsWith("Error"))
+        return false;
+      _account = OwnerAccount.fromJson(json.decode(returnMessage), this);
     }
+    return true;
   }
 
   bool isPhoneNumberUnique(String phoneNumber) {
@@ -206,18 +172,11 @@ class Server {
     cs!.writeString("signup" + separator + phoneNumber + separator + password + ownerAcc.toJson().toString() + separator + restaurant.id! + separator + restaurant.toJson().toString());
     return true;*/
     var ownerAcc =  OwnerAccount(phoneNumber: phoneNumber, restaurant: restaurant, server: this);
-    var message = "serialize" + separator + "restaurant";
-    socket!.add(intToBytes(message.length));
-    socket!.add(message.codeUnits);
-    await socket!.flush();
-    socket!.listen((Uint8List event) {
-      restaurant.id = String.fromCharCodes(event);
-    });
-    message = "signup" + separator + phoneNumber + separator + password + ownerAcc.toJson().toString() + separator + restaurant.id! + separator + restaurant.toJson().toString();
-    socket!.add(intToBytes(message.length));
-    socket!.add(message.codeUnits);
-    await socket!.flush();
+    restaurant.id = await cs!.writeString("owner" + separator + "serialize" + separator + "restaurant");
+    var message = "owner" + separator + "signup" + separator + phoneNumber + separator + password +  ownerAcc.toJson().toString() + separator + restaurant.id! + separator + restaurant.toJson().toString();
+    String response = await cs!.writeString(message);
     _account = ownerAcc;
+    print(response);
     return true;
   }
 
@@ -240,11 +199,10 @@ class Server {
     print("Signup" + separator + phoneNumber + separator + "sinaTaheri1" + separator + account.toJson().toString());
     _account = account;
     return true;*/
-    var message = "signup" + separator + phoneNumber + separator +/*has to be password*/ "sinaTaheri1" + separator + account.toJson().toString();
-    socket!.add(intToBytes(message.length));
-    socket!.add(message.codeUnits);
-    await socket!.flush();
+    var message ="user" + separator+"signup" + separator + phoneNumber + separator +/*has to be password*/ "sinaTaheri1" + separator + account.toJson().toString();
+    String response = await cs!.writeString(message);
     _account = account;
+    print(response);
     return true;
   }
 
