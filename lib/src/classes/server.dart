@@ -156,7 +156,9 @@ class Server {
     }
     return true;
   }
-
+  Future<String> serialize(String type) async{
+    return _account is UserAccount ?  await cs!.writeString("user" + separator + "serialize" + separator + type) : await cs!.writeString("owner" + separator + "serialize" + separator + type);
+  }
   Future<bool> signUpOwner(String phoneNumber, String password, Restaurant restaurant, FoodMenu menu) async {
     /*restaurant.serialize(serializer);
     restaurant.menu = menu;
@@ -171,8 +173,9 @@ class Server {
     cs!.writeString("signup" + separator + phoneNumber + separator + password + ownerAcc.toJson().toString() + separator + restaurant.id! + separator + restaurant.toJson().toString());
     return true;*/
     var ownerAcc =  OwnerAccount(phoneNumber: phoneNumber, restaurant: restaurant, server: this);
+    restaurant.menu = menu;
     restaurant.id = await cs!.writeString("owner" + separator + "serialize" + separator + "restaurant");
-    var message = "owner" + separator + "signup" + separator + phoneNumber + separator + password +  jsonEncode(ownerAcc)+ separator + restaurant.id! + separator + jsonEncode(restaurant);
+    var message = ("owner" + separator + "signup" + separator + phoneNumber + separator + password + separator +  jsonEncode(ownerAcc)+ separator + restaurant.id! + separator + jsonEncode(restaurant));
     String response = await cs!.writeString(message);
     if (response == 'false') return false;
     _account = ownerAcc;

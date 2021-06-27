@@ -55,8 +55,8 @@ class Order with Serializable implements Editable {
     time = DateTime.now();
   }
 
-  Order? reorder() {
-    return server.reorder(this);
+  Future<Order?> reorder() async {
+    return await server.reorder(this);
   }
 
   Map<String, dynamic> toJson() {
