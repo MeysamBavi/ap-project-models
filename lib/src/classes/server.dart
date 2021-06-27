@@ -227,7 +227,9 @@ class Server {
   }
 
   Future<List<Restaurant>> filterRecommendedRestaurants(RestaurantPredicate predicate) async {
-    var message = await cs!.writeString(['user', 'search', jsonEncode(predicate)].join(separator));
+    var p = jsonEncode(predicate);
+    var message = await cs!.writeString(['user', 'search', p].join(separator));
+    print(message);
     return jsonDecode(message).map<Restaurant>((e) => Restaurant.fromJson(e)).toList();
   }
 
