@@ -43,8 +43,27 @@ class Server {
     return pattern.hasMatch(password);
   }
 
-  void edit(Editable object) {
-    //TODO implement edit
+  Future<void> edit(Editable object) async {
+    if (object is Comment) {
+      var response = await cs!.writeString(['owner', 'editComment', object.id, jsonEncode(object)].join(separator));
+    } else if (object is Food) {
+      var response = await cs!.writeString(['owner', 'saveFood', (_account as OwnerAccount).restaurant.menuID, object.id, jsonEncode(object)].join(separator));
+    } else if (object is FoodMenu) {
+      var response = await cs!.writeString(['owner', 'save', object.id, jsonEncode(object)].join(separator));
+    } else if (object is Order) {
+      var response = await cs!.writeString([
+        'owner',
+        'deliver',
+        object.id,
+        jsonEncode(object),
+        _account!.phoneNumber,
+        jsonEncode(_account),
+        jsonEncode(_account!.activeOrders.map<String>((e) => e.id!).toList(growable: false)),
+      ].join(separator));
+    } else if (object is UserAccount) {
+      //this should be saveAccount but address does the same thing
+      var response = await cs!.writeString(['user', 'address', _account!.phoneNumber, jsonEncode(object)].join(separator));
+    }
   }
 
   void addNewOrder(Order order) async {
@@ -63,17 +82,10 @@ class Server {
   }
   
 
-  void addNewComment(Comment comment) async {
-    /*dataBase.comments.add(comment);
-    var restaurant = getObjectByID(comment.restaurantID) as Restaurant;
-    restaurant.commentIDs.add(comment.id!);*/
-    //custom socket version
-    /*cs!.writeString("serialize" + separator + "comment");
-    comment.id = await cs!.readString();
-    cs!.writeString("comment" + separator + _account!.phoneNumber + separator +(_account as UserAccount).toJson().toString() + separator + comment.id! + separator + comment.toJson().toString());
-    */
+  Future<void> addNewComment(Comment comment) async {
     comment.id = await cs!.writeString("user" + separator + "serialize" + separator + "comment");
-    var message = "user" + separator + "comment" + separator + _account!.phoneNumber + separator + jsonEncode(_account as UserAccount) + separator + comment.id! + separator + jsonEncode(comment);
+    (_account as UserAccount).commentIDs.add(comment.id!);
+    var message = ['user', 'comment', _account!.phoneNumber, jsonEncode(_account), comment.restaurantID, comment.id, jsonEncode(comment)].join(separator);
     String response = await cs!.writeString(message);
     print(response);
   }

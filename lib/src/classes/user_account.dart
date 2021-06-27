@@ -105,11 +105,6 @@ class UserAccount extends Account {
     server.edit(this);
   }
 
-  void addComment(String ID) {
-    commentIDs.add(ID);
-    server.edit(this);
-  }
-
   CustomerData toCustomerData(Address address) => CustomerData(firstName, lastName, address);
 
 }
