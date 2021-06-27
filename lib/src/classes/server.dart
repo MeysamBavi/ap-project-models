@@ -98,6 +98,12 @@ class Server {
     _account!.activeOrders.addAll(jsonDecode(response).map<Order>((e) => Order.fromJson(e, this)));
   }
 
+  Future<void> editRestaurant() async {
+    if (_account == null || _account is UserAccount) return;
+    var restaurant = (_account as OwnerAccount).restaurant;
+    var response = await cs!.writeString(['owner', 'editRestaurant', restaurant.id, jsonEncode(restaurant)].join(separator));
+  }
+
   Future<void> addNewComment(Comment comment) async {
     comment.id = await cs!.writeString("user" + separator + "serialize" + separator + "comment");
     (_account as UserAccount).commentIDs.add(comment.id!);
