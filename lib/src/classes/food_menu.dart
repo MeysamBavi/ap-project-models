@@ -42,11 +42,13 @@ class FoodMenu with Serializable implements Editable {
   void addFood(Food food) {
     _data[food.category]!.add(food);
     server.edit(this);
+    server.addFood(food);
   }
 
   void removeFood(Food food) {
     _data[food.category]!.remove(food);
     server.edit(this);
+    server.removeFood(food);
   }
 
   List<Food>? getFoods(FoodCategory category) {

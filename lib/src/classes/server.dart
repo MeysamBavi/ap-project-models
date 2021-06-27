@@ -47,7 +47,7 @@ class Server {
     if (object is Comment) {
       var response = await cs!.writeString(['owner', 'editComment', object.id, jsonEncode(object)].join(separator));
     } else if (object is Food) {
-      var response = await cs!.writeString(['owner', 'saveFood', (_account as OwnerAccount).restaurant.menuID, object.id, jsonEncode(object)].join(separator));
+      var response = await cs!.writeString(['owner', 'editFood', (_account as OwnerAccount).restaurant.menuID, object.id, jsonEncode(object)].join(separator));
     } else if (object is FoodMenu) {
       var response = await cs!.writeString(['owner', 'save', object.id, jsonEncode(object)].join(separator));
     } else if (object is Order) {
@@ -64,6 +64,14 @@ class Server {
       //this should be saveAccount but address does the same thing
       var response = await cs!.writeString(['user', 'address', _account!.phoneNumber, jsonEncode(object)].join(separator));
     }
+  }
+
+  Future<void> addFood(Food food) async {
+    var response = await cs!.writeString(['owner', 'addFood', (_account as OwnerAccount).restaurant.menuID, food.id, jsonEncode(food)].join(separator));
+  }
+
+  Future<void> removeFood(Food food) async {
+    var response = await cs!.writeString(['owner', 'removeFood', (_account as OwnerAccount).restaurant.menuID, food.id].join(separator));
   }
 
   void addNewOrder(Order order) async {
