@@ -51,6 +51,9 @@ class Server {
     } else if (object is FoodMenu) {
       var response = await cs!.writeString(['owner', 'save', object.id, jsonEncode(object)].join(separator));
     } else if (object is Order) {
+      await refreshActiveOrders();
+      _account!.activeOrders.remove(object);
+      _account!.previousOrders.add(object);
       var response = await cs!.writeString([
         'owner',
         'deliver',
@@ -58,7 +61,7 @@ class Server {
         jsonEncode(object),
         _account!.phoneNumber,
         jsonEncode(_account),
-        jsonEncode(_account!.activeOrders.map<String>((e) => e.id!).toList(growable: false)),
+        jsonEncode((_account as OwnerAccount).activeOrdersToJson()),
       ].join(separator));
     } else if (object is UserAccount) {
       //this should be saveAccount but address does the same thing
@@ -88,7 +91,12 @@ class Server {
     String response = await cs!.writeString(message);
     print(response);
   }
-  
+
+  Future<void> refreshActiveOrders() async {
+    var response = await cs!.writeString(['owner', 'activeOrders', _account!.phoneNumber].join(separator));
+    _account!.activeOrders.clear();
+    _account!.activeOrders.addAll(jsonDecode(response).map<Order>((e) => Order.fromJson(e, this)));
+  }
 
   Future<void> addNewComment(Comment comment) async {
     comment.id = await cs!.writeString("user" + separator + "serialize" + separator + "comment");
