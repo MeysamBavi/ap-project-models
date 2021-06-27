@@ -4,7 +4,7 @@ import 'restaurant.dart';
 import 'order.dart';
 
 class OwnerAccount extends Account {
-  final Restaurant restaurant;
+  Restaurant restaurant;
 
   OwnerAccount({
     required String phoneNumber,

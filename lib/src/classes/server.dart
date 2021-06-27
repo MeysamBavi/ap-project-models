@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
-import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart' show Geolocator;
 import 'custom_socket.dart';
 import 'fake_data_base.dart';
@@ -94,92 +92,43 @@ class Server {
     return newOrder;
   }
 
-  Future<bool> login(String phoneNumber, String password, bool isForUser) async{
-    /*var correctPassword = dataBase.loginData[phoneNumber];
-    if (correctPassword == null) return false;
-    if (password == correctPassword) {
-      for (var acc in dataBase.accounts) {
-        if (acc.phoneNumber == phoneNumber) {
-          if (isForUser && acc is OwnerAccount) return false;
-          if (!isForUser && acc is UserAccount) return false;
-
-            _account = acc;
-          // if this account is for owner, find and assign its restaurant's menu
-          if (_account is OwnerAccount) {
-            (_account as OwnerAccount).restaurant.menu = getObjectByID((_account as OwnerAccount).restaurant.menuID!) as FoodMenu;
-          }
-          return true;
-        }
-      }
-    }
-    return false;*/
-    //custom socket version
-    /*if (isForUser)
-    {
-        cs!.writeString("login"+separator + phoneNumber + separator + password);
-        String accountJSON = await cs!.readString();
-        if (!accountJSON.startsWith("Error")) {
-          _account = UserAccount.fromJson(JsonDecoder().convert(accountJSON), this);
-          return true;
-        }
-    }else{
-      cs!.writeString("login"+separator+phoneNumber+separator+password);
-      String? accountJSON = await cs!.readString();
-      if (accountJSON != null)
-      {
-          _account = OwnerAccount.fromJson(JsonDecoder().convert(accountJSON), this);
-          return true;
-      }
-    }
-    return false;
-     */
+  Future<bool> login(String phoneNumber, String password, bool isForUser) async {
     if (isForUser) {
       var message ="user"  + separator + "login" + separator + phoneNumber + separator + password;
       String returnMessage = await cs!.writeString(message);
       if (returnMessage.startsWith("Error"))
         return false;
       _account = UserAccount.fromJson(jsonDecode(returnMessage), this);
-    }else {
-      var message ="owner"  + separator + "login" +separator + phoneNumber + separator + password;
+    } else {
+      var message = ['owner', 'login', phoneNumber, password].join(separator);
       String returnMessage = await cs!.writeString(message);
       if (returnMessage.startsWith("Error"))
         return false;
       _account = OwnerAccount.fromJson(jsonDecode(returnMessage), this);
+      var restaurant = (_account as OwnerAccount).restaurant;
+      restaurant.menu = (await getObjectByID<FoodMenu>(restaurant.menuID!)) as FoodMenu;
     }
     return true;
   }
 
-  bool isPhoneNumberUnique(String phoneNumber) {
-    if (!Server.isPhoneNumberValid(phoneNumber)) return true;
-    for (var acc in dataBase.accounts) {
-      if (acc.phoneNumber == phoneNumber) return false;
-    }
-    return true;
+  Future<bool> isPhoneNumberUnique(String phoneNumber) async {
+    var message = await cs!.writeString(['user', 'isPhoneNumberUnique', phoneNumber].join(separator));
+    return message == 'true' ? true : false;
   }
+
   Future<String> serialize(String type) async{
     return _account is UserAccount ?  await cs!.writeString("user" + separator + "serialize" + separator + type) : await cs!.writeString("owner" + separator + "serialize" + separator + type);
   }
+
   Future<bool> signUpOwner(String phoneNumber, String password, Restaurant restaurant, FoodMenu menu) async {
-    /*restaurant.serialize(serializer);
-    restaurant.menu = menu;
-    _account = OwnerAccount(phoneNumber: phoneNumber, restaurant: restaurant, server: this);
-    dataBase.accounts.add(_account!);
-    dataBase.loginData[phoneNumber] = password;
-    dataBase.restaurants.add(restaurant);
-    dataBase.menus.add(menu);*/
-    //custom socket version
-    /*cs!.writeString("serialize" + separator + "restaurant");
-    restaurant.id = await cs!.readString();
-    cs!.writeString("signup" + separator + phoneNumber + separator + password + ownerAcc.toJson().toString() + separator + restaurant.id! + separator + restaurant.toJson().toString());
-    return true;*/
     var ownerAcc =  OwnerAccount(phoneNumber: phoneNumber, restaurant: restaurant, server: this);
     restaurant.menu = menu;
     restaurant.id = await cs!.writeString("owner" + separator + "serialize" + separator + "restaurant");
     var message = ("owner" + separator + "signup" + separator + phoneNumber + separator + password + separator +  jsonEncode(ownerAcc)+ separator + restaurant.id! + separator + jsonEncode(restaurant));
     String response = await cs!.writeString(message);
-    if (response == 'false') return false;
+    var response2 = await cs!.writeString(['owner', 'save', menu.id, jsonEncode(menu)].join(separator));
+    if (response == 'Error 3') return false;
     _account = ownerAcc;
-    print(response);
     return true;
   }
 
@@ -199,22 +148,24 @@ class Server {
     String response = await cs!.writeString(message);
     if (response == 'false') return false;
     _account = account;
-    print(response);
     return true;
   }
 
   Future<Object?> getObjectByID<T>(String id) async {
 
-    String userOrOwner = _account is UserAccount ? 'user' : 'owner';
+    String userOrOwner = _account == null || _account is UserAccount ? 'user' : 'owner';
+
+    if (T == FoodMenu) {
+      String message = await cs!.writeString([userOrOwner, 'getMenu', id].join(separator));
+      return FoodMenu.fromJson(jsonDecode(message), this);
+    }
 
     String message = await cs!.writeString([userOrOwner, 'get', id].join(separator));
     switch (T) {
       case Order:
         return Order.fromJson(jsonDecode(message), this);
       case Restaurant:
-        return Order.fromJson(jsonDecode(message), this);
-      case FoodMenu:
-        return FoodMenu.fromJson(jsonDecode(message), this);
+        return Restaurant.fromJson(jsonDecode(message));
       case Comment:
         return Comment.fromJson(jsonDecode(message), this);
     }
