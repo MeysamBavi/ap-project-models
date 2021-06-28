@@ -14,7 +14,6 @@ class UserAccount extends Account {
   final List<Address> addresses;
   final List<String> favRestaurantIDs;
   final List<String> commentIDs;
-  // adding and removing from cart should be done manually
   final List<Order> cart;
 
   UserAccount({
@@ -103,6 +102,20 @@ class UserAccount extends Account {
   void removeRestaurant(String ID) {
     favRestaurantIDs.remove(ID);
     server.edit(this);
+  }
+
+  void addToCart(Order order) {
+    cart.add(order);
+    server.edit(this);
+  }
+
+  void removeFromCart(Order order) {
+    cart.remove(order);
+    server.edit(this);
+  }
+
+  Future<void> justEditThis() async {
+    await server.edit(this);
   }
 
   CustomerData toCustomerData(Address address) => CustomerData(firstName, lastName, address);

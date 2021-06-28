@@ -78,24 +78,19 @@ class Server {
   }
 
   void addNewOrder(Order order) async {
-    /*dataBase.orders.add(order);
-    dataBase.ownerOf[order.restaurant.id!]!.activeOrders.add(order);*/
-    //Custom socket version
-    /*cs!.writeString("serialize" + separator + "order");
-    order.id =await cs!.readString();
-    _account!.activeOrders.add(order);
-    cs!.writeString("order" + separator + _account!.phoneNumber + separator + (_account as UserAccount).toJson().toString() + separator + order.id! + separator + order.toJson().toString() + separator + order.restaurant.id!);
-    */
     order.id = await cs!.writeString("user"+ separator  + "serialize" + separator + "order");
-    var message = "user"  + separator + "order" + separator + _account!.phoneNumber + separator + jsonEncode(_account as UserAccount) + separator + order.id! + separator + jsonEncode(order) + separator + order.restaurant.id!;
+    var message = ['user', 'order', _account!.phoneNumber, jsonEncode(_account as UserAccount), order.id, jsonEncode(order), order.restaurant.id].join(separator);
     String response = await cs!.writeString(message);
     print(response);
   }
 
   Future<void> refreshActiveOrders() async {
     var response = await cs!.writeString(['owner', 'activeOrders', _account!.phoneNumber].join(separator));
+    print(response);
     _account!.activeOrders.clear();
-    _account!.activeOrders.addAll(jsonDecode(response).map<Order>((e) => Order.fromJson(e, this)));
+    _account!.activeOrders.addAll(jsonDecode(response).map<Order>((e) => Order.fromJson(e, this, (_account as OwnerAccount).restaurant)));
+    print(_account!.activeOrders);
+    print('end of refresh--------------***********');
   }
 
   Future<void> editRestaurant() async {

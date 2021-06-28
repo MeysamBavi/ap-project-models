@@ -51,13 +51,24 @@ class Order with Serializable implements Editable {
 
   void sendRequest() {
     _isRequested = true;
-    server.addNewOrder(this);
     time = DateTime.now();
+    server.addNewOrder(this);
   }
 
   Future<Order?> reorder() async {
     return await server.reorder(this);
   }
+
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Order &&
+          runtimeType == other.runtimeType &&
+          id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 
   Map<String, dynamic> toJson() {
     var itemsConverted = <Map<String, dynamic>>[];
