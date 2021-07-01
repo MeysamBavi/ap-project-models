@@ -24,14 +24,20 @@ class Server {
   DataBase dataBase;
   String token = '';
   final serializer;
+  String? _ip;
+  int? _port;
   CustomSocket? cs;
-  //Socket? socket;
   Account? get account => _account;
   String separator ="|*|*|";
-  void setSocket(String ip , int port) async
-  {
+
+  void setSocket(String ip , int port) {
+    _ip = ip;
+    _port = port;
     cs = CustomSocket(ip , port);
   }
+
+  String? get ip => _ip;
+  int? get port => _port;
 
   static bool isPhoneNumberValid(String phoneNumber) {
     var pattern = RegExp(r'^09\d{9}$');

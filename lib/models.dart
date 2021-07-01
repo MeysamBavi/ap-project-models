@@ -24,3 +24,4 @@ export 'src/classes/discount.dart';
 export 'src/classes/restaurant_predicate.dart';
 export 'src/ui/login_form.dart';
 export 'src/ui/login_ui.dart';
+export 'src/ui/network_settings_dialog.dart';

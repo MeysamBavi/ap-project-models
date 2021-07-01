@@ -3,8 +3,8 @@ import 'dart:typed_data';
 
 class CustomSocket {
   late Socket _socket;
-  String host;
-  int port;
+  final String host;
+  final int port;
   CustomSocket(this.host, this.port);
 
   Future<String> writeString(String message) async {
