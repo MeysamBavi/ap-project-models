@@ -9,7 +9,8 @@ class LoginPanel extends StatefulWidget {
 
   final bool isForUser;
   final Widget Function(BuildContext) nextPageBuilder;
-  LoginPanel({required this.isForUser, required this.nextPageBuilder})  : super();
+  final Widget Function(BuildContext) previousPageBuilder;
+  LoginPanel({required this.isForUser, required this.nextPageBuilder, required this.previousPageBuilder})  : super();
 
   @override
   _LoginPanelState createState() => _LoginPanelState();
@@ -54,7 +55,14 @@ class _LoginPanelState extends State<LoginPanel> {
                 buildLoginPhoneNumberField(server, (value) => _phoneNumber = value),
                 PasswordField(server, (value) => _password = value),
                 const SizedBox(height: 10,),
-                buildModelButton(Strings.get('login-button')!, Theme.of(context).primaryColor, loginPressed)
+                buildModelButton(Strings.get('login-button')!, Theme.of(context).primaryColor, loginPressed),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(Strings.get('sign-up-prompt')!),
+                    TextButton(child: Text(Strings.get('sign-up-button')!), onPressed: signUpPressed,)
+                  ],
+                ),
               ],
             ),
           ),
@@ -87,5 +95,9 @@ class _LoginPanelState extends State<LoginPanel> {
       return;
     }
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: widget.nextPageBuilder));
+  }
+
+  void signUpPressed() {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: widget.previousPageBuilder));
   }
 }

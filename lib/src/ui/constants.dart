@@ -204,6 +204,7 @@ class Strings {
       'no-accounts-found' : 'Phone number or password is wrong.',
       'login-button' : 'Login',
       'login-header' : 'Login to your account',
+      'sign-up-prompt' : 'Don\'t have an account?',
 
       //user snack bars
       'foods-added-to-cart' : 'Your orders have been added to the cart',

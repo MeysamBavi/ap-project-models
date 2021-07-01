@@ -81,16 +81,12 @@ class Server {
     order.id = await cs!.writeString("user"+ separator  + "serialize" + separator + "order");
     var message = ['user', 'order', _account!.phoneNumber, jsonEncode(_account as UserAccount), order.id, jsonEncode(order), order.restaurant.id].join(separator);
     String response = await cs!.writeString(message);
-    print(response);
   }
 
   Future<void> refreshActiveOrders() async {
     var response = await cs!.writeString(['owner', 'activeOrders', _account!.phoneNumber].join(separator));
-    print(response);
     _account!.activeOrders.clear();
     _account!.activeOrders.addAll(jsonDecode(response).map<Order>((e) => Order.fromJson(e, this, (_account as OwnerAccount).restaurant)));
-    print(_account!.activeOrders);
-    print('end of refresh--------------***********');
   }
 
   Future<void> editRestaurant() async {
@@ -104,7 +100,6 @@ class Server {
     (_account as UserAccount).commentIDs.add(comment.id!);
     var message = ['user', 'comment', _account!.phoneNumber, jsonEncode(_account), comment.restaurantID, comment.id, jsonEncode(comment)].join(separator);
     String response = await cs!.writeString(message);
-    print(response);
   }
   
   //can be deleted !
@@ -224,7 +219,6 @@ class Server {
   Future<List<Restaurant>> filterRecommendedRestaurants(RestaurantPredicate predicate) async {
     var p = jsonEncode(predicate);
     var message = await cs!.writeString(['user', 'search', p].join(separator));
-    print(message);
     return jsonDecode(message).map<Restaurant>((e) => Restaurant.fromJson(e)).toList();
   }
 
