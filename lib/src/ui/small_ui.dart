@@ -26,7 +26,7 @@ Widget buildScore(int score) {
   );
 }
 
-Widget buildScoreFill(double score) {
+Widget buildScoreFill(double score, {double? fontSize, double? iconSize}) {
   return Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(5),
@@ -37,14 +37,14 @@ Widget buildScoreFill(double score) {
       spacing: 5,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
-        Icon(Icons.star_rounded, color: Colors.white,),
-        Text(score.toStringAsFixed(1), style: TextStyle(color: Colors.white),)
+        Icon(Icons.star_rounded, color: Colors.white, size: iconSize,),
+        Text(score.toStringAsFixed(1), style: TextStyle(color: Colors.white, fontSize: fontSize),)
       ],
     ),
   );
 }
 
-Widget buildArea(bool isInArea, [bool fill = false]) {
+Widget buildArea(bool isInArea, {bool fill = false, double fontSize = 10}) {
   var color = isInArea ? Colors.green : Colors.red;
   return Container(
     padding: const EdgeInsets.all(2),
@@ -53,7 +53,7 @@ Widget buildArea(bool isInArea, [bool fill = false]) {
       borderRadius: BorderRadius.circular(4),
       color: fill ? Colors.white : null,
     ),
-    child: Text(isInArea ? Strings.get('in-area')! : Strings.get('not-in-area')!, style: TextStyle(fontSize: 10, color: color),),
+    child: Text(isInArea ? Strings.get('in-area')! : Strings.get('not-in-area')!, style: TextStyle(fontSize: fontSize, color: color),),
   );
 }
 
@@ -92,6 +92,24 @@ Widget buildTextField(String label, String value) {
       enabled: false,
       readOnly: true,
       initialValue: value,
+    ),
+  );
+}
+
+Widget buildCommentsCount(int count, {Color? color, double iconSize: 22}) {
+  return Container(
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        color: color ?? Colors.grey,
+    ),
+    padding: const EdgeInsets.all(2),
+    child: Wrap(
+      spacing: 5,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        Icon(Icons.comment, color: Colors.white, size: iconSize,),
+        Text(count.toString(), style: TextStyle(color: Colors.white),)
+      ],
     ),
   );
 }
