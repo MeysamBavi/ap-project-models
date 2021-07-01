@@ -15,8 +15,8 @@ class CustomSocket {
     await for (var data in _socket) {
       events.add(data);
     }
-    String result = events.map<String>((e) => String.fromCharCodes(e)).join();
     await _socket.close();
+    String result = events.map<String>((e) => String.fromCharCodes(e)).join();
     return result;
   }
 
