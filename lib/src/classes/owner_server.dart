@@ -6,6 +6,7 @@ import 'food.dart';
 import 'restaurant.dart';
 import 'food_menu.dart';
 import 'order.dart';
+import 'comment.dart';
 
 class OwnerServer extends Server {
 
@@ -22,9 +23,28 @@ class OwnerServer extends Server {
   }
 
   @override
-  Future<void> edit(Editable object) {
-    // TODO: implement edit
-    throw UnimplementedError();
+  Future<void> edit(Editable object) async {
+    if (object is Comment) {
+      await sendAndReceive(['editComment', object.id!, jsonEncode(object)]);
+    } else if (object is Food) {
+      await sendAndReceive(['editFood', restaurant.menuID!, object.id!, jsonEncode(object)]);
+    } else if (object is FoodMenu) {
+      await sendAndReceive(['save', object.id!, jsonEncode(object)]);
+    } else if (object is Order) {
+      await refreshActiveOrders();
+      account.activeOrders.remove(object);
+      account.previousOrders.add(object);
+      await sendAndReceive([
+        'deliver',
+        object.id!,
+        jsonEncode(object),
+        account.phoneNumber,
+        jsonEncode(account),
+        jsonEncode(account.activeOrdersToJson()),
+      ]);
+    } else {
+      throw UnimplementedError('edit is not implemented for the type: ${object.runtimeType}.');
+    }
   }
 
   @override

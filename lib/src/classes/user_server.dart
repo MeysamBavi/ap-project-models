@@ -24,9 +24,13 @@ class UserServer extends Server {
   }
 
   @override
-  Future<void> edit(Editable object) {
-    // TODO: implement edit
-    throw UnimplementedError();
+  Future<void> edit(Editable object) async {
+    if (object is UserAccount) {
+      //this should be saveAccount but address does the same thing
+      await sendAndReceive(['address', account.phoneNumber, jsonEncode(object)]);
+    } else {
+      throw UnimplementedError('edit is not implemented for the type: ${object.runtimeType}.');
+    }
   }
 
   @override
