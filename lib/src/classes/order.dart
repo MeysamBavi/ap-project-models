@@ -4,6 +4,8 @@ import 'price.dart';
 import 'small_data.dart';
 import 'server.dart';
 import 'restaurant.dart';
+import 'owner_server.dart';
+import 'user_server.dart';
 
 class Order with Serializable implements Editable {
   final Server server;
@@ -30,7 +32,7 @@ class Order with Serializable implements Editable {
 
   set isDelivered(bool value) {
     _isDelivered = value;
-    server.edit(this);
+    (server as OwnerServer).edit(this);
   }
 
   Price get totalCost {
@@ -52,11 +54,11 @@ class Order with Serializable implements Editable {
   void sendRequest() {
     _isRequested = true;
     time = DateTime.now();
-    server.addNewOrder(this);
+    (server as UserServer).addNewOrder(this);
   }
 
   Future<Order?> reorder() async {
-    return await server.reorder(this);
+    return await (server as UserServer).reorder(this);
   }
 
 

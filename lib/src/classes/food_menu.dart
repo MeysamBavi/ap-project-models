@@ -1,21 +1,22 @@
 import 'editable.dart';
 import 'food.dart';
 import 'serializable.dart';
+import 'owner_server.dart';
 import 'server.dart';
 
 class FoodMenu with Serializable implements Editable {
 
   final Map<FoodCategory, List<Food>> _data;
-  Server _server;
+  OwnerServer _server;
 
-  FoodMenu(Server server): _server = server, _data = <FoodCategory, List<Food>>{} {
+  FoodMenu(OwnerServer server): _server = server, _data = <FoodCategory, List<Food>>{} {
     for (var category in FoodCategory.values) {
       _data[category] = <Food>[];
     }
   }
 
   FoodMenu.fromJson(Map<String, dynamic> json, Server server):
-        _server = server,
+        _server = server as OwnerServer,
         _data = {}
   {
     id = json['ID'];
@@ -35,7 +36,7 @@ class FoodMenu with Serializable implements Editable {
 
 
   @override
-  Server get server => _server;
+  OwnerServer get server => _server;
 
   List<FoodCategory> get categories => FoodCategory.values.where((element) => _data[element]!.isNotEmpty).toList(growable: false);
 

@@ -2,7 +2,7 @@ import 'package:models/models.dart';
 import 'package:test/test.dart';
 
 void main() {
-  var server = Server();
+  var server = OwnerServer();
   var pizza = Food(name: 'pizza', category: FoodCategory.FastFood, price: Price(25000), server: server);
   var burger = Food(name: 'burger', category: FoodCategory.FastFood, price: Price(20000), server: server);
   var sushi = Food(name: 'sushi', category: FoodCategory.SeaFood, price: Price(45000), server: server);
