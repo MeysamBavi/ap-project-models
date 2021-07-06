@@ -52,6 +52,7 @@ class OwnerServer extends Server {
     var response = await sendAndReceive(['login', phoneNumber, password]);
     if (response.contains('Error')) return false;
     _account = OwnerAccount.fromJson(jsonDecode(response), this);
+    restaurant.menu = await getObjectByID<FoodMenu>(restaurant.menuID!);
     return true;
   }
 

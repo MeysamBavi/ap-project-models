@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'login_ui.dart';
 import 'head.dart';
 import '../classes/server.dart';
@@ -87,7 +88,7 @@ class _LoginPanelState extends State<LoginPanel> {
   void loginPressed() async {
     if (!_formKey.currentState!.validate()) return;
     _formKey.currentState!.save();
-    var found = await server.login(_phoneNumber!, _password!, widget.isForUser);
+    var found = await server.login(_phoneNumber!, _password!);
     if (!found) {
       setState(() {
         _notFoundError = true;
