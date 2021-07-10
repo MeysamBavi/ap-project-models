@@ -40,16 +40,14 @@ class FoodMenu with Serializable implements Editable {
 
   List<FoodCategory> get categories => FoodCategory.values.where((element) => _data[element]!.isNotEmpty).toList(growable: false);
 
-  void addFood(Food food) {
+  Future<void> addFood(Food food) async {
     _data[food.category]!.add(food);
-    server.edit(this);
-    server.addFood(food);
+    await server.addFood(this, food);
   }
 
-  void removeFood(Food food) {
+  Future<void> removeFood(Food food) async {
     _data[food.category]!.remove(food);
-    server.edit(this);
-    server.removeFood(food);
+    await server.removeFood(this, food);
   }
 
   List<Food>? getFoods(FoodCategory category) {

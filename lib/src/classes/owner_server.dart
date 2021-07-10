@@ -28,8 +28,6 @@ class OwnerServer extends Server {
       await sendAndReceive(['editComment', object.id!, jsonEncode(object)]);
     } else if (object is Food) {
       await sendAndReceive(['editFood', restaurant.menuID!, object.id!, jsonEncode(object)]);
-    } else if (object is FoodMenu) {
-      await sendAndReceive(['save', object.id!, jsonEncode(object)]);
     } else if (object is Order) {
       await refreshActiveOrders();
       account.activeOrders.remove(object);
@@ -56,12 +54,12 @@ class OwnerServer extends Server {
     return true;
   }
 
-  Future<void> addFood(Food food) async {
-    await sendAndReceive([restaurant.menuID!, food.id!, jsonEncode(food)]);
+  Future<void> removeFood(FoodMenu menu, Food food) async {
+    await sendAndReceive(['removeFood', menu.id!, food.id!, jsonEncode(menu)]);
   }
 
-  Future<void> removeFood(Food food) async {
-    await sendAndReceive([restaurant.menuID!, food.id!]);
+  Future<void> addFood(FoodMenu menu, Food food) async {
+    await sendAndReceive(['addFood', menu.id!, jsonEncode(menu), food.id!, jsonEncode(food)]);
   }
 
   Future<void> refreshActiveOrders() async {
@@ -78,8 +76,7 @@ class OwnerServer extends Server {
     var ownerAcc =  OwnerAccount(phoneNumber: phoneNumber, restaurant: restaurant, server: this);
     restaurant.menu = menu;
     restaurant.id = await serialize(restaurant.runtimeType);
-    var response = await sendAndReceive(['signup', phoneNumber, password, jsonEncode(ownerAcc), restaurant.id!, jsonEncode(restaurant)]);
-    await sendAndReceive(['save', menu.id!, jsonEncode(menu)]);
+    var response = await sendAndReceive(['signup', phoneNumber, password, jsonEncode(ownerAcc), restaurant.id!, jsonEncode(restaurant), menu.id!, jsonEncode(menu)]);
     if (response.contains('Error')) return false;
     _account = ownerAcc;
     return true;
