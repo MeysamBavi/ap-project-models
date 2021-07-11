@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:models/models.dart';
 import 'login_ui.dart';
 import 'head.dart';
 import '../classes/server.dart';
 import 'constants.dart';
 import 'button_model.dart';
+import 'network_settings_dialog.dart';
 
 class LoginPanel extends StatefulWidget {
 
@@ -68,6 +68,10 @@ class _LoginPanelState extends State<LoginPanel> {
             ),
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => showDialog(context: context, builder: buildNetworkSettingsDialog),
+        child: Icon(Icons.settings_input_antenna_rounded),
       ),
     );
   }
