@@ -117,4 +117,8 @@ class UserServer extends Server {
     return true;
   }
 
+  Future<void> logout() async {
+    _account = null;
+  }
+
 }

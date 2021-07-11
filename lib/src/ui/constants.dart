@@ -205,6 +205,7 @@ class Strings {
       'login-button' : 'Login',
       'login-header' : 'Login to your account',
       'sign-up-prompt' : 'Don\'t have an account?',
+      'logout' : 'Logout',
 
       //user snack bars
       'foods-added-to-cart' : 'Your orders have been added to the cart',

@@ -13,7 +13,7 @@ abstract class Server {
   late CustomSocket _socket;
   String? _ip;
   int? _port;
-  var _stopwatch = Stopwatch();
+  final _stopwatch = Stopwatch();
 
   String? get ip => _ip;
   int? get port => _port;
@@ -102,5 +102,7 @@ abstract class Server {
     if (radius == 0.0) return true;
     return Geolocator.distanceBetween(restaurant.latitude, restaurant.longitude, customer.latitude, customer.longitude) <= radius;
   }
+
+  Future<void> logout();
 
 }
