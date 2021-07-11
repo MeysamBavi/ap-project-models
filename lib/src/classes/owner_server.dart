@@ -7,6 +7,7 @@ import 'restaurant.dart';
 import 'food_menu.dart';
 import 'order.dart';
 import 'comment.dart';
+import 'address.dart';
 
 class OwnerServer extends Server {
 
@@ -72,7 +73,24 @@ class OwnerServer extends Server {
     await sendAndReceive(['editRestaurant', restaurant.id!, jsonEncode(restaurant)]);
   }
 
-  Future<bool> signUp(String phoneNumber, String password, Restaurant restaurant, FoodMenu menu) async {
+  Future<bool> signUp({
+    required String phoneNumber,
+    required String password,
+    required String name,
+    required double areaOfDispatch,
+    required Set<FoodCategory> categories,
+    required Address address
+  }) async {
+    var menu = FoodMenu(this);
+    menu.id = await serialize(menu.runtimeType);
+    var restaurant = Restaurant(
+      name: name,
+      menuID: menu.id,
+      score: 0.0,
+      address: address,
+      areaOfDispatch: areaOfDispatch,
+      foodCategories: categories,
+    );
     var ownerAcc =  OwnerAccount(phoneNumber: phoneNumber, restaurant: restaurant, server: this);
     restaurant.menu = menu;
     restaurant.id = await serialize(restaurant.runtimeType);
