@@ -13,6 +13,7 @@ abstract class Server {
   late CustomSocket _socket;
   String? _ip;
   int? _port;
+  var _stopwatch = Stopwatch();
 
   String? get ip => _ip;
   int? get port => _port;
@@ -21,6 +22,15 @@ abstract class Server {
     _ip = ip;
     _port = port;
     _socket = CustomSocket(_ip!, _port!);
+  }
+
+  Future<int?> get ping async {
+    _stopwatch.reset();
+    _stopwatch.start();
+    var result = await _socket.writeString('ping').timeout(Duration(seconds: 3), onTimeout: () => CustomSocket.onTimeOut);
+    _stopwatch.stop();
+    if (result == CustomSocket.onTimeOut) return null;
+    return _stopwatch.elapsedMilliseconds;
   }
 
   String createMessage(List<String> commands);
@@ -37,6 +47,11 @@ abstract class Server {
   static bool isPasswordValid(String password) {
     var pattern = RegExp(r'^(?=.{6,}$)(?=.*[0-9])(?=.*[a-zA-Z])[0-9a-zA-Z]+$');
     return pattern.hasMatch(password);
+  }
+
+  static bool isIPValid(String ip) {
+    var pattern = RegExp(r'^(\d+\.)*(\d+)$');
+    return pattern.hasMatch(ip);
   }
 
   static int onScore(Restaurant a, Restaurant b) => (b.score - a.score).sign.toInt();

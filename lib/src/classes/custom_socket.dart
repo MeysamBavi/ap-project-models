@@ -5,10 +5,15 @@ class CustomSocket {
   late Socket _socket;
   final String host;
   final int port;
+  static const String onTimeOut = '---timeout---';
   CustomSocket(this.host, this.port);
 
   Future<String> writeString(String message) async {
-    _socket = await Socket.connect(host, port);
+    try {
+      _socket = await Socket.connect(host, port);
+    } on SocketException {
+      return onTimeOut;
+    }
     _socket.add([...intToBytes(message.length), ...message.codeUnits,]);
     await _socket.flush();
     List<Uint8List> events = [];
