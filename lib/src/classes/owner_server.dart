@@ -90,6 +90,7 @@ class OwnerServer extends Server {
       address: address,
       areaOfDispatch: areaOfDispatch,
       foodCategories: categories,
+      numberOfComments: 0
     );
     var ownerAcc =  OwnerAccount(phoneNumber: phoneNumber, restaurant: restaurant, server: this);
     restaurant.menu = menu;

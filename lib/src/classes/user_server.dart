@@ -49,7 +49,7 @@ class UserServer extends Server {
   Future<void> addNewComment(Comment comment) async {
     comment.id = await serialize(comment.runtimeType);
     account.commentIDs.add(comment.id!);
-    await sendAndReceive(['comment', account.phoneNumber, jsonEncode(account), comment.restaurantID, comment.id!, jsonEncode(comment)]);
+    await sendAndReceive(['comment', account.phoneNumber, jsonEncode(account), comment.restaurantID, comment.id!, jsonEncode(comment), comment.score.toString()]);
   }
 
   Future<Food?> getFoodByID(String foodID, String menuID) async {

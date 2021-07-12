@@ -12,6 +12,7 @@ class Restaurant with Serializable {
   Address address;
   double areaOfDispatch; // in meters
   final double score;
+  final int numberOfComments;
   final List<String> commentIDs;
   Image logo;
 
@@ -22,6 +23,7 @@ class Restaurant with Serializable {
     required this.menuID,
     required this.score,
     required this.address,
+    required this.numberOfComments,
     Image? logo,
     this.areaOfDispatch = 0,
   })  : commentIDs = [],
@@ -36,6 +38,7 @@ class Restaurant with Serializable {
         areaOfDispatch = json['areaOfDispatch'],
         score = json['score'],
         commentIDs = [...json['commentIDs']],
+        numberOfComments = json['numberOfComments'].toInt(),
         logo = Image.asset('assets/default_restaurant.jpg' , package: 'models',)
   {
     id = json['ID'];
