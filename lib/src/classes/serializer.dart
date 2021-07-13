@@ -15,11 +15,12 @@ class Serializer {
     Order : 'O-',
     Food : 'F-'
   };
-  
-  String createID(Serializable object) {
+
+  String createID(Type type) {
     var rand = Random();
-    String id = idPrefix[object.runtimeType] ?? '';
-    id += object.hashCode.toRadixString(16).padLeft(4, '0').substring(0, 4) + '-';
+    String id = idPrefix[type] ?? '';
+    id += rand.nextInt(0x0ffff + 1).toRadixString(16).padLeft(4, '0');
+    id += '-';
     id += rand.nextInt(0x0ffff + 1).toRadixString(16).padLeft(4, '0');
     id = id.toUpperCase();
     assert (isIDValid(id));
