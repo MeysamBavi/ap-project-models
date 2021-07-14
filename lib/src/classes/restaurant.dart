@@ -19,7 +19,7 @@ class Restaurant with Serializable {
 
   Restaurant({
     required this.name,
-    Set<FoodCategory>? foodCategories,
+    required this.foodCategories,
     required this.menuID,
     required this.score,
     required this.address,
@@ -27,8 +27,7 @@ class Restaurant with Serializable {
     Image? logo,
     this.areaOfDispatch = 0,
   })  : commentIDs = [],
-        this.logo = logo??Image.asset('assets/default_restaurant.jpg' , package: 'models',),
-        this.foodCategories = foodCategories ?? {};
+        this.logo = logo??Image.asset('assets/default_restaurant.jpg' , package: 'models',);
 
   Restaurant.fromJson(Map<String, dynamic> json):
         name = json['name'],
