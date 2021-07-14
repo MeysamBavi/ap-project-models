@@ -1,16 +1,13 @@
-import 'package:models/src/classes/discount.dart';
-
-import 'package:models/src/classes/food.dart';
-
-import 'package:models/src/classes/restaurant_predicate.dart';
-
-import 'package:models/src/classes/user_account.dart';
-import 'dart:math';
+import 'dart:math' show min;
+import 'discount.dart';
+import 'food.dart';
+import 'owner_account.dart';
+import 'restaurant_predicate.dart';
+import 'user_account.dart';
 import 'fake_data_base.dart';
 import 'server.dart';
 import 'user_server.dart';
 import 'owner_server.dart';
-import 'food.dart';
 import 'small_data.dart';
 import 'food_menu.dart';
 import 'restaurant.dart';
@@ -188,9 +185,21 @@ class FakeUserServer extends FakeServer implements UserServer {
   }
 
   @override
-  Future<bool> signUp(String firstName, String lastName, String phoneNumber, String password, Address defaultAddress) {
-    // TODO: implement signUp
-    throw UnimplementedError();
+  Future<bool> signUp(String firstName, String lastName, String phoneNumber, String password, Address defaultAddress) async {
+    _account = UserAccount(
+      server: this,
+      firstName: firstName,
+      lastName: lastName,
+      phoneNumber: phoneNumber,
+      addresses: [defaultAddress],
+      defaultAddressName: defaultAddress.name,
+      favRestaurantIDs: [],
+      commentIDs: [],
+    );
+
+    _dataBase.userAccounts.add(account);
+    _dataBase.usersLoginData[phoneNumber] = password;
+    return true;
   }
 
   @override
@@ -210,6 +219,82 @@ class FakeUserServer extends FakeServer implements UserServer {
   Future<Discount?> validateDiscount(String code) async {
     var index =  _dataBase.discounts.indexWhere((element) => element.code == code);
     return index > -1 ? _dataBase.discounts[index] : null;
+  }
+
+}
+
+//------------------------------------------
+
+class FakeOwnerServer extends FakeServer implements OwnerServer {
+
+  FakeOwnerServer({required DataBase dataBase}) : super(dataBase: dataBase);
+
+  OwnerAccount? _account;
+
+  @override
+  OwnerAccount get account => _account!;
+
+  @override
+  Restaurant get restaurant => account.restaurant;
+
+  @override
+  Future<void> addFood(FoodMenu menu, Food food) async {}
+
+  @override
+  Future<void> editRestaurant() async {}
+
+  @override
+  Future<bool> login(String phoneNumber, String password) async {
+    var correctPassword = _dataBase.ownersLoginData[phoneNumber];
+    if (correctPassword == null) return false;
+    if (password != correctPassword) return false;
+
+    _account = _dataBase.ownerAccounts.firstWhere((element) => element.phoneNumber == phoneNumber);
+    return true;
+  }
+
+  @override
+  Future<void> logout() async {
+    _account = null;
+  }
+
+  @override
+  Future<void> refreshActiveOrders() async {}
+
+  @override
+  Future<void> removeFood(FoodMenu menu, Food food) async {}
+
+  @override
+  Future<bool> signUp({
+    required String phoneNumber,
+    required String password,
+    required String name,
+    required double areaOfDispatch,
+    required Set<FoodCategory> categories,
+    required Address address
+  }) async {
+    var menu = FoodMenu(this);
+    menu.id = await serialize(menu.runtimeType);
+    var restaurant = Restaurant(
+        name: name,
+        menuID: menu.id,
+        score: 0.0,
+        address: address,
+        areaOfDispatch: areaOfDispatch,
+        foodCategories: categories,
+        numberOfComments: 0
+    );
+    var ownerAcc =  OwnerAccount(phoneNumber: phoneNumber, restaurant: restaurant, server: this);
+    restaurant.menu = menu;
+    restaurant.id = await serialize(restaurant.runtimeType);
+    _account = ownerAcc;
+
+    _dataBase.ownerAccounts.add(ownerAcc);
+    _dataBase.ownersLoginData[phoneNumber] = password;
+    _dataBase.ownerOf[restaurant.id!] = ownerAcc;
+    _dataBase.restaurants.add(restaurant);
+    _dataBase.menus.add(menu);
+    return true;
   }
 
 }
