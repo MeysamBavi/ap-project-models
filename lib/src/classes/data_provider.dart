@@ -17,6 +17,13 @@ class RestaurantProvider {
   final DataBase dataBase;
   final Server server;
 
+  static const int _MAXIMUM_NUMBER_OF_IRANIAN_RESTAURANTS = 5;
+  static const int _MAXIMUM_NUMBER_OF_FASTFOOD_RESTAURANTS = 7;
+  static const int _MAXIMUM_NUMBER_OF_OTHER_RESTAURANTS = 9;
+
+  //this is based on the total number of restaurant names and number of unique addresses
+  static const int MAXIMUM_NUMBER_OF_RESTAURANTS = _MAXIMUM_NUMBER_OF_IRANIAN_RESTAURANTS + _MAXIMUM_NUMBER_OF_FASTFOOD_RESTAURANTS + _MAXIMUM_NUMBER_OF_OTHER_RESTAURANTS;
+
   RestaurantProvider(this.dataBase, this.server)  : _isUsed = false;
 
   var _iranianNames = <String>[
@@ -156,17 +163,30 @@ class RestaurantProvider {
   Food _generateFood(FoodCategory category) {
     var food = Food(
       server: server,
-      price: Price((_random.nextInt(41) + 40) * 1000),
+      price: Price((_random.nextInt(61) + 30) * 1000),
       category: category,
       name: _foodNames[category]![_random.nextInt(_foodNames[category]!.length)],
-      isAvailable: _random.nextDouble() < 0.7 ? true : false,
+      isAvailable: _random.nextDouble() < 0.75 ? true : false,
       description: _descriptions[category]![_random.nextInt(_descriptions[category]!.length)],
     );
     food.id = _serializer.createID(food.runtimeType);
     return food;
   }
 
-  Restaurant _generateRestaurant(Set<FoodCategory> categories) {
+  void _generateAndAddComment(_CommentTemplate template, Restaurant restaurant) {
+    var comment = Comment(
+      server: server,
+      score: template.score,
+      message: template.message,
+      title: template.title,
+      restaurantID: restaurant.id!,
+    );
+    comment.id = _serializer.createID(comment.runtimeType);
+    dataBase.comments.add(comment);
+    restaurant.commentIDs.add(comment.id!);
+  }
+
+  void _generateAndAddRestaurant(Set<FoodCategory> categories) {
     var menu = FoodMenu(server);
     menu.id = _serializer.createID(menu.runtimeType);
     dataBase.menus.add(menu);
@@ -187,30 +207,48 @@ class RestaurantProvider {
       name = _fastFoodNames.removeAt(_random.nextInt(_fastFoodNames.length));
     }
 
-    var score = _random.nextDouble() * 4 + 1;
-    var numberOfComments = _random.nextInt(8) + pow(2, score);
+    var score = _random.nextDouble() * 4.5 + 0.5;
+    var numberOfComments = _random.nextInt(8) + pow(1.625, score);
 
     var restaurant = Restaurant(
       name: name,
       foodCategories: categories,
       address: _getAddress(),
       menuID: menu.id!,
-      areaOfDispatch: _random.nextDouble() * 2000 + 4000,
-      score: _random.nextDouble() * 4 + 1,
+      areaOfDispatch: _random.nextDouble() * 4000 + 2000,
+      score: score,
       numberOfComments: numberOfComments.toInt(),
     );
 
     restaurant.id = _serializer.createID(restaurant.runtimeType);
     dataBase.restaurants.add(restaurant);
 
-    return restaurant;
+    var commentTemplatesCopy = _commentTemplates.sublist(0);
+    var l = min(numberOfComments, commentTemplatesCopy.length);
+
+    for (var i = 0; i < l; i++) {
+      _generateAndAddComment(commentTemplatesCopy.removeAt(_random.nextInt(commentTemplatesCopy.length)), restaurant);
+    }
   }
 
   void fill() {
     if (_isUsed) throw Exception('This object is already used');
     _isUsed = true;
 
-
+    for (var i = 0 ; i < _MAXIMUM_NUMBER_OF_IRANIAN_RESTAURANTS; i++) {
+      _generateAndAddRestaurant({FoodCategory.Iranian});
+    }
+    for (var i = 0 ; i < _MAXIMUM_NUMBER_OF_FASTFOOD_RESTAURANTS; i++) {
+      _generateAndAddRestaurant({FoodCategory.FastFood});
+    }
+    for (var i = 0 ; i < _MAXIMUM_NUMBER_OF_OTHER_RESTAURANTS; i++) {
+      var categories = FoodCategory.values.sublist(0);
+      var l = _random.nextInt(max(1, FoodCategory.values.length - 1));
+      for (var j = 0; i < l; j++) {
+        categories.removeAt(_random.nextInt(categories.length));
+      }
+      _generateAndAddRestaurant(categories.toSet());
+    }
   }
 
 }
