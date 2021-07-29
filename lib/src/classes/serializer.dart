@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'serializable.dart';
 import 'restaurant.dart';
 import 'food_menu.dart';
 import 'food.dart';
