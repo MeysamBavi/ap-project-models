@@ -133,7 +133,18 @@ class FakeUserServer extends FakeServer implements UserServer {
   Future<void> addNewOrder(Order order) async {
     order.id = await serialize(order.runtimeType);
     _dataBase.orders.add(order);
-    _dataBase.ownerOf[order.restaurant.id!]!.activeOrders.add(order);
+    setDeliveryTimeFor(order);
+  }
+
+  void setDeliveryTimeFor(Order order, [Duration? duration]) {
+    if (duration == null) {
+      duration = Duration(seconds: 15);
+    }
+    Future.delayed(duration, () {
+      try {
+        order.isDelivered = true;
+      } on Error {}
+    });
   }
 
   @override
