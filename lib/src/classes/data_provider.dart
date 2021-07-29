@@ -8,6 +8,10 @@ import 'food_menu.dart';
 import 'serializer.dart';
 import 'address.dart';
 import 'comment.dart';
+import 'small_data.dart';
+import 'order.dart';
+import 'user_account.dart';
+import 'fake_server.dart';
 
 class RestaurantProvider {
 
@@ -139,26 +143,7 @@ class RestaurantProvider {
     return _addresses.removeAt(_random.nextInt(_addresses.length));
   }
 
-  var _commentTemplates = <_CommentTemplate>[
-    _CommentTemplate('It was nice', 'It was good. I will probably order again', 4),
-    _CommentTemplate('Never order', 'Food came cold and it tasted bad', 1),
-    _CommentTemplate('It was good', 'Food came in hot, but delivery was late. It was good overall', 3),
-    _CommentTemplate('Great!!', 'I think I found my favorite restaurant :)', 5),
-    _CommentTemplate('Bad Packaging', 'Packaging was bad and food was spilled all over. I got a refund however', 2),
-    _CommentTemplate('Seen Better', 'Not really tasty and delicious', 4),
-    _CommentTemplate('It used to be better', 'Your food used to be better, i don\' know what happened', 2),
-    _CommentTemplate('Very Good', 'just came in hot and quick', 5),
-    _CommentTemplate('so little', 'I expected a lot more for what i paid. it tasted good tho', 3),
-    _CommentTemplate('Old customer', 'Ordering from here for 3 years! Always the best', 4),
-    _CommentTemplate('Came late and cold', 'never ordering again', 0),
-    _CommentTemplate('Good', 'nice and tidy as always', 4),
-    _CommentTemplate('a bit cold', 'it was good overall, just a bit cold', 4),
-    _CommentTemplate('Great', 'great.', 5),
-    _CommentTemplate('Wrong order', 'this was\'t my order, what the hell', 1),
-    _CommentTemplate('Nice', 'evidently using fresh ingredients, well done', 4),
-    _CommentTemplate('Really good', 'Tasted like... a great food!', 5),
-    _CommentTemplate('nice', 'as always good', 4),
-  ];
+
 
   Food _generateFood(FoodCategory category) {
     var food = Food(
@@ -171,19 +156,6 @@ class RestaurantProvider {
     );
     food.id = _serializer.createID(food.runtimeType);
     return food;
-  }
-
-  void _generateAndAddComment(_CommentTemplate template, Restaurant restaurant) {
-    var comment = Comment(
-      server: server,
-      score: template.score,
-      message: template.message,
-      title: template.title,
-      restaurantID: restaurant.id!,
-    );
-    comment.id = _serializer.createID(comment.runtimeType);
-    dataBase.comments.add(comment);
-    restaurant.commentIDs.add(comment.id!);
   }
 
   void _generateAndAddRestaurant(Set<FoodCategory> categories) {
@@ -221,14 +193,11 @@ class RestaurantProvider {
     );
 
     restaurant.id = _serializer.createID(restaurant.runtimeType);
+    restaurant.menu = menu; // critical line; this makes OrderProvider access the restaurant's menu without having to search database
     dataBase.restaurants.add(restaurant);
 
-    var commentTemplatesCopy = _commentTemplates.sublist(0);
-    var l = min(numberOfComments, commentTemplatesCopy.length);
+    CommentProvider(dataBase, server).generateAndAddUniqueCommentsForRestaurant(restaurant, numberOfComments.toInt());
 
-    for (var i = 0; i < l; i++) {
-      _generateAndAddComment(commentTemplatesCopy.removeAt(_random.nextInt(commentTemplatesCopy.length)), restaurant);
-    }
   }
 
   void fill() {
@@ -260,4 +229,134 @@ class _CommentTemplate {
 
   _CommentTemplate(this.title, this.message, this.score);
 
+}
+
+class CommentProvider {
+
+  final DataBase dataBase;
+  final Server server;
+  final _random = Random();
+  final _serializer = Serializer();
+
+  CommentProvider(this.dataBase, this.server);
+
+  var _commentTemplates = <_CommentTemplate>[
+    _CommentTemplate('It was nice', 'It was good. I will probably order again', 4),
+    _CommentTemplate('Never order', 'Food came cold and it tasted bad', 1),
+    _CommentTemplate('It was good', 'Food came in hot, but delivery was late. It was good overall', 3),
+    _CommentTemplate('Great!!', 'I think I found my favorite restaurant :)', 5),
+    _CommentTemplate('Bad Packaging', 'Packaging was bad and food was spilled all over. I got a refund however', 2),
+    _CommentTemplate('Seen Better', 'Not really tasty and delicious', 4),
+    _CommentTemplate('It used to be better', 'Your food used to be better, i don\' know what happened', 2),
+    _CommentTemplate('Very Good', 'just came in hot and quick', 5),
+    _CommentTemplate('so little', 'I expected a lot more for what i paid. it tasted good tho', 3),
+    _CommentTemplate('Old customer', 'Ordering from here for 3 years! Always the best', 4),
+    _CommentTemplate('Came late and cold', 'never ordering again', 0),
+    _CommentTemplate('Good', 'nice and tidy as always', 4),
+    _CommentTemplate('a bit cold', 'it was good overall, just a bit cold', 4),
+    _CommentTemplate('Great', 'great.', 5),
+    _CommentTemplate('Wrong order', 'this was\'t my order, what the hell', 1),
+    _CommentTemplate('Nice', 'evidently using fresh ingredients, well done', 4),
+    _CommentTemplate('Really good', 'Tasted like... a great food!', 5),
+    _CommentTemplate('nice', 'as always good', 4),
+  ];
+
+  Comment generateAndAddComment(Restaurant restaurant, [_CommentTemplate? template]) {
+
+    if (template == null) {
+      template = _commentTemplates[_random.nextInt(_commentTemplates.length)];
+    }
+
+    var comment = Comment(
+      server: server,
+      score: template.score,
+      message: template.message,
+      title: template.title,
+      restaurantID: restaurant.id!,
+    );
+    comment.id = _serializer.createID(comment.runtimeType);
+    dataBase.comments.add(comment);
+    restaurant.commentIDs.add(comment.id!);
+    return comment;
+  }
+
+  void generateAndAddUniqueCommentsForRestaurant(Restaurant restaurant, int numberOfComments) {
+    var commentTemplatesCopy = _commentTemplates.sublist(0);
+    var l = min(numberOfComments, commentTemplatesCopy.length);
+
+    for (var i = 0; i < l; i++) {
+      generateAndAddComment(restaurant, commentTemplatesCopy.removeAt(_random.nextInt(commentTemplatesCopy.length)));
+    }
+  }
+}
+
+// receives a database filled with restaurants and menus, and creates orders
+class OrderProvider {
+
+  final UserAccount? user;
+  final DataBase dataBase;
+  final Server server;
+  final bool _isForUser;
+  final _random = Random();
+  final _serializer = Serializer();
+
+  OrderProvider.forUser({required this.user, required this.dataBase, required this.server}) : _isForUser = true;
+
+  OrderProvider.forOwner({required this.dataBase, required this.server})  : user = null, _isForUser = false;
+
+  var _customers = [
+    CustomerData('Meysam', 'Bavi', Address(latitude: 34.640740, longitude: 50.874652, text: 'Qom, somewhere fun')),
+    CustomerData('Sina', 'Taheri Behrooz', Address(latitude: 35.700908, longitude: 51.377503, text: 'Tehran, somewhere fun')),
+    CustomerData('Mojtaba', 'Vahidi', Address(latitude: 35.795538, longitude: 51.397714, text: 'Tehran, somewhere fun')),
+  ];
+
+  void fill() {
+    if (_isForUser) {
+      _userFill();
+    } else {
+      _ownerFill();
+    }
+  }
+
+  void _userFill() {
+    for (var i = 0; i < 3; i++) {
+      user!.activeOrders.add(_generateAndAddOrder(customer: user!.toCustomerData(user!.defaultAddress!), isRequested: true));
+      (server as FakeUserServer).setDeliveryTimeFor(user!.activeOrders[i], Duration(seconds: 15 + i*10));
+      user!.previousOrders.add(_generateAndAddOrder(customer: user!.toCustomerData(user!.defaultAddress!), isRequested: true, isDelivered: true));
+      user!.cart.add(_generateAndAddOrder(customer: user!.toCustomerData(user!.defaultAddress!), isRequested: true, isDelivered: true));
+    }
+
+    var comment = CommentProvider(dataBase, server).generateAndAddComment(user!.previousOrders[0].restaurant);
+    user!.commentIDs.add(comment.id!);
+  }
+
+  Order _generateAndAddOrder({CustomerData? customer, bool isDelivered = false, bool isRequested = false}) {
+    if (customer == null) {
+      customer = _customers[_random.nextInt(_customers.length)];
+    }
+    var restaurant = dataBase.restaurants[_random.nextInt(dataBase.restaurants.length)];
+
+    var items = <FoodData, int>{};
+
+    for (var category in restaurant.menu!.categories) {
+      items[restaurant.menu!.getFoods(category)![0].toFoodData()] = _random.nextInt(3) + 1;
+    }
+
+    var order = Order(
+      items: items,
+      restaurant: restaurant,
+      customer: customer,
+      server: server,
+      isDelivered: isDelivered,
+      isRequested: isRequested,
+    );
+
+    order.id = _serializer.createID(order.runtimeType);
+    dataBase.orders.add(order);
+    order.code = order.id!;
+
+    return order;
+  }
+
+  void _ownerFill() {}
 }
