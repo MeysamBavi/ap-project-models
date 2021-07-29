@@ -23,10 +23,12 @@ class Order with Serializable implements Editable {
     required this.restaurant,
     required this.customer,
     String? code,
+    bool? isDelivered,
+    bool? isRequested,
 })  : time = DateTime.now(),
-      _isDelivered = false,
+      _isDelivered = isDelivered ?? false,
       _code = code,
-      _isRequested = false;
+      _isRequested = isRequested ?? false;
 
   bool get isDelivered => _isDelivered;
 
