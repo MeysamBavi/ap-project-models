@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import '../../src/classes/server.dart';
 import '../../src/classes/user_server.dart';
 import '../../src/classes/owner_server.dart';
+import '../../src/classes/fake_server.dart';
+import '../../src/classes/fake_data_base.dart';
+import '../../src/classes/data_provider.dart';
 
 class Head extends InheritedWidget {
 
   final _ServerPointer _serverPointer;
-  final bool _isForUser;
+  final bool isForUser;
 
   Server get server => _serverPointer.value;
 
@@ -27,7 +30,7 @@ class Head extends InheritedWidget {
     required Widget child,
     required Server server,
   })  : _serverPointer = _ServerPointer(server),
-        _isForUser = server is UserServer,
+        isForUser = server is UserServer,
         super(key: key, child: child);
 
   static Head of(BuildContext context) {
@@ -35,12 +38,39 @@ class Head extends InheritedWidget {
   }
 
   set offlineMode(bool value) {
-    //TODO
+    if (value) {
+      _offlineModeOn();
+    } else {
+      _offlineModeOff();
+    }
   }
+
+  bool get isOnline => server is! FakeServer;
 
   @override
   bool updateShouldNotify(Head oldWidget) {
     return false;
+  }
+
+  void _offlineModeOn() {
+    if (isForUser) {
+      var dataBase = DataBase.empty();
+      print('database created');
+      _serverPointer.value = FakeUserServer(dataBase: dataBase);
+      print('fake server created');
+      RestaurantProvider(dataBase, server).fill();
+      print('database filled with restaurant');
+      OrderProvider.forUser(dataBase: dataBase, server: server, user: UserProvider.getUserInstance(dataBase, server)).fill();
+      print('all done');
+    }
+  }
+
+  void _offlineModeOff() {
+    if (isForUser) {
+      _serverPointer.value = UserServer();
+    } else {
+      _serverPointer.value = OwnerServer();
+    }
   }
 
 }

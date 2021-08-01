@@ -8,7 +8,15 @@ class RestaurantPredicate {
   bool Function(Restaurant) generate() {
 
     return (Restaurant restaurant) {
-      return restaurant.name.contains(RegExp(name!, caseSensitive: false));
+      var result = true;
+
+      if (name != null) {
+        result = result && restaurant.name.contains(RegExp(name ?? '', caseSensitive: false));
+      }
+      if (category != null) {
+        result = result && restaurant.foodCategories.contains(category);
+      }
+      return result;
     };
   }
 

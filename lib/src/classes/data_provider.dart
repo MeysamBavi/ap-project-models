@@ -30,6 +30,29 @@ class RestaurantProvider {
 
   RestaurantProvider(this.dataBase, this.server)  : _isUsed = false;
 
+  void fill() {
+    if (_isUsed) throw Exception('This object is already used');
+    _isUsed = true;
+
+    for (var i = 0 ; i < _MAXIMUM_NUMBER_OF_IRANIAN_RESTAURANTS; i++) {
+      _generateAndAddRestaurant({FoodCategory.Iranian});
+    }
+    print('irani done');
+    for (var i = 0 ; i < _MAXIMUM_NUMBER_OF_FASTFOOD_RESTAURANTS; i++) {
+      _generateAndAddRestaurant({FoodCategory.FastFood});
+    }
+    print('fastfood done');
+    for (var i = 0 ; i < _MAXIMUM_NUMBER_OF_OTHER_RESTAURANTS; i++) {
+      var categories = FoodCategory.values.sublist(0);
+      var l = _random.nextInt(max(1, FoodCategory.values.length - 1));
+      for (var j = 0; j < l; j++) {
+        categories.removeAt(_random.nextInt(categories.length));
+      }
+      _generateAndAddRestaurant(categories.toSet());
+    }
+    print('other done');
+  }
+
   var _iranianNames = <String>[
     'Akbar Jooje',
     'Nemoone',
@@ -139,11 +162,11 @@ class RestaurantProvider {
     Address(text: 'Mashhad, Ab Square', latitude: 36.283490, longitude: 59.612113),
   ];
 
+
+
   Address _getAddress() {
     return _addresses.removeAt(_random.nextInt(_addresses.length));
   }
-
-
 
   Food _generateFood(FoodCategory category) {
     var food = Food(
@@ -163,10 +186,10 @@ class RestaurantProvider {
     menu.id = _serializer.createID(menu.runtimeType);
     dataBase.menus.add(menu);
 
-    for (var i = 0; i < categories.length; i++) {
+    for (var category in categories) {
       var l = _random.nextInt(3) + 4;
-      for (var j = 0; i < l; j++) {
-        menu.addFood(_generateFood(categories.elementAt(i)));
+      for (var j = 0; j < l; j++) {
+        menu.justAddFood(_generateFood(category));
       }
     }
 
@@ -179,7 +202,7 @@ class RestaurantProvider {
       name = _fastFoodNames.removeAt(_random.nextInt(_fastFoodNames.length));
     }
 
-    var score = _random.nextDouble() * 4.5 + 0.5;
+    var score = _getRandomScore();
     var numberOfComments = _random.nextInt(8) + pow(1.625, score);
 
     var restaurant = Restaurant(
@@ -187,7 +210,7 @@ class RestaurantProvider {
       foodCategories: categories,
       address: _getAddress(),
       menuID: menu.id!,
-      areaOfDispatch: _random.nextDouble() * 4000 + 2000,
+      areaOfDispatch: _random.nextDouble() * 4000 + 5000,
       score: score,
       numberOfComments: numberOfComments.toInt(),
     );
@@ -200,24 +223,8 @@ class RestaurantProvider {
 
   }
 
-  void fill() {
-    if (_isUsed) throw Exception('This object is already used');
-    _isUsed = true;
-
-    for (var i = 0 ; i < _MAXIMUM_NUMBER_OF_IRANIAN_RESTAURANTS; i++) {
-      _generateAndAddRestaurant({FoodCategory.Iranian});
-    }
-    for (var i = 0 ; i < _MAXIMUM_NUMBER_OF_FASTFOOD_RESTAURANTS; i++) {
-      _generateAndAddRestaurant({FoodCategory.FastFood});
-    }
-    for (var i = 0 ; i < _MAXIMUM_NUMBER_OF_OTHER_RESTAURANTS; i++) {
-      var categories = FoodCategory.values.sublist(0);
-      var l = _random.nextInt(max(1, FoodCategory.values.length - 1));
-      for (var j = 0; i < l; j++) {
-        categories.removeAt(_random.nextInt(categories.length));
-      }
-      _generateAndAddRestaurant(categories.toSet());
-    }
+  double _getRandomScore() {
+    return 3.5 * sqrt(_random.nextDouble()) + 1.5;
   }
 
 }
@@ -359,4 +366,34 @@ class OrderProvider {
   }
 
   void _ownerFill() {}
+}
+
+
+class UserProvider {
+
+
+  static const userPhoneNumber = '09123456789';
+  static const userPassword = 'password1';
+
+  static UserAccount getUserInstance(DataBase dataBase, Server server) {
+    var user = UserAccount(
+      firstName: 'Ali',
+      lastName: 'Alavi',
+      phoneNumber: userPhoneNumber,
+      addresses: [
+        Address(latitude: 35.710639,
+            longitude: 51.392359,
+            name: 'home',
+            text: 'Tehran, Laleh Park')
+      ],
+      defaultAddressName: 'home',
+      commentIDs: [],
+      favRestaurantIDs: [],
+      server: server,
+    );
+    dataBase.usersLoginData[userPhoneNumber] = userPassword;
+    dataBase.userAccounts.add(user);
+    return user;
+  }
+
 }

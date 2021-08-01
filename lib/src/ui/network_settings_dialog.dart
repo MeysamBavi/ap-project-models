@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'head.dart';
 import '../classes/server.dart';
+import '../classes/data_provider.dart';
 
 class NetworkSettingsDialog extends StatefulWidget {
   const NetworkSettingsDialog({Key? key}) : super(key: key);
@@ -22,12 +23,15 @@ class _NetworkSettingsDialogState extends State<NetworkSettingsDialog> {
   @override
   Widget build(BuildContext context) {
 
-    server = Head.of(context).server;
-    if (ip == null) {
-      ip = server.ip;
-    }
-    if (port == null) {
-      port = server.port;
+    var head = Head.of(context);
+    server = head.server;
+    if (head.isOnline) {
+      if (ip == null) {
+        ip = server.ip;
+      }
+      if (port == null) {
+        port = server.port;
+      }
     }
 
     return AlertDialog(
@@ -37,7 +41,7 @@ class _NetworkSettingsDialogState extends State<NetworkSettingsDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: head.isOnline ? [
             TextFormField(
               decoration: InputDecoration(
                 hintText: 'IP address',
@@ -64,10 +68,10 @@ class _NetworkSettingsDialogState extends State<NetworkSettingsDialog> {
             const SizedBox(height: 10,),
             if (shouldShowPing)
               buildPing()
-          ],
+          ] : [Text('App is in offline mode.')],
         ),
       ),
-      actions: [
+      actions: head.isOnline ? [
         if (loading)
           CircularProgressIndicator(value: null,)
         else
@@ -79,10 +83,12 @@ class _NetworkSettingsDialogState extends State<NetworkSettingsDialog> {
         },
         ),
         if (shouldShowPing)
-          TextButton(child: Text('Ping'), onPressed: () async {
-            showLoadingUntilPingIsFinished();
-          },)
-      ],
+          TextButton(child: Text('Ping'), onPressed: () async {showLoadingUntilPingIsFinished();},),
+        TextButton(child: Text('Offline Mode', style: TextStyle(color: Colors.green)), onPressed: offlineModePressed),
+      ] : [
+      TextButton(child: Text('Online Mode', style: TextStyle(color: Colors.green)), onPressed: onlineModePressed),
+      IconButton(icon: Icon(Icons.info, color: Colors.grey,), onPressed: infoPressed),
+    ],
     );
   }
 
@@ -111,6 +117,63 @@ class _NetworkSettingsDialogState extends State<NetworkSettingsDialog> {
       children: [
         Text('Connected.', style: TextStyle(color: Colors.green),),
         Text('ping: $ping ms')
+      ],
+    );
+  }
+
+  void offlineModePressed() {
+    setState(() {
+      Head.of(context).offlineMode = true;
+    });
+  }
+
+  void onlineModePressed() {
+    setState(() {
+      Head.of(context).offlineMode = false;
+    });
+  }
+
+  void infoPressed() {
+    Navigator.of(context).pop();
+    showDialog(context: context, builder: buildInfoDialog);
+  }
+
+  Widget buildInfoDialog(BuildContext context) {
+    var head = Head.of(context);
+    return AlertDialog(
+      title: Text('Login Info'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('You can login with these information or sign up.'),
+          const SizedBox(height: 13,),
+          // Text('Phone number: ${head.isForUser ? UserProvider.userPhoneNumber : 'blank'}'),
+          // Text('Password: ${head.isForUser ? UserProvider.userPassword : 'blank'}'),
+          RichText(
+              text: TextSpan(
+                  style: Theme.of(context).textTheme.bodyText2,
+                  children: [
+                    TextSpan(text: 'Phone number: '),
+                    TextSpan(text: head.isForUser ? UserProvider.userPhoneNumber : 'blank',
+                        style: TextStyle(color: Theme.of(context).primaryColor))
+                  ]
+              )
+          ),
+          RichText(
+              text: TextSpan(
+                  style: Theme.of(context).textTheme.bodyText2,
+                  children: [
+                    TextSpan(text: 'Password: '),
+                    TextSpan(text: head.isForUser ? UserProvider.userPassword : 'blank',
+                        style: TextStyle(color: Theme.of(context).primaryColor))
+                  ]
+              )
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(child: Text('OK'), onPressed: () => Navigator.of(context).pop(),)
       ],
     );
   }

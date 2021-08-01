@@ -125,6 +125,7 @@ class FakeUserServer extends FakeServer implements UserServer {
   Future<void> addNewComment(Comment comment) async {
     comment.id = await serialize(comment.runtimeType);
     _dataBase.comments.add(comment);
+    account.commentIDs.add(comment.id!);
     var restaurant = await getObjectByID<Restaurant>(comment.restaurantID);
     restaurant!.commentIDs.add(comment.id!);
   }

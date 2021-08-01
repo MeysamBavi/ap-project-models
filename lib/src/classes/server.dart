@@ -15,6 +15,10 @@ abstract class Server {
   int? _port;
   final _stopwatch = Stopwatch();
 
+  Server() {
+    setSocket("192.168.1.1", 8081);
+  }
+
   String? get ip => _ip;
   int? get port => _port;
 
