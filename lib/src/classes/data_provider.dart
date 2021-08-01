@@ -12,6 +12,7 @@ import 'small_data.dart';
 import 'order.dart';
 import 'user_account.dart';
 import 'fake_server.dart';
+import 'owner_account.dart';
 
 class RestaurantProvider {
 
@@ -20,6 +21,7 @@ class RestaurantProvider {
   final _serializer = Serializer();
   final DataBase dataBase;
   final Server server;
+  final bool _isForUser;
 
   static const int _MAXIMUM_NUMBER_OF_IRANIAN_RESTAURANTS = 5;
   static const int _MAXIMUM_NUMBER_OF_FASTFOOD_RESTAURANTS = 7;
@@ -28,11 +30,16 @@ class RestaurantProvider {
   //this is based on the total number of restaurant names and number of unique addresses
   static const int MAXIMUM_NUMBER_OF_RESTAURANTS = _MAXIMUM_NUMBER_OF_IRANIAN_RESTAURANTS + _MAXIMUM_NUMBER_OF_FASTFOOD_RESTAURANTS + _MAXIMUM_NUMBER_OF_OTHER_RESTAURANTS;
 
-  RestaurantProvider(this.dataBase, this.server)  : _isUsed = false;
+  RestaurantProvider.forUser(this.dataBase, this.server)  : _isUsed = false, _isForUser = true;
 
+  RestaurantProvider.forOwner(this.dataBase, this.server)  : _isUsed = false, _isForUser = false;
+
+  //should only be called for user
   void fill() {
     if (_isUsed) throw Exception('This object is already used');
     _isUsed = true;
+
+    if (!_isForUser) throw Exception('Illegal method call; \'fill\' is only for user.');
 
     for (var i = 0 ; i < _MAXIMUM_NUMBER_OF_IRANIAN_RESTAURANTS; i++) {
       _generateAndAddRestaurant({FoodCategory.Iranian});
@@ -227,6 +234,14 @@ class RestaurantProvider {
     return 3.5 * sqrt(_random.nextDouble()) + 1.5;
   }
 
+  Restaurant getRestaurantInstanceForOwner() {
+    if (_isForUser) throw Exception('Illegal method call; \'fill\' is only for owner.');
+
+    _generateAndAddRestaurant({FoodCategory.FastFood, FoodCategory.SeaFood});
+
+    return dataBase.restaurants[0];
+  }
+
 }
 
 class _CommentTemplate {
@@ -247,7 +262,7 @@ class CommentProvider {
 
   CommentProvider(this.dataBase, this.server);
 
-  var _commentTemplates = <_CommentTemplate>[
+  final _source = <_CommentTemplate>[
     _CommentTemplate('It was nice', 'It was good. I will probably order again', 4),
     _CommentTemplate('Never order', 'Food came cold and it tasted bad', 1),
     _CommentTemplate('It was good', 'Food came in hot, but delivery was late. It was good overall', 3),
@@ -268,15 +283,20 @@ class CommentProvider {
     _CommentTemplate('nice', 'as always good', 4),
   ];
 
+  var _temp = [];
+
   Comment generateAndAddComment(Restaurant restaurant, [_CommentTemplate? template]) {
 
     if (template == null) {
-      template = _commentTemplates[_random.nextInt(_commentTemplates.length)];
+      if (_temp.isEmpty) {
+        _temp = _source.sublist(0);
+      }
+      template = _temp.removeAt(_random.nextInt(_temp.length));
     }
 
     var comment = Comment(
       server: server,
-      score: template.score,
+      score: template!.score,
       message: template.message,
       title: template.title,
       restaurantID: restaurant.id!,
@@ -288,11 +308,11 @@ class CommentProvider {
   }
 
   void generateAndAddUniqueCommentsForRestaurant(Restaurant restaurant, int numberOfComments) {
-    var commentTemplatesCopy = _commentTemplates.sublist(0);
-    var l = min(numberOfComments, commentTemplatesCopy.length);
+    var temp2 = _source.sublist(0);
+    var l = min(numberOfComments, temp2.length);
 
     for (var i = 0; i < l; i++) {
-      generateAndAddComment(restaurant, commentTemplatesCopy.removeAt(_random.nextInt(commentTemplatesCopy.length)));
+      generateAndAddComment(restaurant, temp2.removeAt(_random.nextInt(temp2.length)));
     }
   }
 }
@@ -301,15 +321,16 @@ class CommentProvider {
 class OrderProvider {
 
   final UserAccount? user;
+  final OwnerAccount? owner;
   final DataBase dataBase;
   final Server server;
   final bool _isForUser;
   final _random = Random();
   final _serializer = Serializer();
 
-  OrderProvider.forUser({required this.user, required this.dataBase, required this.server}) : _isForUser = true;
+  OrderProvider.forUser({required this.user, required this.dataBase, required this.server}) : _isForUser = true, owner = null;
 
-  OrderProvider.forOwner({required this.dataBase, required this.server})  : user = null, _isForUser = false;
+  OrderProvider.forOwner({required this.owner, required this.dataBase, required this.server})  : user = null, _isForUser = false;
 
   var _customers = [
     CustomerData('Meysam', 'Bavi', Address(latitude: 34.640740, longitude: 50.874652, text: 'Qom, somewhere fun')),
@@ -337,11 +358,14 @@ class OrderProvider {
     user!.commentIDs.add(comment.id!);
   }
 
-  Order _generateAndAddOrder({CustomerData? customer, bool isDelivered = false, bool isRequested = false}) {
+  Order _generateAndAddOrder({CustomerData? customer, bool isDelivered = false, bool isRequested = false, DateTime? time, Restaurant? restaurant}) {
     if (customer == null) {
       customer = _customers[_random.nextInt(_customers.length)];
     }
-    var restaurant = dataBase.restaurants[_random.nextInt(dataBase.restaurants.length)];
+
+    if (restaurant == null) {
+      restaurant = dataBase.restaurants[_random.nextInt(dataBase.restaurants.length)];
+    }
 
     var items = <FoodData, int>{};
 
@@ -365,7 +389,41 @@ class OrderProvider {
     return order;
   }
 
-  void _ownerFill() {}
+  void _ownerFill() {
+    owner!.previousOrders.addAll(
+        [
+          _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-01-10 12:37:00'), restaurant: owner!.restaurant),
+          _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-01-12 13:11:00'), restaurant: owner!.restaurant),
+          _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-02-22 15:33:00'), restaurant: owner!.restaurant),
+          _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-02-27 14:58:00'), restaurant: owner!.restaurant),
+          _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-03-10 16:01:00'), restaurant: owner!.restaurant),
+          _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-03-25 16:01:00'), restaurant: owner!.restaurant),
+          _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-04-02 16:01:00'), restaurant: owner!.restaurant),
+          _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.now(), restaurant: owner!.restaurant),
+        ]);
+    _getOrderStream().listen((order) {
+      owner!.activeOrders.add(order);
+      print('order added');
+    });
+    _getCommentStream().listen((comment) {
+      print('comment added');
+    });
+  }
+
+  Stream<Order> _getOrderStream() async* {
+    while (true) {
+      yield _generateAndAddOrder(restaurant: owner!.restaurant);
+      await Future.delayed(Duration(seconds: _random.nextInt(11) + 20));
+    }
+  }
+
+  Stream<Comment> _getCommentStream() async* {
+    var commentProvider = CommentProvider(dataBase, server);
+    while (true) {
+      yield commentProvider.generateAndAddComment(owner!.restaurant);
+      await Future.delayed(Duration(seconds: _random.nextInt(31) + 40));
+    }
+  }
 }
 
 
@@ -396,4 +454,21 @@ class UserProvider {
     return user;
   }
 
+}
+
+class OwnerProvider {
+
+  static const ownerPhoneNumber = '09123123123';
+  static const ownerPassword = 'password1';
+
+  static OwnerAccount getOwnerInstance(DataBase dataBase, Server server) {
+    var owner = OwnerAccount(
+      phoneNumber: ownerPhoneNumber,
+      server: server,
+      restaurant: RestaurantProvider.forOwner(dataBase, server).getRestaurantInstanceForOwner(),
+    );
+    dataBase.ownersLoginData[ownerPhoneNumber] = ownerPassword;
+    dataBase.ownerAccounts.add(owner);
+    return owner;
+  }
 }
