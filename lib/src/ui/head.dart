@@ -53,15 +53,14 @@ class Head extends InheritedWidget {
   }
 
   void _offlineModeOn() {
+    var dataBase = DataBase.empty();
     if (isForUser) {
-      var dataBase = DataBase.empty();
-      print('database created');
       _serverPointer.value = FakeUserServer(dataBase: dataBase);
-      print('fake server created');
-      RestaurantProvider(dataBase, server).fill();
-      print('database filled with restaurant');
+      RestaurantProvider.forUser(dataBase, server).fill();
       OrderProvider.forUser(dataBase: dataBase, server: server, user: UserProvider.getUserInstance(dataBase, server)).fill();
-      print('all done');
+    } else {
+      _serverPointer.value = FakeOwnerServer(dataBase: dataBase);
+      OrderProvider.forOwner(owner: OwnerProvider.getOwnerInstance(dataBase, server), dataBase: dataBase, server: server).fill();
     }
   }
 
