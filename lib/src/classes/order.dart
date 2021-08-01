@@ -25,7 +25,8 @@ class Order with Serializable implements Editable {
     String? code,
     bool? isDelivered,
     bool? isRequested,
-})  : time = DateTime.now(),
+    DateTime? time,
+})  : time = time ?? DateTime.now(),
       _isDelivered = isDelivered ?? false,
       _code = code,
       _isRequested = isRequested ?? false;
