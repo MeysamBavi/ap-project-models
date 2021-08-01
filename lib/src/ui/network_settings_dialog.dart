@@ -155,7 +155,7 @@ class _NetworkSettingsDialogState extends State<NetworkSettingsDialog> {
                   style: Theme.of(context).textTheme.bodyText2,
                   children: [
                     TextSpan(text: 'Phone number: '),
-                    TextSpan(text: head.isForUser ? UserProvider.userPhoneNumber : 'blank',
+                    TextSpan(text: head.isForUser ? UserProvider.userPhoneNumber : OwnerProvider.ownerPhoneNumber,
                         style: TextStyle(color: Theme.of(context).primaryColor))
                   ]
               )
@@ -165,7 +165,7 @@ class _NetworkSettingsDialogState extends State<NetworkSettingsDialog> {
                   style: Theme.of(context).textTheme.bodyText2,
                   children: [
                     TextSpan(text: 'Password: '),
-                    TextSpan(text: head.isForUser ? UserProvider.userPassword : 'blank',
+                    TextSpan(text: head.isForUser ? UserProvider.userPassword : OwnerProvider.ownerPassword,
                         style: TextStyle(color: Theme.of(context).primaryColor))
                   ]
               )
