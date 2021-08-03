@@ -53,14 +53,19 @@ class Head extends InheritedWidget {
   }
 
   void _offlineModeOn() {
+    if (_serverPointer.fakeServer != null) {
+      _serverPointer.value = _serverPointer.fakeServer!;
+      return;
+    }
     var dataBase = DataBase.empty();
     if (isForUser) {
-      _serverPointer.value = FakeUserServer(dataBase: dataBase);
+      _serverPointer.fakeServer = FakeUserServer(dataBase: dataBase);
+      _serverPointer.value = _serverPointer.fakeServer!;
       RestaurantProvider.forUser(dataBase, server).fill();
       OrderProvider.forUser(dataBase: dataBase, server: server, user: UserProvider.getUserInstance(dataBase, server)).fill();
     } else {
-      _serverPointer.value = FakeOwnerServer(dataBase: dataBase);
-      OwnerProvider.getOwnerInstance(dataBase, server);
+      _serverPointer.fakeServer = FakeOwnerServer(dataBase: dataBase);
+      _serverPointer.value = _serverPointer.fakeServer!;
       OrderProvider.forOwner(owner: OwnerProvider.getOwnerInstance(dataBase, server), dataBase: dataBase, server: server).fill();
     }
   }
@@ -77,5 +82,6 @@ class Head extends InheritedWidget {
 
 class _ServerPointer {
   Server value;
+  FakeServer? fakeServer; // a variable to save already created fake server for later use
   _ServerPointer(this.value);
 }
