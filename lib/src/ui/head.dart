@@ -61,7 +61,7 @@ class Head extends InheritedWidget {
     } else {
       _serverPointer.value = FakeOwnerServer(dataBase: dataBase);
       OwnerProvider.getOwnerInstance(dataBase, server);
-      // OrderProvider.forOwner(owner: OwnerProvider.getOwnerInstance(dataBase, server), dataBase: dataBase, server: server).fill();
+      OrderProvider.forOwner(owner: OwnerProvider.getOwnerInstance(dataBase, server), dataBase: dataBase, server: server).fill();
     }
   }
 

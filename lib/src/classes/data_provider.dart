@@ -327,7 +327,7 @@ class OrderProvider {
   final bool _isForUser;
   final _random = Random();
   final _serializer = Serializer();
-  var _streamsShouldRun = true;
+  var _streamsAreRunning = false;
 
   OrderProvider.forUser({required this.user, required this.dataBase, required this.server}) : _isForUser = true, owner = null;
 
@@ -392,17 +392,44 @@ class OrderProvider {
   }
 
   void _ownerFill() {
-    owner!.previousOrders.addAll(
-        [
-          _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-01-10 12:37:00'), restaurant: owner!.restaurant),
-          _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-01-12 13:11:00'), restaurant: owner!.restaurant),
-          _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-02-22 15:33:00'), restaurant: owner!.restaurant),
-          _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-02-27 14:58:00'), restaurant: owner!.restaurant),
-          _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-03-10 16:01:00'), restaurant: owner!.restaurant),
-          _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-03-25 16:01:00'), restaurant: owner!.restaurant),
-          _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-04-02 16:01:00'), restaurant: owner!.restaurant),
-          _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.now(), restaurant: owner!.restaurant),
-        ]);
+    if (owner!.restaurant.menu!.isNotEmpty) {
+      owner!.previousOrders.addAll(
+          [
+            _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-01-10 12:37:00'), restaurant: owner!.restaurant),
+            _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-01-12 13:11:00'), restaurant: owner!.restaurant),
+            _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-02-22 15:33:00'), restaurant: owner!.restaurant),
+            _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-02-27 14:58:00'), restaurant: owner!.restaurant),
+            _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-03-10 16:01:00'), restaurant: owner!.restaurant),
+            _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-03-25 16:01:00'), restaurant: owner!.restaurant),
+            _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.parse('2021-04-02 16:01:00'), restaurant: owner!.restaurant),
+            _generateAndAddOrder(isRequested: true, isDelivered: true, time: DateTime.now(), restaurant: owner!.restaurant),
+          ]);
+    }
+  }
+
+  Stream<Order> _getOrderStream() async* {
+    while (_streamsAreRunning) {
+      print('menu is empty: ' + owner!.restaurant.menu!.isEmpty.toString());
+      if (owner!.restaurant.menu!.isNotEmpty) {
+        yield _generateAndAddOrder(restaurant: owner!.restaurant);
+      }
+      await Future.delayed(Duration(seconds: _random.nextInt(11) + 50));
+    }
+  }
+
+  Stream<Comment> _getCommentStream() async* {
+    var commentProvider = CommentProvider(dataBase, server);
+    while (_streamsAreRunning) {
+      if (owner!.restaurant.menu!.isNotEmpty) {
+        yield commentProvider.generateAndAddComment(owner!.restaurant);
+      }
+      await Future.delayed(Duration(seconds: _random.nextInt(31) + 70));
+    }
+  }
+
+  void openStreams() {
+    if (_streamsAreRunning) return;
+
     _getOrderStream().listen((order) {
       owner!.activeOrders.add(order);
       print('order added');
@@ -410,25 +437,11 @@ class OrderProvider {
     _getCommentStream().listen((comment) {
       print('comment added');
     });
-  }
-
-  Stream<Order> _getOrderStream() async* {
-    while (_streamsShouldRun) {
-      yield _generateAndAddOrder(restaurant: owner!.restaurant);
-      await Future.delayed(Duration(seconds: _random.nextInt(11) + 50));
-    }
-  }
-
-  Stream<Comment> _getCommentStream() async* {
-    var commentProvider = CommentProvider(dataBase, server);
-    while (_streamsShouldRun) {
-      yield commentProvider.generateAndAddComment(owner!.restaurant);
-      await Future.delayed(Duration(seconds: _random.nextInt(31) + 70));
-    }
+    _streamsAreRunning = true;
   }
 
   void closeStreams() {
-    _streamsShouldRun = false;
+    _streamsAreRunning = false;
   }
 }
 

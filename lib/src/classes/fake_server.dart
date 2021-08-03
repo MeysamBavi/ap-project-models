@@ -328,7 +328,7 @@ class FakeOwnerServer extends FakeServer implements OwnerServer {
 
   void _setUpOrderProvider() {
     _orderProvider = OrderProvider.forOwner(owner: account, dataBase: _dataBase, server: this);
-    _orderProvider!.fill();
+    _orderProvider!.openStreams();
   }
 
 }
