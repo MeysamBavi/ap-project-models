@@ -10,6 +10,7 @@ import 'restaurant.dart';
 import 'restaurant_predicate.dart';
 import 'discount.dart';
 import 'address.dart';
+import 'price.dart';
 
 class UserServer extends Server {
 
@@ -41,8 +42,11 @@ class UserServer extends Server {
     return true;
   }
 
-  Future<void> addNewOrder(Order order) async {
+  Future<void> addNewOrder(Order order, Price totalPriceWithDiscount) async {
     order.id = await serialize(order.runtimeType);
+    account.activeOrders.add(order);
+    account.cart.remove(order);
+    account.justSubtractCredit(totalPriceWithDiscount);
     await sendAndReceive(['order', account.phoneNumber, jsonEncode(account), order.id!, jsonEncode(order), order.restaurant.id!]);
   }
 

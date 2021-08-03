@@ -54,10 +54,10 @@ class Order with Serializable implements Editable {
     _code = value;
   }
 
-  void sendRequest() {
+  Future<void> sendRequest(Price totalPriceWithDiscount) async {
     _isRequested = true;
     time = DateTime.now();
-    (server as UserServer).addNewOrder(this);
+    await (server as UserServer).addNewOrder(this, totalPriceWithDiscount);
   }
 
   Future<Order?> reorder() async {

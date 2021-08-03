@@ -16,6 +16,7 @@ import 'comment.dart';
 import 'order.dart';
 import 'editable.dart';
 import 'serializer.dart';
+import 'price.dart';
 import 'data_provider.dart' show OrderProvider;
 import 'package:geolocator/geolocator.dart' show Geolocator;
 
@@ -132,8 +133,11 @@ class FakeUserServer extends FakeServer implements UserServer {
   }
 
   @override
-  Future<void> addNewOrder(Order order) async {
+  Future<void> addNewOrder(Order order, Price totalPriceWithDiscount) async {
     order.id = await serialize(order.runtimeType);
+    account.activeOrders.add(order);
+    account.cart.remove(order);
+    account.justSubtractCredit(totalPriceWithDiscount);
     _dataBase.orders.add(order);
     setDeliveryTimeFor(order);
   }
@@ -252,7 +256,9 @@ class FakeOwnerServer extends FakeServer implements OwnerServer {
   Restaurant get restaurant => account.restaurant;
 
   @override
-  Future<void> addFood(FoodMenu menu, Food food) async {}
+  Future<void> addFood(FoodMenu menu, Food food) async {
+    food.id = await serialize(food.runtimeType);
+  }
 
   @override
   Future<void> editRestaurant() async {}

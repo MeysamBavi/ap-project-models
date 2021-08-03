@@ -60,6 +60,7 @@ class OwnerServer extends Server {
   }
 
   Future<void> addFood(FoodMenu menu, Food food) async {
+    food.id = await serialize(food.runtimeType);
     await sendAndReceive(['addFood', menu.id!, jsonEncode(menu), food.id!, jsonEncode(food)]);
   }
 

@@ -84,6 +84,10 @@ class UserAccount extends Account {
     server.edit(this);
   }
 
+  void justSubtractCredit(Price value) {
+    _credit -= value;
+  }
+
   void addAddress(Address address) {
     addresses.add(address);
     server.edit(this);
