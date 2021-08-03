@@ -86,8 +86,8 @@ class _NetworkSettingsDialogState extends State<NetworkSettingsDialog> {
           TextButton(child: Text('Ping'), onPressed: () async {showLoadingUntilPingIsFinished();},),
         TextButton(child: Text('Offline Mode', style: TextStyle(color: Colors.green)), onPressed: offlineModePressed),
       ] : [
-      TextButton(child: Text('Online Mode', style: TextStyle(color: Colors.green)), onPressed: onlineModePressed),
       IconButton(icon: Icon(Icons.info, color: Colors.grey,), onPressed: infoPressed),
+      TextButton(child: Text('Online Mode', style: TextStyle(color: Colors.green)), onPressed: onlineModePressed),
     ],
     );
   }
