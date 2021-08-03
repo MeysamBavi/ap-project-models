@@ -78,4 +78,16 @@ class FoodMenu with Serializable implements Editable {
     }
     return subMenu;
   }
+
+  bool get isEmpty {
+    if (_data.isEmpty) return true;
+
+    for (var category in FoodCategory.values) {
+      if (_data[category]?.isNotEmpty ?? false) return false;
+    }
+
+    return true;
+  }
+
+  bool get isNotEmpty => !isEmpty;
 }
