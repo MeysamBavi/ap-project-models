@@ -327,6 +327,7 @@ class OrderProvider {
   final bool _isForUser;
   final _random = Random();
   final _serializer = Serializer();
+  var _streamsShouldRun = true;
 
   OrderProvider.forUser({required this.user, required this.dataBase, required this.server}) : _isForUser = true, owner = null;
 
@@ -380,6 +381,7 @@ class OrderProvider {
       server: server,
       isDelivered: isDelivered,
       isRequested: isRequested,
+      time: time,
     );
 
     order.id = _serializer.createID(order.runtimeType);
@@ -411,18 +413,22 @@ class OrderProvider {
   }
 
   Stream<Order> _getOrderStream() async* {
-    while (true) {
+    while (_streamsShouldRun) {
       yield _generateAndAddOrder(restaurant: owner!.restaurant);
-      await Future.delayed(Duration(seconds: _random.nextInt(11) + 20));
+      await Future.delayed(Duration(seconds: _random.nextInt(11) + 50));
     }
   }
 
   Stream<Comment> _getCommentStream() async* {
     var commentProvider = CommentProvider(dataBase, server);
-    while (true) {
+    while (_streamsShouldRun) {
       yield commentProvider.generateAndAddComment(owner!.restaurant);
-      await Future.delayed(Duration(seconds: _random.nextInt(31) + 40));
+      await Future.delayed(Duration(seconds: _random.nextInt(31) + 70));
     }
+  }
+
+  void closeStreams() {
+    _streamsShouldRun = false;
   }
 }
 
