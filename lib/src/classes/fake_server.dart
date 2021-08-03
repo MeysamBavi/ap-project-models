@@ -16,6 +16,7 @@ import 'comment.dart';
 import 'order.dart';
 import 'editable.dart';
 import 'serializer.dart';
+import 'data_provider.dart' show OrderProvider;
 import 'package:geolocator/geolocator.dart' show Geolocator;
 
 abstract class FakeServer implements Server {
@@ -242,6 +243,7 @@ class FakeOwnerServer extends FakeServer implements OwnerServer {
   FakeOwnerServer({required DataBase dataBase}) : super(dataBase: dataBase);
 
   OwnerAccount? _account;
+  OrderProvider? _orderProvider;
 
   @override
   OwnerAccount get account => _account!;
@@ -262,16 +264,30 @@ class FakeOwnerServer extends FakeServer implements OwnerServer {
     if (password != correctPassword) return false;
 
     _account = _dataBase.ownerAccounts.firstWhere((element) => element.phoneNumber == phoneNumber);
+    _setUpOrderProvider();
     return true;
   }
 
   @override
   Future<void> logout() async {
     _account = null;
+    _orderProvider?.closeStreams();
+    _orderProvider = null;
   }
 
   @override
-  Future<void> refreshActiveOrders() async {}
+  Future<void> refreshActiveOrders() async {
+    var temp = <Order>[];
+    account.activeOrders.forEach((element) {
+      if (element.isDelivered) {
+        temp.add(element);
+      }
+    });
+    temp.forEach((element) {
+      account.activeOrders.remove(element);
+      account.previousOrders.add(element);
+    });
+  }
 
   @override
   Future<void> removeFood(FoodMenu menu, Food food) async {}
@@ -306,7 +322,13 @@ class FakeOwnerServer extends FakeServer implements OwnerServer {
     _dataBase.ownerOf[restaurant.id!] = ownerAcc;
     _dataBase.restaurants.add(restaurant);
     _dataBase.menus.add(menu);
+    _setUpOrderProvider();
     return true;
+  }
+
+  void _setUpOrderProvider() {
+    _orderProvider = OrderProvider.forOwner(owner: account, dataBase: _dataBase, server: this);
+    _orderProvider!.fill();
   }
 
 }
