@@ -181,6 +181,7 @@ class Strings {
       'outside-area-dialog-title' : 'Outside of area of dispatch',
       'outside-area-dialog-message' : 'Your default address is outside of this restaurant\'s area. Choose a different address.',
       'discount-button' : 'Apply Discount',
+      'discount-input-hint' : 'Discount code',
       'discount-dialog-title' : 'Enter discount code:',
       'discount-invalid-code' : 'Invalid discount code.',
       'apply' : 'Apply',
