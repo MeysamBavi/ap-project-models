@@ -63,6 +63,7 @@ class Head extends InheritedWidget {
       _serverPointer.value = _serverPointer.fakeServer!;
       RestaurantProvider.forUser(dataBase, server).fill();
       OrderProvider.forUser(dataBase: dataBase, server: server, user: UserProvider.getUserInstance(dataBase, server)).fill();
+      DiscountProvider(dataBase).fill();
     } else {
       _serverPointer.fakeServer = FakeOwnerServer(dataBase: dataBase);
       _serverPointer.value = _serverPointer.fakeServer!;

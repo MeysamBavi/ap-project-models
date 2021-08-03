@@ -13,6 +13,7 @@ import 'order.dart';
 import 'user_account.dart';
 import 'fake_server.dart';
 import 'owner_account.dart';
+import 'discount.dart';
 
 class RestaurantProvider {
 
@@ -491,5 +492,17 @@ class OwnerProvider {
     dataBase.ownersLoginData[ownerPhoneNumber] = ownerPassword;
     dataBase.ownerAccounts.add(owner);
     return owner;
+  }
+}
+
+class DiscountProvider {
+  final DataBase dataBase;
+
+  DiscountProvider(this.dataBase);
+
+  void fill() {
+    for (var i = 1; i <= 10; i++) {
+      dataBase.discounts.add(Discount('off-${i*10}', i*10));
+    }
   }
 }
