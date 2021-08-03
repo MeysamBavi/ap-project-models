@@ -352,14 +352,14 @@ class OrderProvider {
       user!.activeOrders.add(_generateAndAddOrder(customer: user!.toCustomerData(user!.defaultAddress!), isRequested: true));
       (server as FakeUserServer).setDeliveryTimeFor(user!.activeOrders[i], Duration(seconds: 15 + i*10));
       user!.previousOrders.add(_generateAndAddOrder(customer: user!.toCustomerData(user!.defaultAddress!), isRequested: true, isDelivered: true));
-      user!.cart.add(_generateAndAddOrder(customer: user!.toCustomerData(user!.defaultAddress!), isRequested: true, isDelivered: true));
+      user!.cart.add(_generateAndAddOrder(customer: user!.toCustomerData(user!.defaultAddress!), isRequested: true, isDelivered: true, serialize: false));
     }
 
     var comment = CommentProvider(dataBase, server).generateAndAddComment(user!.previousOrders[0].restaurant);
     user!.commentIDs.add(comment.id!);
   }
 
-  Order _generateAndAddOrder({CustomerData? customer, bool isDelivered = false, bool isRequested = false, DateTime? time, Restaurant? restaurant}) {
+  Order _generateAndAddOrder({CustomerData? customer, bool isDelivered = false, bool isRequested = false, DateTime? time, Restaurant? restaurant, bool serialize = true}) {
     if (customer == null) {
       customer = _customers[_random.nextInt(_customers.length)];
     }
@@ -384,9 +384,11 @@ class OrderProvider {
       time: time,
     );
 
-    order.id = _serializer.createID(order.runtimeType);
+    if (serialize) {
+      order.id = _serializer.createID(order.runtimeType);
+      order.code = order.id!;
+    }
     dataBase.orders.add(order);
-    order.code = order.id!;
 
     return order;
   }
