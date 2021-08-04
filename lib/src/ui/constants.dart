@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 import '../classes/food.dart';
 
 class CommonColors {
@@ -19,20 +18,6 @@ class CommonColors {
   static const Color themeColorBlack = Color(0xFF393E41);
   static const Color themeColorYellow = Color(0xFFE7BB41);
   static const Color themeColorYellowDark = Color(0xFFCCA12B);
-
-  static var randomColorList = <Color?>[
-    CommonColors.green,
-    CommonColors.red,
-    CommonColors.pink,
-    CommonColors.cyan,
-    CommonColors.blue,
-  ];
-
-  //random color generator method to be implemented
-  static Color? generateColor() {
-    Random rnd = new Random();
-    return randomColorList[rnd.nextInt(randomColorList.length)];
-  }
 }
 
 class Strings {
