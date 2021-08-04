@@ -27,4 +27,14 @@ class FoodData {
   final String name;
   final Price price;
   FoodData(this.name, this.foodID, this.price);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FoodData &&
+          runtimeType == other.runtimeType &&
+          foodID == other.foodID;
+
+  @override
+  int get hashCode => foodID.hashCode;
 }
