@@ -15,7 +15,7 @@ Widget buildModelButton(String text, Color color, VoidCallback callback, {double
         if (states.contains(MaterialState.pressed)) {
           return 0.5;
         }
-        return 4.0;
+        return 2.0;
       })
     ),
     onPressed: callback,

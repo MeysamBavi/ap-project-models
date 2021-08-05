@@ -57,17 +57,16 @@ Widget buildArea(bool isInArea, {bool fill = false, double fontSize = 10}) {
   );
 }
 
-Color getColorForScore(int score) {
-  var map = <int, Color> {
-    0 : Colors.grey[600]!,
-    1 : Colors.red[800]!,
-    2 : Colors.orange[700]!,
-    3 : Colors.lime[600]!,
-    4 : Colors.green,
-    5 : Colors.cyan,
-  };
-  return map[score] ?? map[0]!;
-}
+final _colorMap = <int, Color> {
+  0 : Colors.grey[600]!,
+  1 : Colors.red[800]!,
+  2 : Colors.orange[700]!,
+  3 : Colors.lime[600]!,
+  4 : Colors.green,
+  5 : Colors.cyan,
+};
+
+Color getColorForScore(int score) => _colorMap[score] ?? _colorMap[0]!;
 
 SnackBar showBar(String content , Duration duration)
 {

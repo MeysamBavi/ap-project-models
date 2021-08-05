@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../classes/food.dart';
 
-class CommonColors {
+abstract class CommonColors {
   static Color? pink = Colors.pink[200];
   static Color? blue = Colors.blueAccent[400];
   static Color? green = Colors.greenAccent[400];
@@ -12,8 +12,9 @@ class CommonColors {
   static const Color themeColorPlatinum = Color(0xFFE7E5DF);
   static const Color themeColorPlatinumLight = Color(0xFFFFFDF7);
   static const Color themeColorBlue = Color(0xFF44BBA4);
+  static const Color themeColorBlueLight = Color(0xFF2FDAB8);
   static const Color themeColorBlueDark = Color(0xFF378F7D);
-  static const Color themeColorRed = Color(0xFFBD2426);
+  static const Color themeColorRed = Color(0xFFD4282B);
   static const Color themeColorRed2 = Color(0xFF980000);
   static const Color themeColorBlack = Color(0xFF393E41);
   static const Color themeColorYellow = Color(0xFFE7BB41);
@@ -114,7 +115,7 @@ class Strings {
       'order-bottom-sheet-order' : 'Order',
       'order-bottom-sheet-not-available' : 'This food is not available',
       'cart-page-no-items-in-cart' : 'The cart is empty',
-      'cart-page-app-bar' : 'User cart',
+      'cart-page-app-bar' : 'Cart',
       'cart-page-proceed' : 'Proceed',
       'cart-page-delete' : 'Delete',
       'user-account-app-bar' : 'User account',
@@ -251,4 +252,11 @@ class Strings {
     return '${phoneNumber.substring(0, 4)}****${phoneNumber.substring(l-3, l)}';
   }
 
+}
+
+abstract class Shadows {
+  static List<BoxShadow> wide({Color? color}) {
+    color ??= Colors.black54.withOpacity(0.22);
+    return [BoxShadow(blurRadius: 15, spreadRadius: 4, color: color)];
+  }
 }

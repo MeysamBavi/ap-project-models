@@ -42,6 +42,7 @@ class _LoginPanelState extends State<LoginPanel> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
             color: Theme.of(context).cardColor,
+            boxShadow: Shadows.wide(),
           ),
           padding: EdgeInsets.all(20),
           child: Form(
