@@ -70,10 +70,24 @@ class Order with Serializable implements Editable {
       identical(this, other) ||
       other is Order &&
           runtimeType == other.runtimeType &&
-          id == other.id;
+          time == other.time &&
+          id == other.id &&
+          restaurant.id == other.restaurant.id;
 
   @override
-  int get hashCode => id.hashCode;
+  int get hashCode => time.hashCode ^ id.hashCode ^ restaurant.id.hashCode;
+
+  // @override
+  // bool operator ==(Object other) =>
+  //     identical(this, other) ||
+  //     other is Order &&
+  //         runtimeType == other.runtimeType &&
+  //         id == other.id;
+  //
+  // @override
+  // int get hashCode => id.hashCode;
+
+
 
   Map<String, dynamic> toJson() {
     var itemsConverted = <Map<String, dynamic>>[];
