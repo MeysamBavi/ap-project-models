@@ -59,11 +59,13 @@ abstract class Server {
   }
 
   static int onScore(Restaurant a, Restaurant b) => (b.score - a.score).sign.toInt();
-  static int Function(Restaurant, Restaurant) createOnDistance(double latitude, double longitude) {
+  static int onScoreReverse(Restaurant a, Restaurant b) => (a.score - b.score).sign.toInt();
+  static int Function(Restaurant, Restaurant) createOnDistance(double latitude, double longitude, [bool reverse = false]) {
     return (Restaurant a, Restaurant b) {
       var distanceToA = Geolocator.distanceBetween(a.address.latitude, a.address.longitude, latitude, longitude);
       var distanceToB = Geolocator.distanceBetween(b.address.latitude, b.address.longitude, latitude, longitude);
-      return (distanceToA - distanceToB).sign.toInt();
+      var diff = distanceToA - distanceToB;
+      return (reverse ? -diff : diff).sign.toInt();
     };
   }
 
