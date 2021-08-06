@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:models/models.dart';
 import 'head.dart';
 import '../classes/server.dart';
 import '../classes/data_provider.dart';
@@ -84,10 +85,10 @@ class _NetworkSettingsDialogState extends State<NetworkSettingsDialog> {
         ),
         if (shouldShowPing)
           TextButton(child: Text('Ping'), onPressed: () async {showLoadingUntilPingIsFinished();},),
-        TextButton(child: Text('Offline Mode', style: TextStyle(color: Colors.green)), onPressed: offlineModePressed),
+        TextButton(child: Text('Offline Mode', style: TextStyle(color: Theme.of(context).accentColor)), onPressed: offlineModePressed),
       ] : [
       IconButton(icon: Icon(Icons.info, color: Colors.grey,), onPressed: infoPressed),
-      TextButton(child: Text('Online Mode', style: TextStyle(color: Colors.green)), onPressed: onlineModePressed),
+      TextButton(child: Text('Online Mode', style: TextStyle(color: Theme.of(context).accentColor)), onPressed: onlineModePressed),
     ],
     );
   }
@@ -115,7 +116,7 @@ class _NetworkSettingsDialogState extends State<NetworkSettingsDialog> {
     return Wrap(
       direction: Axis.vertical,
       children: [
-        Text('Connected.', style: TextStyle(color: Colors.green),),
+        Text('Connected.', style: TextStyle(color: CommonColors.themeColorGreen),),
         Text('ping: $ping ms')
       ],
     );

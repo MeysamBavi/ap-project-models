@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import '../classes/food.dart';
 
 abstract class CommonColors {
-  static Color? pink = Colors.pink[200];
-  static Color? blue = Colors.blueAccent[400];
-  static Color? green = Colors.greenAccent[400];
-  static Color? red = Colors.redAccent[400];
-  static const Color black = Colors.black;
-  static const Color cyan = Color(0xFF00E5FF);
+  // static Color? pink = Colors.pink[200];
+  // static Color? blue = Colors.blueAccent[400];
+  // static Color? green = Colors.greenAccent[400];
+  // static Color? red = Colors.redAccent[400];
+  // static const Color black = Colors.black;
+  // static const Color cyan = Color(0xFF00E5FF);
 
   static const Color themeColorPlatinum = Color(0xFFE7E5DF);
   static const Color themeColorPlatinumLight = Color(0xFFFFFDF7);
@@ -19,6 +19,7 @@ abstract class CommonColors {
   static const Color themeColorBlack = Color(0xFF393E41);
   static const Color themeColorYellow = Color(0xFFE7BB41);
   static const Color themeColorYellowDark = Color(0xFFCCA12B);
+  static const Color themeColorGreen = Color(0xFF2DCF91);
 }
 
 class Strings {
@@ -35,6 +36,7 @@ class Strings {
       'bottom-nav-label-order' : 'Orders',
       'edit-menu-categories-header' : 'Categories',
       'add-food-tooltip' : 'Add Food',
+      'create-food-button' : 'Create',
       'search-menu-tooltip' : 'Search Menu',
       'food-item-edit-button' : 'Edit',
       'toman' : 'Toman',
@@ -45,7 +47,7 @@ class Strings {
       'food-remove-dialog-no' : 'No',
       'food-remove-dialog-yes' : 'Yes',
       'remove-food-dialog-message' : 'Are you sure?',
-      'order-bottom-sheet-is-ready' : 'ready to deliver?',
+      'order-bottom-sheet-is-ready' : 'Ready to deliver?',
       'order-page-active-orders' : 'Active Orders',
       'order-page-inactive-orders' : 'Previous Orders',
       'no-order-message' : 'No order exists.',
@@ -76,7 +78,7 @@ class Strings {
       'stats-title' : 'Statistics',
       'today' : 'Today',
       'all' : 'All',
-      'edit-add-image' : 'Edit image',
+      'edit-add-image' : 'Add image',
       'account' : 'Account',
       'logo-label' : 'Restaurant logo:',
       'settings-categories' : 'Food Categories',
