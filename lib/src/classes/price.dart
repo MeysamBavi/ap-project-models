@@ -9,7 +9,7 @@ class Price {
   int toInt() => _value;
 
   @override
-  String toString() => '$_value';
+  String toString() => _separateEachNDigitsWithC(n: 3, c: ',', value: _value);
 
   Price operator +(Price other) => Price(_value + other.toInt());
   Price operator -(Price other) => Price(_value - other.toInt());
@@ -51,4 +51,16 @@ class Price {
     return Price(value.round());
   }
 
+}
+
+String _separateEachNDigitsWithC({required int n, required String c, required int value}) {
+  var buffer = StringBuffer();
+  var initialLength = value.toString().length;
+  for (var i = 0; i < initialLength; i++) {
+    if ((initialLength - i) % n == 0 && i != 0) {
+      buffer.write(c);
+    }
+    buffer.write(value.toString()[i]);
+  }
+  return buffer.toString();
 }
