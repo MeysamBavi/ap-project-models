@@ -72,7 +72,7 @@ class FoodMenu with Serializable implements Editable {
     for (var category in FoodCategory.values) {
       for (Food food in _data[category] ?? const []) {
         if (predicate(food)) {
-          subMenu.addFood(food);
+          subMenu.justAddFood(food);
         }
       }
     }
