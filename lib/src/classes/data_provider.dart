@@ -329,6 +329,8 @@ class OrderProvider {
   final _random = Random();
   final _serializer = Serializer();
   var _streamsAreRunning = false;
+  var _remainingOrders = 100;
+  var _remainingComments = 100;
 
   OrderProvider.forUser({required this.user, required this.dataBase, required this.server}) : _isForUser = true, owner = null;
 
@@ -411,22 +413,24 @@ class OrderProvider {
   }
 
   Stream<Order> _getOrderStream() async* {
-    while (_streamsAreRunning) {
+    while (_streamsAreRunning && _remainingOrders > 0) {
+      await Future.delayed(Duration(seconds: _random.nextInt(11) + 50));
       print('menu is empty: ' + owner!.restaurant.menu!.isEmpty.toString());
       if (owner!.restaurant.menu!.isNotEmpty) {
+        _remainingOrders--;
         yield _generateAndAddOrder(restaurant: owner!.restaurant);
       }
-      await Future.delayed(Duration(seconds: _random.nextInt(11) + 50));
     }
   }
 
   Stream<Comment> _getCommentStream() async* {
     var commentProvider = CommentProvider(dataBase, server);
-    while (_streamsAreRunning) {
+    while (_streamsAreRunning && _remainingComments > 0) {
+      await Future.delayed(Duration(seconds: _random.nextInt(31) + 70));
       if (owner!.restaurant.menu!.isNotEmpty) {
+        _remainingComments--;
         yield commentProvider.generateAndAddComment(owner!.restaurant);
       }
-      await Future.delayed(Duration(seconds: _random.nextInt(31) + 70));
     }
   }
 
