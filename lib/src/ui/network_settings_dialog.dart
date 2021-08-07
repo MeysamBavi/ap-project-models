@@ -85,10 +85,10 @@ class _NetworkSettingsDialogState extends State<NetworkSettingsDialog> {
         ),
         if (shouldShowPing)
           TextButton(child: Text('Ping'), onPressed: () async {showLoadingUntilPingIsFinished();},),
-        TextButton(child: Text('Offline Mode', style: TextStyle(color: Theme.of(context).accentColor)), onPressed: offlineModePressed),
+        TextButton(child: Text('Offline Mode', style: TextStyle(color: Theme.of(context).colorScheme.secondaryVariant)), onPressed: offlineModePressed),
       ] : [
       IconButton(icon: Icon(Icons.info, color: Colors.grey,), onPressed: infoPressed),
-      TextButton(child: Text('Online Mode', style: TextStyle(color: Theme.of(context).accentColor)), onPressed: onlineModePressed),
+      TextButton(child: Text('Online Mode', style: TextStyle(color: Theme.of(context).colorScheme.secondaryVariant)), onPressed: onlineModePressed),
     ],
     );
   }
@@ -117,7 +117,7 @@ class _NetworkSettingsDialogState extends State<NetworkSettingsDialog> {
       direction: Axis.vertical,
       children: [
         Text('Connected.', style: TextStyle(color: CommonColors.themeColorGreen),),
-        Text('ping: $ping ms')
+        Text('ping: $ping ms', style: TextStyle(color: Theme.of(context).primaryColorDark))
       ],
     );
   }

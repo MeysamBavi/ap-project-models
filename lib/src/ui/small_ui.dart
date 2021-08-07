@@ -20,7 +20,7 @@ Widget buildScore(int score) {
     spacing: 5,
     crossAxisAlignment: WrapCrossAlignment.center,
     children: [
-      Icon(Icons.star, color: getColorForScore(score),),
+      Icon(Icons.star_rounded, color: getColorForScore(score),),
       Text(score.toString(), style: TextStyle(fontWeight: FontWeight.bold),)
     ],
   );
