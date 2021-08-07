@@ -2,27 +2,23 @@ import 'package:flutter/material.dart';
 import '../classes/food.dart';
 
 abstract class CommonColors {
-  // static Color? pink = Colors.pink[200];
-  // static Color? blue = Colors.blueAccent[400];
-  // static Color? green = Colors.greenAccent[400];
-  // static Color? red = Colors.redAccent[400];
-  // static const Color black = Colors.black;
-  // static const Color cyan = Color(0xFF00E5FF);
 
   static const Color themeColorPlatinum = Color(0xFFE7E5DF);
-  static const Color themeColorPlatinumLight = Color(0xFFFFFDF7);
+  static const Color themeColorPlatinumLight = Color(0xFFF9F8F5);
+  static const Color themeColorCard = Color(0xFFFFFEFC);
   static const Color themeColorBlue = Color(0xFF44BBA4);
   static const Color themeColorBlueLight = Color(0xFF2FDAB8);
   static const Color themeColorBlueDark = Color(0xFF378F7D);
   static const Color themeColorRed = Color(0xFFD4282B);
   static const Color themeColorRed2 = Color(0xFF980000);
   static const Color themeColorBlack = Color(0xFF393E41);
+  static const Color themeColorBlackTransparent = Color(0xA0393E41);
   static const Color themeColorYellow = Color(0xFFE7BB41);
   static const Color themeColorYellowDark = Color(0xFFCCA12B);
   static const Color themeColorGreen = Color(0xFF2DCF91);
 }
 
-class Strings {
+abstract class Strings {
 
   static const _data = <String, Map<String, String>>{
     'eng' : {
@@ -41,6 +37,8 @@ class Strings {
       'food-item-edit-button' : 'Edit',
       'toman' : 'Toman',
       'orders-menu-header' : 'Orders',
+      'edit-menu-empty-message' : 'Your menu is empty.',
+      'menu-search-empty-message' : 'No food found.',
       'edit-bottom-sheet-remove' : 'Delete',
       'edit-bottom-sheet-save' : 'Save',
       'food-remove-dialog-title' : 'Delete Food?',
@@ -60,6 +58,11 @@ class Strings {
       'order-details-button' : 'Details',
       'menu-search-options-title' : 'Search for...',
       'search-name-hint' : 'Name contains...',
+      'record-title' : 'Records of Sale',
+      'stats-title-title' : 'Title',
+      'stats-count' : 'Count',
+      'stats-price' : 'Price',
+      'stats-total' : 'Total Sale',
       'price-from' : 'Min price',
       'price-to' : 'Max price',
       'search-availability' : 'Is Available',
@@ -98,6 +101,9 @@ class Strings {
       'set-radius-and-coordinates' : 'Set',
       'duplicate-number-error' : 'This phone number is already registered.',
       'login-prompt' : 'Already have an account?',
+      'order-card-food-name' : 'Food name',
+      'order-card-unit-price' : 'Unit price',
+      'order-card-count' : 'Count',
 
       //user app
       'bottom-nav-restaurants' : 'Restaurants',
@@ -106,22 +112,23 @@ class Strings {
       'bottom-nav-user-account' : 'Account',
       'app-bar-restaurants' : 'Restaurants',
       'app-bar-leading-search' : 'Search',
+      'restaurant-menu-empty-message' : 'Menu is empty.',
       'restaurant-card-inf' : 'Buy',
       'restaurant-page-return-tooltip' : 'Return',
-      'restaurant-page-accept-tooltip' : 'Order',
+      'restaurant-page-accept-tooltip' : 'Add to cart',
       'restaurant-page-menu-header' : 'Menu',
       'restaurant-page-button' : 'Info',
       'order-bottom-sheet-number' : 'Number',
-      'order-bottom-sheet-empty-error' : 'Please enter a number',
-      'order-bottom-sheet-negative-error' : 'Number must be positive',
+      'order-bottom-sheet-empty-error' : 'Please enter a number.',
+      'order-bottom-sheet-negative-error' : 'Number must not be negative.',
       'order-bottom-sheet-order' : 'Order',
-      'order-bottom-sheet-not-available' : 'This food is not available',
-      'cart-page-no-items-in-cart' : 'The cart is empty',
+      'order-bottom-sheet-not-available' : 'This food is not available.',
+      'cart-page-no-items-in-cart' : 'The cart is empty.',
       'cart-page-app-bar' : 'Cart',
       'cart-page-proceed' : 'Proceed',
       'cart-page-delete' : 'Delete',
       'user-account-app-bar' : 'User account',
-      'add-fund-null-error' : 'The field can\'t be empty',
+      'add-fund-null-error' : 'The field can\'t be empty.',
       'add-fund-negative-error' : 'Enter a positive value.',
       'add-fund-invalid-number' : 'Invalid number.',
       'account-info-title' : 'Account Info',
@@ -131,21 +138,22 @@ class Strings {
       'add-fund-hint' : 'Add Credit',
       'my-comments-title' : 'My Comments',
       'fav-restaurants-app-bar' : 'Favourite Restaurants',
+      'no-favorite-restaurants' : 'No restaurant is added to the list.',
       'addressed-title' : 'Addresses',
       'set-default-address' : 'Set as default address',
-      'address-actions-hint' : 'Tap to edit. Hold to set as default',
+      'address-actions-hint' : 'Tap to edit. Hold to set as default.',
       'orders-app-bar' : 'Orders',
       'orders-active-orders-heading' : 'Active Orders',
       'orders-previous-orders-heading' : 'Previous Orders',
-      'orders-no-active-orders' : 'No Active Orders',
-      'orders-no-previous-orders' : 'No Previous Orders',
+      'orders-no-active-orders' : 'No active order found.',
+      'orders-no-previous-orders' : 'No previous order found.',
       'orders-reorder-button' : 'Re-Order',
-      'insufficient-fund-dialog' : 'Not Enough Money',
+      'insufficient-fund-dialog' : 'Not enough money',
       'current-credit-message' : 'You currently have',
       'fund-dialog-add-fund' : 'Add',
       'orders-comment-button' : 'Comment',
       'my-comments' : 'My Comments',
-      'no-comments' : 'You haven\'t commented anything.',
+      'no-comments' : 'You haven\'t had any comment.',
       'comment-title' : 'Title',
       'comment-message' : 'Message',
       'comment-empty-title' : 'Title can\'t be empty.',
@@ -154,7 +162,7 @@ class Strings {
       'reorder-success' : 'Order added to your cart.',
       'search-name-empty' : 'Name is required.',
       'restaurant-name-hint' : 'Restaurant name',
-      'restaurant-no-comments' : 'No comment found.',
+      'restaurant-no-comments' : 'No comments found.',
       'comments-tab-title' : 'Comments',
       'edit-address-title' : 'Edit Address',
       'add-address-title' : 'Add Address',
@@ -180,7 +188,7 @@ class Strings {
       'empty-last-name' : 'Last name is required.',
 
       //models
-      'empty-reply-error' : 'Reply can\'t be empty',
+      'empty-reply-error' : 'Reply can\'t be empty.',
       'in-area' : 'Inside area',
       'not-in-area' : 'Outside area',
       'phone-number-hint' : 'Phone number',
@@ -195,23 +203,25 @@ class Strings {
       'login-header' : 'Login to your account',
       'sign-up-prompt' : 'Don\'t have an account?',
       'logout' : 'Logout',
+      'enter-comment-reply-prompt' : 'Enter reply',
+      'comment-no-response' : 'No response',
 
       //user snack bars
-      'foods-added-to-cart' : 'Your orders have been added to the cart',
-      'order-completed' : 'Order is complete, your food will be delivered ASAP',
-      'credit-added' : 'Credit added Successfully',
-      'comment-added' : 'Comment added Successfully',
-      'delete_order' : 'Order deleted Successfully',
+      'foods-added-to-cart' : 'Your orders have been added to the cart.',
+      'order-completed' : 'Order is complete, your food will be delivered ASAP.',
+      'credit-added' : 'Credit added successfully.',
+      'comment-added' : 'Comment added successfully.',
+      'delete_order' : 'Order deleted successfully.',
       'address-added' : 'Address added successfully.',
       'address-edited' : 'Address edited successfully.',
 
       //restaurant snack bars
-      'edit-food-edit-successful' : 'Food edited Successfully',
-      'delete-food-successful' : 'Food deleted Successfully',
-      'add-food-successful' : 'Food added Successfully',
-      'food-delivered-successful' : 'Food delivered Successfully',
-      'comment-answer-added' : 'Your answer has been added to the Comment',
-      'location-selected' : 'Area of dispatch Selected Successfully',
+      'edit-food-edit-successful' : 'Food edited successfully.',
+      'delete-food-successful' : 'Food deleted successfully.',
+      'add-food-successful' : 'Food added successfully.',
+      'food-delivered-successful' : 'Food delivered successfully.',
+      'comment-answer-added' : 'Your answer has been added to the comment.',
+      'location-selected' : 'Area of dispatch selected successfully.',
 
     }
   };
