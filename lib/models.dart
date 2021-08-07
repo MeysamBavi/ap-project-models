@@ -1,4 +1,3 @@
-export 'src/ui/Form.dart';
 export 'src/classes/food.dart';
 export 'src/classes/food_menu.dart';
 export 'src/classes/price.dart';
@@ -26,3 +25,5 @@ export 'src/classes/restaurant_predicate.dart';
 export 'src/ui/login_form.dart';
 export 'src/ui/login_ui.dart';
 export 'src/ui/network_settings_dialog.dart';
+
+// developed by Sina Taheri Behrooz and Meysam Bavi
