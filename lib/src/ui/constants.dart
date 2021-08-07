@@ -186,6 +186,7 @@ abstract class Strings {
       'last-name-hint' : 'Last name',
       'empty-first-name' : 'First name is required.',
       'empty-last-name' : 'Last name is required.',
+      'no-restaurant' : 'No restaurant found.',
 
       //models
       'empty-reply-error' : 'Reply can\'t be empty.',
