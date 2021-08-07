@@ -272,3 +272,15 @@ abstract class Shadows {
     return [BoxShadow(blurRadius: 15, spreadRadius: 4, color: color)];
   }
 }
+
+AssetImage getCategoryImage(FoodCategory category) {
+  switch (category) {
+    case FoodCategory.Iranian:
+      return AssetImage('assets/iranian.jpg', package: 'models');
+    case FoodCategory.FastFood:
+      return AssetImage('assets/fastfood.jpg', package: 'models');
+    case FoodCategory.SeaFood:
+    default:
+      return AssetImage('assets/seafood.jpg', package: 'models');
+  }
+}
