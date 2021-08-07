@@ -28,6 +28,9 @@ flutter:
     - assets/default_restaurant.jpg
     - assets/login_background.jpg
     - assets/login_background.png
+    - assets/iranian.jpg
+    - assets/fastfood.jpg
+    - assets/seafood.jpg
   # To add assets to your package, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
