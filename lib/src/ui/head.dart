@@ -25,6 +25,9 @@ class Head extends InheritedWidget {
     return server;
   }
 
+  //a map for storing reused widgets in runtime; like images
+  final depot = <Object, Widget>{};
+
   Head({
     Key? key,
     required Widget child,

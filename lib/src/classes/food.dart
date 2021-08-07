@@ -3,7 +3,6 @@ import 'serializable.dart';
 import 'price.dart';
 import 'server.dart';
 import 'small_data.dart';
-import 'package:flutter/material.dart';
 
 class Food with Serializable implements Editable {
 
@@ -13,13 +12,11 @@ class Food with Serializable implements Editable {
   bool isAvailable;
   FoodCategory category;
   Server _server;
-  Image image;
 
   Food({
     required String name,
     required FoodCategory category,
     required Price price,
-    Image? image,
     String? description,
     bool isAvailable = true,
     required Server server
@@ -27,7 +24,6 @@ class Food with Serializable implements Editable {
         name = name,
         category = category,
         price = price,
-        image = image ?? Image.asset('assets/default_food.jpg' , package: 'models',),
         description = description ?? '',
         isAvailable = isAvailable,
         _server = server;
@@ -38,8 +34,7 @@ class Food with Serializable implements Editable {
         price = Price(int.parse(json['price'])),
         description = json['description'],
         isAvailable = json['isAvailable'],
-        category = Food.toCategory(json['category'])!,
-        image = Image.asset('assets/default_food.jpg' , package: 'models',)
+        category = Food.toCategory(json['category'])!
   {
     id = json['ID'];
   }

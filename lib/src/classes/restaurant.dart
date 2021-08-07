@@ -2,20 +2,17 @@ import 'food.dart';
 import 'food_menu.dart';
 import 'serializable.dart';
 import 'address.dart';
-import 'package:flutter/material.dart';
 
 class Restaurant with Serializable {
   final String name;
   FoodMenu? menu;
-  final String? menuID;
+  final String menuID;
   final Set<FoodCategory> foodCategories;
   Address address;
   double areaOfDispatch; // in meters
   final double score;
   final int numberOfComments;
   final List<String> commentIDs;
-  Image logo;
-
 
   Restaurant({
     required this.name,
@@ -24,10 +21,8 @@ class Restaurant with Serializable {
     required this.score,
     required this.address,
     required this.numberOfComments,
-    Image? logo,
     this.areaOfDispatch = 0,
-  })  : commentIDs = [],
-        this.logo = logo??Image.asset('assets/default_restaurant.jpg' , package: 'models',);
+  })  : commentIDs = [];
 
   Restaurant.fromJson(Map<String, dynamic> json):
         name = json['name'],
@@ -37,8 +32,7 @@ class Restaurant with Serializable {
         areaOfDispatch = json['areaOfDispatch'],
         score = json['score'],
         commentIDs = [...json['commentIDs']],
-        numberOfComments = json['numberOfComments'].toInt(),
-        logo = Image.asset('assets/default_restaurant.jpg' , package: 'models',)
+        numberOfComments = json['numberOfComments'].toInt()
   {
     id = json['ID'];
   }
