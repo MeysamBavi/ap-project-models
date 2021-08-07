@@ -28,7 +28,7 @@ class OwnerServer extends Server {
     if (object is Comment) {
       await sendAndReceive(['editComment', object.id!, jsonEncode(object)]);
     } else if (object is Food) {
-      await sendAndReceive(['editFood', restaurant.menuID!, object.id!, jsonEncode(object)]);
+      await sendAndReceive(['editFood', restaurant.menuID, object.id!, jsonEncode(object)]);
     } else if (object is Order) {
       await refreshActiveOrders();
       account.activeOrders.remove(object);
@@ -51,7 +51,7 @@ class OwnerServer extends Server {
     var response = await sendAndReceive(['login', phoneNumber, password]);
     if (response.contains('Error')) return false;
     _account = OwnerAccount.fromJson(jsonDecode(response), this);
-    restaurant.menu = await getObjectByID<FoodMenu>(restaurant.menuID!);
+    restaurant.menu = await getObjectByID<FoodMenu>(restaurant.menuID);
     return true;
   }
 
@@ -86,7 +86,7 @@ class OwnerServer extends Server {
     menu.id = await serialize(menu.runtimeType);
     var restaurant = Restaurant(
       name: name,
-      menuID: menu.id,
+      menuID: menu.id!,
       score: 0.0,
       address: address,
       areaOfDispatch: areaOfDispatch,

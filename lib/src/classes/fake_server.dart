@@ -311,7 +311,7 @@ class FakeOwnerServer extends FakeServer implements OwnerServer {
     menu.id = await serialize(menu.runtimeType);
     var restaurant = Restaurant(
         name: name,
-        menuID: menu.id,
+        menuID: menu.id!,
         score: 0.0,
         address: address,
         areaOfDispatch: areaOfDispatch,

@@ -65,7 +65,7 @@ class UserServer extends Server {
   Future<Order?> reorder(Order order) async {
     var newItems = <FoodData, int>{};
     for (var oldFoodData in order.items.keys) {
-      var newFood = await getFoodByID(oldFoodData.foodID, order.restaurant.menuID!);
+      var newFood = await getFoodByID(oldFoodData.foodID, order.restaurant.menuID);
       if (newFood == null) continue;
       newItems[newFood.toFoodData()] = order.items[oldFoodData]!;
     }
