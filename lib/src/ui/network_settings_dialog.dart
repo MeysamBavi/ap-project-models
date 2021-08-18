@@ -147,7 +147,8 @@ class _NetworkSettingsDialogState extends State<NetworkSettingsDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('You can login with these information or sign up.'),
+          head.isForUser ? Text(Strings.get('offline-mode-user')!) : Text(Strings.get('offline-mode-owner')!),
+          Text('\nYou can login with these information or sign up.'),
           const SizedBox(height: 13,),
           // Text('Phone number: ${head.isForUser ? UserProvider.userPhoneNumber : 'blank'}'),
           // Text('Password: ${head.isForUser ? UserProvider.userPassword : 'blank'}'),

@@ -104,6 +104,7 @@ abstract class Strings {
       'order-card-food-name' : 'Food name',
       'order-card-unit-price' : 'Unit price',
       'order-card-count' : 'Count',
+      'offline-mode-owner' : 'In offline mode you can test the app without having to connect to a server. Fake orders and comments will be created as you go.',
 
       //user app
       'bottom-nav-restaurants' : 'Restaurants',
@@ -177,7 +178,7 @@ abstract class Strings {
       'outside-area-dialog-title' : 'Outside of area of dispatch',
       'outside-area-dialog-message' : 'Your default address is outside of this restaurant\'s area. Choose a different address.',
       'discount-button' : 'Apply Discount',
-      'discount-input-hint' : 'Discount code',
+      'discount-input-hint' : '(Example: off-50)',
       'discount-dialog-title' : 'Enter discount code:',
       'discount-invalid-code' : 'Invalid discount code.',
       'apply' : 'Apply',
@@ -187,6 +188,7 @@ abstract class Strings {
       'empty-first-name' : 'First name is required.',
       'empty-last-name' : 'Last name is required.',
       'no-restaurant' : 'No restaurant found.',
+      'offline-mode-user' : 'In offline mode you can test the app without having to connect to a server. Order your food and it will be delivered in a few seconds!',
 
       //models
       'empty-reply-error' : 'Reply can\'t be empty.',
